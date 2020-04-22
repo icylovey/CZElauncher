@@ -1,0 +1,112 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 中文(简体，中国) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// ZIPRES
+//
+
+IDR_ZIPRES1             ZIPRES                  "F:\\ProjectCode\\C++\\Other\\ZElauncher\\Debug\\Skin\\Skin.zip"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// XML
+//
+
+IDR_XML1                XML                     "F:\\ProjectCode\\C++\\Other\\ZElauncher\\Debug\\Menu_server.xml"
+
+IDR_XML2                XML                     "F:\\ProjectCode\\C++\\Other\\ZElauncher\\Debug\\Menu_Main.xml"
+
+IDR_XML3                XML                     "F:\\ProjectCode\\C++\\Other\\ZElauncher\\Debug\\Skin\\ListRes\\skin.xml"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// PNG
+//
+
+IDB_PNG2                PNG                     "F:\\ProjectCode\\C++\\Other\\ZElauncher\\Debug\\Skin\\ListRes\\bk\\tree_expand.png"
+
+IDB_PNG1                PNG                     "F:\\ProjectCode\\C++\\Other\\ZElauncher\\Debug\\Skin\\ListRes\\bk\\menu_bk.png"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON1               ICON                    "F:\\ProjectCode\\C++\\Other\\ZElauncher\\Debug\\icon.ico"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_STRING112           "<li+onmouseover=[""'].+[""']+onmouseout=[""'].+[""']>+<div+class=[""'].+[""']>+<div+class=[""']img[""']>+<a+href=[""'](.+)[""']+title=[""'](.+)[""']><img+src=[""'](.*)[""']+alt=[""'].+[""']+onerror=[""']this.src=[""'].+[""'][""']></a>+</div>+<div+style=[""'].+[""']+id=[""'].+[""']+class=[""'].+[""']>+<div>+.+<em>+</em>.+<br>+.+<em>+</em>.+<br>+.+<em>+</em>.+<br>+</div>+</div>+</div>+<div+class=[""'].+[""']>+<div+class=[""'].+[""']><a+href=[""']+[""']+title=[""'].+[""']>.+</a></div>+<div>.+<span+style=['""].+['""]>(+)</span>(.+)</div>+<div>.+<span+style=['""].+['""]>(+)</span>(.+)</div>+</div>+</li>"
+END
+
+#endif    // 中文(简体，中国) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -1,0 +1,243 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="JSON">
+      <UniqueIdentifier>{d76467b6-1f18-446c-97a1-10453d7e9d46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ModuleSDK">
+      <UniqueIdentifier>{1aaa38cb-6767-400f-837f-fa89064a255f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DuilibSDK">
+      <UniqueIdentifier>{406b6f60-560e-47d1-8410-e5bd91f09572}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DuilibSDK\Menu">
+      <UniqueIdentifier>{78b5eec2-604c-4f42-943b-6dd0166b92f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Util">
+      <UniqueIdentifier>{48a5b7ac-6ecf-45c8-8b8e-7de6f0654f40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Util">
+      <UniqueIdentifier>{d1577de1-a98f-4d12-9104-2894e5e2e8d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="资源文件\xml">
+      <UniqueIdentifier>{7314b75b-fd9c-4dae-9479-59405790bf91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="资源文件\xml\menu">
+      <UniqueIdentifier>{782b69c1-e7b9-479c-90cf-75827aa4f9a8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Main.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="json\autolink.h">
+      <Filter>JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="json\config.h">
+      <Filter>JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="json\features.h">
+      <Filter>JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="json\forwards.h">
+      <Filter>JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="json\json.h">
+      <Filter>JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="json\json_batchallocator.h">
+      <Filter>JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="json\reader.h">
+      <Filter>JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="json\value.h">
+      <Filter>JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="json\writer.h">
+      <Filter>JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleSDK\lib_http.h">
+      <Filter>ModuleSDK</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleSDK\ChineseCode.h">
+      <Filter>ModuleSDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\include\Menu\UIMenu.h">
+      <Filter>DuilibSDK\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\include\Menu\observer_impl_base.hpp">
+      <Filter>DuilibSDK\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\include\Menu\UICrack.h">
+      <Filter>DuilibSDK\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleSDK\Path.h">
+      <Filter>ModuleSDK</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleSDK\lib_Process.h">
+      <Filter>ModuleSDK</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleSDK\lib_Socket.h">
+      <Filter>ModuleSDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Skin.h">
+      <Filter>源文件\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="ZElauncher.h">
+      <Filter>头文件\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Award.h">
+      <Filter>头文件\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Award_Tip.h">
+      <Filter>头文件\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Server.h">
+      <Filter>头文件\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerMenu.h">
+      <Filter>头文件\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Setting.h">
+      <Filter>头文件\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Shop.h">
+      <Filter>头文件\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinConvert.h">
+      <Filter>头文件\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Tools.h">
+      <Filter>头文件\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="json\json_reader.cpp">
+      <Filter>JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="json\json_value.cpp">
+      <Filter>JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="json\json_writer.cpp">
+      <Filter>JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleSDK\lib_http.cpp">
+      <Filter>ModuleSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleSDK\ChineseCode.cpp">
+      <Filter>ModuleSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\include\Menu\UICrack.cpp">
+      <Filter>DuilibSDK\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\include\Menu\UIMenu.cpp">
+      <Filter>DuilibSDK\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleSDK\Path.cpp">
+      <Filter>ModuleSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleSDK\lib_Process.cpp">
+      <Filter>ModuleSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleSDK\lib_Socket.cpp">
+      <Filter>ModuleSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Award.cpp">
+      <Filter>源文件\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Award_Tip.cpp">
+      <Filter>源文件\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Server.cpp">
+      <Filter>源文件\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerMenu.cpp">
+      <Filter>源文件\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Setting.cpp">
+      <Filter>源文件\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Shop.cpp">
+      <Filter>源文件\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Skin.cpp">
+      <Filter>源文件\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinConvert.cpp">
+      <Filter>源文件\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Tools.cpp">
+      <Filter>源文件\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="ZElauncher.cpp">
+      <Filter>源文件\Util</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ZElauncher.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="json\json_internalarray.inl">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="json\json_internalmap.inl">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="json\json_valueiterator.inl">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="json\sconscript">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="..\Debug\Skin\ListRes.zip">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\Debug\Skin\Skin.zip" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\Debug\Menu_Main.xml">
+      <Filter>资源文件\xml\menu</Filter>
+    </Xml>
+    <Xml Include="..\Debug\Menu_server.xml">
+      <Filter>资源文件\xml\menu</Filter>
+    </Xml>
+    <Xml Include="..\Debug\Skin\ListRes\skin.xml">
+      <Filter>资源文件\xml\menu</Filter>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Debug\Skin\ListRes\bk\menu_bk.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\Debug\Skin\ListRes\bk\tree_expand.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\Debug\icon.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
