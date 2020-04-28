@@ -129,6 +129,9 @@
     <ClInclude Include="resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="LookPlayer.h">
+      <Filter>头文件\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="json\json_reader.cpp">
@@ -193,6 +196,9 @@
     </ClCompile>
     <ClCompile Include="ZElauncher.cpp">
       <Filter>源文件\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="LookPlayer.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

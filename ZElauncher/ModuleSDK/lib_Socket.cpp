@@ -32,6 +32,12 @@ namespace lib_Socket
 		}
 		return IsTCPStatupWSA;
 	}
+	void __fastcall TCPClient::UnInitialize()
+	{
+		Release();
+		WSACleanup();
+		IsUDPStatupWSA = false;
+	}
 	void __fastcall TCPClient::Release()
 	{
 		IsTCPThread = false;
@@ -127,9 +133,9 @@ namespace lib_Socket
 		closesocket(ClientSocket) == 0 ? IsSucceed = true : IsSucceed = false;
 		return IsSucceed;
 	}
-	std::vector<TCPSOCKET> __fastcall TCPClient::QueryTCPSocket()
+	TCPSOCKET __fastcall TCPClient::QueryTCPSocket(UINT nIndex)
 	{
-		return TcpInfo;
+		return TcpInfo[nIndex];
 	}
 	void __fastcall TCPClient::SetFunc(std::string ServerAddr, unsigned int Port, pTCPEventFunc EventFunc)
 	{
@@ -240,6 +246,12 @@ namespace lib_Socket
 		}
 		return IsUDPStatupWSA;
 	}
+	void __fastcall UDPClient::UnInitialize()
+	{
+		Release();
+		WSACleanup();
+		IsUDPStatupWSA = false;
+	}
 	void __fastcall UDPClient::Release()
 	{
 		IsUDPThread = false;
@@ -247,7 +259,6 @@ namespace lib_Socket
 		for (unsigned int i = 0; i < UdpInfo.size(); i++) {
 			closesocket(UdpInfo[i].Socket);
 		}
-		WSACleanup();
 		UdpInfo.clear();
 		std::vector<UDPSOCKET>().swap(UdpInfo);
 	}
@@ -370,9 +381,9 @@ namespace lib_Socket
 			}
 		}
 	}
-	std::vector<UDPSOCKET> __fastcall UDPClient::QueryUDPSocket()
+	UDPSOCKET __fastcall UDPClient::QueryUDPSocket(UINT nIndex)
 	{
-		return UdpInfo;
+		return UdpInfo[nIndex];
 	}
 	static void __stdcall UDPThread()
 	{

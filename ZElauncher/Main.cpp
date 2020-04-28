@@ -57,10 +57,8 @@ int __stdcall WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 {
 	NotRepeat();
 
-	GetUpdateVersion(_T("v1.1.5"));
+	GetUpdateVersion(_T("v1.1.7"));
 	Zip7ZInitiale();
-	/*std::string szOutput;
-	Zip7ZUnCompressed(_T("C:\\Users\\Administrator\\Desktop\\ze_notredame_p4.bsp.bz2"), _T(""), _T("C:\\Users\\Administrator\\Desktop"), szOutput, NULL);*/
 
 	CPaintManagerUI::SetInstance(hInstance);
 	TCHAR RunPath[MAX_PATH] = { 0 };

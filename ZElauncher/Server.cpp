@@ -49,7 +49,22 @@ void _stdcall MenuProc(HWND hWnd, MenuInfo* MenuInfo)
 		else if (_tcscmp(MenuInfo->MenuText.GetData(), _T("复制IP地址")) == 0)pServer->CopyServerInfo(3);
 		else if (_tcscmp(MenuInfo->MenuText.GetData(), _T("复制地图名")) == 0)pServer->CopyServerInfo(1);
 		else if (_tcscmp(MenuInfo->MenuText.GetData(), _T("加入服务器")) == 0)pServer->JoinServer();
+		else if (_tcscmp(MenuInfo->MenuText.GetData(), _T("查看玩家")) == 0)pServer->OnLookPlayer();
 	}
+}
+
+void CServerUI::OnLookPlayer()
+{
+	CListUI* pList = static_cast<CListUI*>(m_paManager->FindControl(_T("List_Server")));
+	CListTextElementUI* pItem = static_cast<CListTextElementUI*>(pList->GetItemAt(pList->GetCurSel()));
+	CDuiString ItemText = pItem->GetText(3);
+	g_ServerName_LookPlayer = ItemText;
+	CLookPlayerUI* pSetting = new CLookPlayerUI();
+	if (pSetting == NULL) return;
+	pSetting->Create(NULL, _T("查看服务器"), UI_WNDSTYLE_DIALOG, WS_EX_STATICEDGE | WS_EX_APPWINDOW, 0, 0, 900, 500);
+	pSetting->CenterWindow();
+	::ShowWindow(*pSetting, SW_SHOW);
+	//::SetWindowPos(*pSetting, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
 }
 
 void CServerUI::ClearEdit()
@@ -620,6 +635,7 @@ void CServerUI::Get93xServerList2(const char* pName, UINT type)
 			std::string tmpStr;
 			if (root[i]["name"].isNull())continue;
 			tmpStr = root[i]["name"].asCString();
+			if (tmpStr.empty())continue;
 			//新版识别
 			for (UINT n = 0; n < VectorType.size(); n++) {
 				transform(tmpStr.begin(), tmpStr.end(), tmpStr.begin(), ::tolower);

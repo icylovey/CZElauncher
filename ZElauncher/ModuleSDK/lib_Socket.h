@@ -20,7 +20,7 @@ namespace lib_Socket
 	@parameter 错误代码
 	@parameter 预设参数
 	*/
-	typedef void(*pTCPEventFunc)(SOCKET nSock, unsigned int nIndex, void *pBuf, unsigned int BufLen, unsigned int ErrorCode, LPARAM lParam);
+	typedef void(__stdcall *pTCPEventFunc)(SOCKET nSock, unsigned int nIndex, void *pBuf, unsigned int BufLen, unsigned int ErrorCode, LPARAM lParam);
 	//TCP信息数据类型
 	struct TCPSOCKET
 	{
@@ -57,6 +57,8 @@ namespace lib_Socket
 		~TCPClient();
 		//TCP初始化
 		bool __fastcall Initialize();
+		//卸载TCP
+		void __fastcall UnInitialize();
 		//TCP释放
 		void __fastcall Release();
 		/*
@@ -79,7 +81,7 @@ namespace lib_Socket
 		/*
 		查询TCP Socket
 		*/
-		std::vector<TCPSOCKET> __fastcall QueryTCPSocket();
+		TCPSOCKET __fastcall QueryTCPSocket(UINT nIndex);
 		/*
 		端对端发送TCP数据
 		@parameter TCP连接套接字
@@ -140,6 +142,8 @@ namespace lib_Socket
 		bool __fastcall Initialize();
 		//释放UDP
 		void __fastcall Release();
+		//卸载UDP
+		void __fastcall UnInitialize();
 		//获取错误信息
 		SOCKETERROR __fastcall GetError();
 		/*
@@ -157,7 +161,7 @@ namespace lib_Socket
 		/*
 		查询UDP Socket
 		*/
-		std::vector<UDPSOCKET> __fastcall QueryUDPSocket();
+		UDPSOCKET __fastcall QueryUDPSocket(UINT nIndex);
 		/*
 		端对端发送UDP数据
 		@parameter UDP连接套接字

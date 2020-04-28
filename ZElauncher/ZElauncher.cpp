@@ -27,7 +27,7 @@ LPCTSTR CZElauncherMain::GetResourceID() const
 
 CDuiString CZElauncherMain::GetSkinFile()
 {
-	//return MAKEINTRESOURCE(IDR_XML_Skin);
+	//return _T("115");
 	return _T("skin.xml");
 }
 

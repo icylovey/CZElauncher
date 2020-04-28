@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "LookPlayer.h"
 
 using namespace DuiLib;
 using namespace lib_http;
@@ -29,6 +30,7 @@ public:
 	void OutPutTip(LPCTSTR lpOutput);
 	void OutPutTip2(LPCTSTR lpOutput);
 	void RunGame(LPCTSTR lpServer);
+	void OnLookPlayer();
 private:
 	void Notify(TNotifyUI& msg);
 	void GetServerList(const char* pName, UINT type = NULL);
