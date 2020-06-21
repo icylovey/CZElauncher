@@ -39,7 +39,7 @@ void CSkinUI::ConvertSkin(LPCTSTR pUrl)
 	GetPrivateProfileString(_T("ZElauncher"), _T("SkinConvertTip2"), NULL, pTpatternSkinInfoTip2, 4096, dbPath);
 	if (_tcslen(pTpatternSkinInfoTip2) < 5) { MessageBox(NULL, _T("字符数据库丢失!无法获取新手礼包数据!"), NULL, MB_OK); delete[]pTpatternSkinConvert; delete[]pTpatternSkinInfoTip; delete[]pTpatternSkinInfoTip2; return; }
 	std::string htmldata;
-	lib_http::http http;
+	lib_http::CLibhttp http;
 	CDuiString Cookies = http.GetLocalCookies(_T("https://bbs.93x.net/")).c_str();
 	http.GET(pUrl, htmldata, _T(""), Cookies.GetData());
 	UINT nLen = htmldata.size() * sizeof(TCHAR);
@@ -139,7 +139,7 @@ std::string CSkinUI::GetSkinHtml(const TCHAR* Page)
 {
 	std::string Result;
 	{
-		lib_http::http http;
+		lib_http::CLibhttp http;
 		CDuiString url = _T("https://bbs.93x.net/plugin-xnet_steam_store_client_items-csgo_skinlist.html?FreeExperience=");
 		url += Page;
 		CDuiString Cookies = http.GetLocalCookies(_T("https://bbs.93x.net")).c_str();
@@ -150,7 +150,7 @@ std::string CSkinUI::GetSkinHtml(const TCHAR* Page)
 
 CDuiString CSkinUI::GetImgStr(LPCTSTR pUrl, UINT iFlag)
 {
-	lib_http::http http;
+	lib_http::CLibhttp http;
 	std::string Htmldata;
 	http.GET(pUrl, Htmldata);
 	if (Htmldata.length() < 10)return _T("skin\\nopic.jpg");

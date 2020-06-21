@@ -2,16 +2,16 @@
 
 namespace lib_http
 {
-	CLibhttp::CLibhttp()
+	http::http()
 	{
 		
 	}
 
-	CLibhttp::~CLibhttp()
+	http::~http()
 	{
 		
 	}
-	std::string _fastcall CLibhttp::GetHost(std::string url)
+	std::string _fastcall http::GetHost(std::string url)
 	{
 		bool Ishttps;
 		url.find("https://") == std::string::npos ? Ishttps = false : Ishttps = true;
@@ -25,7 +25,7 @@ namespace lib_http
 		if (strpos != std::wstring::npos)host = host.substr(0, strpos);
 		return host;
 	}
-	std::wstring _fastcall CLibhttp::GetHost(std::wstring url)
+	std::wstring _fastcall http::GetHost(std::wstring url)
 	{
 		bool Ishttps;
 		url.find(L"https://") == std::wstring::npos ? Ishttps = false : Ishttps = true;
@@ -39,7 +39,7 @@ namespace lib_http
 		if (strpos != std::wstring::npos)host = host.substr(0, strpos);
 		return host;
 	}
-	std::string _fastcall CLibhttp::GetURLPage(std::string url)
+	std::string _fastcall http::GetURLPage(std::string url)
 	{
 		bool Ishttps;
 		url.find("https://") == std::wstring::npos ? Ishttps = false : Ishttps = true;
@@ -50,7 +50,7 @@ namespace lib_http
 		std::string urlpage = url.substr(coutof, strpos - coutof);
 		return urlpage;
 	}
-	std::wstring _fastcall CLibhttp::GetURLPage(std::wstring url)
+	std::wstring _fastcall http::GetURLPage(std::wstring url)
 	{
 		bool Ishttps;
 		url.find(L"https://") == std::wstring::npos ? Ishttps = false : Ishttps = true;
@@ -61,7 +61,7 @@ namespace lib_http
 		std::wstring urlpage= url.substr(coutof, strpos-coutof);
 		return urlpage;
 	}
-	bool _fastcall CLibhttp::POST(std::string url, std::string &ResultData, std::string RequestData, std::string Header, std::string Cookies, std::string ReturnCookies)
+	bool _fastcall http::POST(std::string url, std::string &ResultData, std::string RequestData, std::string Header, std::string Cookies, std::string ReturnCookies)
 	{
 		bool IsHttps;
 		//把url转小写(不使用)
@@ -136,7 +136,7 @@ namespace lib_http
 		ResultData.length() > 0 ? Resultbool = true : Resultbool = false;
 		return Resultbool;
 	}
-	bool _fastcall CLibhttp::POST(std::wstring url, std::string &ResultData, std::wstring RequestData, std::wstring Header, std::wstring Cookies, std::wstring ReturnCookies)
+	bool _fastcall http::POST(std::wstring url, std::string &ResultData, std::wstring RequestData, std::wstring Header, std::wstring Cookies, std::wstring ReturnCookies)
 	{
 		bool IsHttps;
 		url.find(L"https") == std::string::npos ? IsHttps = false : IsHttps = true;
@@ -211,7 +211,7 @@ namespace lib_http
 		ResultData.length() > 0 ? Resultbool = true : Resultbool = false;
 		return Resultbool;
 	}
-	bool _fastcall CLibhttp::GET(std::string url, std::string &ResultData, std::string Header, std::string Cookies, std::string ReturnCookies)
+	bool _fastcall http::GET(std::string url, std::string &ResultData, std::string Header, std::string Cookies, std::string ReturnCookies)
 	{
 		bool IsHttps;
 		url.find("https") == std::string::npos ? IsHttps = false : IsHttps = true;
@@ -284,7 +284,7 @@ namespace lib_http
 		ResultData.length() > 0 ? Resultbool = true : Resultbool = false;
 		return Resultbool;
 	}
-	bool _fastcall CLibhttp::GET(std::wstring url, std::string &ResultData, std::wstring Header, std::wstring Cookies, std::wstring ReturnCookies)
+	bool _fastcall http::GET(std::wstring url, std::string &ResultData, std::wstring Header, std::wstring Cookies, std::wstring ReturnCookies)
 	{
 		bool IsHttps;
 		url.find(L"https") == std::string::npos ? IsHttps = false : IsHttps = true;
@@ -357,7 +357,7 @@ namespace lib_http
 		ResultData.length() > 0 ? Resultbool = true : Resultbool = false;
 		return Resultbool;
 	}
-	std::string _fastcall CLibhttp::GetLocalCookies(std::string host)
+	std::string _fastcall http::GetLocalCookies(std::string host)
 	{
 		char *TmpCookies = nullptr;
 		DWORD CookiesLen = 4097;
@@ -369,7 +369,7 @@ namespace lib_http
 		delete[]TmpCookies;
 		return Cookies;
 	}
-	std::wstring _fastcall CLibhttp::GetLocalCookies(std::wstring host)
+	std::wstring _fastcall http::GetLocalCookies(std::wstring host)
 	{
 		char *TmpCookies = nullptr;
 		DWORD CookiesLen = 4097;
@@ -381,7 +381,7 @@ namespace lib_http
 		delete[]TmpCookies;
 		return Cookies;
 	}
-	VARIANT _fastcall CLibhttp::ExecuteJScript(std::string JScript, std::string FuncetionName, std::string ErrorLog)
+	VARIANT _fastcall http::ExecuteJScript(std::string JScript, std::string FuncetionName, std::string ErrorLog)
 	{
 		IScriptControlPtr m_pScriptControlPtr;
 		m_pScriptControlPtr.CreateInstance(__uuidof(ScriptControl));
@@ -432,7 +432,7 @@ namespace lib_http
 		m_pScriptControlPtr.Release();
 		return Result;
 	}
-	VARIANT _fastcall CLibhttp::ExecuteJScript(std::wstring JScript, std::wstring FuncetionName, std::wstring ErrorLog)
+	VARIANT _fastcall http::ExecuteJScript(std::wstring JScript, std::wstring FuncetionName, std::wstring ErrorLog)
 	{
 		IScriptControlPtr m_pScriptControlPtr;
 		m_pScriptControlPtr.CreateInstance(__uuidof(ScriptControl));
@@ -483,11 +483,11 @@ namespace lib_http
 		m_pScriptControlPtr->Release();
 		return Result;
 	}
-	bool _fastcall CLibhttp::RegEx_FindString(std::string Regex, std::string DestString, bool IsCase /* = false */, bool IsMultiRows /* = true */, bool IsGlobal /* = true */)
+	bool _fastcall http::RegEx_FindString(std::string Regex, std::string DestString, bool IsCase /* = false */, bool IsMultiRows /* = true */, bool IsGlobal /* = true */)
 	{
 		return true;
 	}
-	bool _fastcall CLibhttp::DownloadFile(std::string url, std::string FilePath, DownloadProc DownloadPr /* = nullptr */)
+	bool _fastcall http::DownloadFile(std::string url, std::string FilePath, DownloadProc DownloadPr /* = nullptr */)
 	{
 		if (url.empty())return false;
 		if (FilePath.empty())return false;
@@ -554,7 +554,7 @@ namespace lib_http
 		Header.str("");
 		return true;
 	}
-	bool _fastcall CLibhttp::DownloadFile(std::wstring url, std::wstring FilePath, DownloadProc DownloadPr /* = nullptr */)
+	bool _fastcall http::DownloadFile(std::wstring url, std::wstring FilePath, DownloadProc DownloadPr /* = nullptr */)
 	{
 		if (url.empty())return false;
 		if (FilePath.empty())return false;

@@ -211,7 +211,7 @@ void CZElauncherMain::OnInitialize()
 	else {
 		OutTip(_T("获取配置信息完成"));
 	}
-	InitLogin();
+	//InitLogin();
 	
 }
 
@@ -230,7 +230,7 @@ void CZElauncherMain::InitLogin()
 	CButtonUI* pLogin = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Button_Login")));
 	if (!pLogin)return;
 	//获取个人信息;
-	lib_http::http http;
+	lib_http::CLibhttp http;
 	CDuiString Cookies = http.GetLocalCookies(_T("https://bbs.93x.net")).c_str();
 	std::string Result;
 	http.GET(_T("https://bbs.93x.net/plugin.php?id=xnet_steam_openid:SoftLogin"), Result, _T(""), Cookies.GetData());
@@ -259,6 +259,7 @@ void CZElauncherMain::LoginUser()
 {
 	CButtonUI* pLogin = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Button_Login")));
 	if (!pLogin)return;
+	if (MessageBox(NULL, _T("由于X社接口限制原因,请求操作会很慢甚至假死. 请问是否继续操作?"), NULL, MB_YESNO) == IDNO)return;
 	if (_tcscmp(pLogin->GetText(), _T("{u}{a}未登录{/a}{/u}")) != 0) {
 		MessageBox(NULL, _T("您已经登录,不用重复登录.\r\n如果想要注销,打开IE登录论坛注销即可!"), NULL, MB_OK);
 	}

@@ -25,11 +25,11 @@ namespace lib_http
 	//@parameter 当前下载数据大小
 	//@parameter 每秒下载数据大小
 	typedef bool(__stdcall *DownloadProc)(size_t FileSize, UINT nState, size_t DownloadSize, size_t SecondSize);
-	class CLibhttp
+	class http
 	{
 	public:
-		CLibhttp();
-		~CLibhttp();
+		http();
+		~http();
 		//POST请求
 		//@parameter 请求地址
 		//@parameter 返回数据
@@ -63,12 +63,12 @@ namespace lib_http
 		//下载文件
 		//@parameter 下载地址
 		//@parameter 保存文件目录
-		//@parameter 回调函数 DownloadProc(size_t FileSize, UINT nState, size_t DownloadSize, size_t SecondSize);
+		//@parameter 回调函数 DownloadProc(size_t FileSize, size_t DownloadSize, size_t SecondSize);
 		bool _fastcall DownloadFile(std::string url, std::string FilePath, DownloadProc DownloadPr = nullptr);
 		//下载文件
 		//@parameter 下载地址
 		//@parameter 保存文件目录
-		//@parameter 回调函数 DownloadProc(size_t FileSize, UINT nState, size_t DownloadSize, size_t SecondSize);
+		//@parameter 回调函数 DownloadProc(size_t FileSize, size_t DownloadSize, size_t SecondSize);
 		bool _fastcall DownloadFile(std::wstring url, std::wstring FilePath, DownloadProc DownloadPr = nullptr);
 		//获取指定网址本地IE Cookies
 		//@parameter 主机Url地址
@@ -111,7 +111,6 @@ namespace lib_http
 		//@parameter 是否全局匹配
 		bool _fastcall RegEx_FindString(std::wstring Regex, std::wstring DestString, bool IsCase = false, bool IsMultiRows = true, bool IsGlobal = true);
 	private:
-
 	};
 	//Http Socket方式请求;
 }

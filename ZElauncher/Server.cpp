@@ -1,6 +1,6 @@
 #include "Server.h"
 
-bool CServerUI::Is93x = true;
+bool CServerUI::Is93x = false;
 
 CServerUI* pServer = nullptr;
 Server::ServerInfo g_Current_server_name;
@@ -107,7 +107,7 @@ void CServerUI::GetServerList(const char* pName, UINT type)
 	std::string StrResult;
 #pragma region 获取服务器Url
 	{
-		http phttp;
+		CLibhttp phttp;
 		string url;
 		strCoding encod;
 		switch (type)
@@ -209,7 +209,7 @@ void CServerUI::Get93xServerList(const char* pName, UINT type)
 	//获取网页Json内容
 	std::string StrResult;
 	{
-		http phttp;
+		CLibhttp phttp;
 		string url = "https://serverssoftware.93x.net/api/servers?game=csgo";
 		if (!phttp.GET(url, StrResult))MessageBox(NULL, _T("获取服务器信息失败!"), NULL, NULL);
 	}
@@ -395,7 +395,7 @@ void CServerUI::GetServerList2(const char* pName, UINT type)
 		}
 	}
 	else VectorType.emplace_back("");;
-	lib_http::http http;
+	lib_http::CLibhttp http;
 	http.GET(_T("https://csgo.wanmei.com/communityserver/2019?task=getlist"), StrResult);
 #pragma endregion
 	if (StrResult.length() < 10) { MessageBox(NULL, _T("获取服务器信息失败!"), NULL, NULL); return; }
@@ -554,7 +554,7 @@ void CServerUI::Get93xServerList2(const char* pName, UINT type)
 	//获取网页Json内容
 	std::string StrResult;
 	{
-		http phttp;
+		CLibhttp phttp;
 		string url = "https://serverssoftware.93x.net/api/servers?game=csgo";
 		if (!phttp.GET(url, StrResult))MessageBox(NULL, _T("获取服务器信息失败!"), NULL, NULL);
 	}
@@ -913,7 +913,7 @@ void CServerUI::DownloadMap93x(LPCTSTR lpMapName)
 	CDuiString sWriteFile = TempPath;
 	sWriteFile += lpMapName;
 	sWriteFile += _T(".bsp.bz2");
-	lib_http::http http;
+	lib_http::CLibhttp http;
 	if (http.DownloadFile(sUrl.GetData(), sWriteFile.GetData(), DownloadProc_)) {
 		std::string szOutPut;
 		if (Zip7ZUnCompressed(sWriteFile.GetData(), _T(""), sMapFile.GetData(), szOutPut, NULL)) {
@@ -966,7 +966,7 @@ void CServerUI::DownloadMapjsly(LPCTSTR lpMapName)
 	CDuiString sWriteFile = TempPath;
 	sWriteFile += lpMapName;
 	sWriteFile += _T(".bsp.bz2");
-	lib_http::http http;
+	lib_http::CLibhttp http;
 	if (http.DownloadFile(sUrl.GetData(), sWriteFile.GetData(), DownloadProc_)) {
 		std::string szOutPut;
 		if (Zip7ZUnCompressed(sWriteFile.GetData(), _T(""), sMapFile.GetData(), szOutPut, NULL)) {
@@ -1019,7 +1019,7 @@ void CServerUI::DownloadMapfys(LPCTSTR lpMapName)
 	CDuiString sWriteFile = TempPath;
 	sWriteFile += lpMapName;
 	sWriteFile += _T(".bsp.bz2");
-	lib_http::http http;
+	lib_http::CLibhttp http;
 	if (http.DownloadFile(sUrl.GetData(), sWriteFile.GetData(), DownloadProc_)) {
 		std::string szOutPut;
 		if (Zip7ZUnCompressed(sWriteFile.GetData(), _T(""), sMapFile.GetData(), szOutPut, NULL)) {

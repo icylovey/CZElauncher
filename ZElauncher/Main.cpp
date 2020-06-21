@@ -6,7 +6,7 @@ void __stdcall GetUpdateVersion(LPCTSTR sVersion)
 	_tcscpy(Version, sVersion);
 	std::string htmldata;
 	{
-		lib_http::http http;
+		lib_http::CLibhttp http;
 		http.GET(_T("http://blog.sina.com.cn/s/blog_155297e510102z9f9.html"), htmldata);
 	}
 	//×ª»»±àÂë

@@ -49,7 +49,7 @@ std::string CShopUI::GetSkinHtml(const TCHAR* Page)
 {
 	std::string Result;
 	{
-		lib_http::http http;
+		lib_http::CLibhttp http;
 		CDuiString url = _T("https://bbs.93x.net/plugin.php?id=dc_mall&uid=0&page=");
 		url += Page;
 		CDuiString Cookies = http.GetLocalCookies(_T("https://bbs.93x.net")).c_str();
@@ -148,7 +148,7 @@ void CShopUI::GetShopinfo()
 			std::string ImgData;
 			if (sText.length() > 3)
 			{
-				lib_http::http htp;
+				lib_http::CLibhttp htp;
 				std::wstring url;
 				url = L"https://bbs.93x.net/";
 				url += sText;

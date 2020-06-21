@@ -36,8 +36,9 @@ void CAwardUI::OnClick(CControlUI* Click)
 void CAwardUI::Sign93x()
 {
 	//获取签到Key和个人信息
+	if (MessageBox(NULL, _T("由于X社接口限制原因,请求操作会很慢甚至假死. 请问是否继续操作?"), NULL, MB_YESNO) == IDNO)return;
 	{
-		lib_http::http http;
+		lib_http::CLibhttp http;
 		CDuiString Cookies = http.GetLocalCookies(_T("https://bbs.93x.net")).c_str();
 		std::string Result;
 		http.GET(_T("https://bbs.93x.net/plugin.php?id=xnet_steam_openid:SoftLogin"), Result, _T(""), Cookies.GetData());
@@ -87,7 +88,7 @@ void CAwardUI::Notify(TNotifyUI& msg)
 _bstr_t CAwardUI::GetFormhash(LPCTSTR pUrl)
 {
 	std::string strHtml;
-	lib_http::http http;
+	lib_http::CLibhttp http;
 	CDuiString Cookies = http.GetLocalCookies(pUrl).c_str();
 	http.GET(pUrl, strHtml, _T(""), Cookies.GetData());
 	UINT nPos = strHtml.find("formhash=");
@@ -103,7 +104,7 @@ bool CAwardUI::IsStart_yaoyiyao(LPCTSTR pUrl)
 {
 	std::string Result;
 	{
-		lib_http::http http;
+		lib_http::CLibhttp http;
 		CDuiString Cookies = http.GetLocalCookies(pUrl).c_str();
 		CDuiString url = pUrl;
 		url += _T("plugin.php?id=yinxingfei_zzza:yinxingfei_zzza_hall");
@@ -155,11 +156,12 @@ bool CAwardUI::IsStart_yaoyiyao(LPCTSTR pUrl)
 
 void CAwardUI::yaoyiyao()
 {
+	if (MessageBox(NULL, _T("由于X社接口限制原因,请求操作会很慢甚至假死. 请问是否继续操作?"), NULL, MB_YESNO) == IDNO)return;
 	CDuiString htmlUrl = _T("https://bbs.93x.net/");
 	if (!IsStart_yaoyiyao(htmlUrl))return;
 	std::string Result;
 	{
-		lib_http::http http;
+		lib_http::CLibhttp http;
 		CDuiString Cookies = http.GetLocalCookies(htmlUrl.GetData()).c_str();
 		CDuiString sFormhash = _T("formhash=");
 		sFormhash += static_cast<TCHAR*>(GetFormhash(htmlUrl));
@@ -198,9 +200,10 @@ void CAwardUI::yaoyiyao()
 
 void CAwardUI::online_Award(LPCTSTR pUrl, LPCTSTR szAward)
 {
+	if (MessageBox(NULL, _T("由于X社接口限制原因,请求操作会很慢甚至假死. 请问是否继续操作?"), NULL, MB_YESNO) == IDNO)return;
 	std::string Result;
 	{
-		lib_http::http http;
+		lib_http::CLibhttp http;
 		CDuiString Cookies = http.GetLocalCookies(_T("https://bbs.93x.net")).c_str();
 		http.GET(pUrl, Result, _T(""), Cookies.GetData());
 		if (Result.length() < 10) {
@@ -257,7 +260,7 @@ void CAwardUI::online_Award(LPCTSTR pUrl, LPCTSTR szAward)
 {
 	std::string Result;
 	{
-		lib_http::http http;
+		lib_http::CLibhttp http;
 		CDuiString Cookies = http.GetLocalCookies(_T("https://bbs.93x.net")).c_str();
 		http.GET(pUrl, Result, _T(""), Cookies.GetData());
 		if (Result.length() < 10) {
