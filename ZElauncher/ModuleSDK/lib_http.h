@@ -8,18 +8,24 @@
 #include <fstream>
 #include <vector>
 #include <time.h>
+#include <tchar.h>
+#include <openssl/ssl.h>
+
+#include "lib_String.h"
 
 #import <msscript.ocx>
 //#import <vbscript.dll>rename("RGB","rgb")
 
 #pragma comment(lib,"wininet.lib")
 #pragma comment(lib,"ws2_32.lib")
+#pragma comment(lib,"libssl.lib")
 #pragma warning(disable:4996)
 
 namespace lib_http
 {
 	using namespace std;
 	using namespace MSScriptControl;
+	using namespace lib_String;
 	//下载回调函数,返回true继续下载,返回false停止下载;
 	//@parameter 下载文件总大小
 	//@parameter 当前下载数据大小
@@ -60,6 +66,10 @@ namespace lib_http
 		//@parameter 请求Cookies
 		//@parameter 返回Cokies
 		bool _fastcall GET(std::wstring url, std::string &ResultData, std::wstring Header = L"", std::wstring Cookies = L"", std::wstring ReturnCookies = L"");
+		//从协议头中获取Cookies
+		std::string __fastcall GetCookies(const char* httpHeader);
+		//GET禁止重定向
+		bool _fastcall GET(bool forbidjump, const char* url, std::string& ResultData, std::string Header, std::string Cookies, std::string& ReturnCookies);
 		//下载文件
 		//@parameter 下载地址
 		//@parameter 保存文件目录
@@ -114,6 +124,26 @@ namespace lib_http
 
 	};
 	//Http Socket方式请求;
+	class CLibhttp2
+	{
+	public:
+		CLibhttp2() {};
+		~CLibhttp2() {};
+		bool __fastcall Initalize();
+		void __fastcall UnInitalize();
+		std::string __fastcall GetHost(std::string url);
+		std::wstring __fastcall GetHost(std::wstring url);
+		std::string __fastcall GetURLPage(std::string url);
+		std::wstring __fastcall GetURLPage(std::wstring url);
+		UINT __fastcall GetProt(TCHAR* url);
+		lib_String::CLibString __fastcall GetCookies();
+		lib_String::CLibString __fastcall GethtmlData(std::string& ResultData);
+		bool __fastcall Get(const TCHAR* Url, std::string& ResultData, const TCHAR* Header = nullptr, const TCHAR* Cookies = nullptr);
+	private:
+		lib_String::CLibString m_htmlHeader;
+		lib_String::CLibString m_htmldata;
+
+	};
 }
 
 #endif

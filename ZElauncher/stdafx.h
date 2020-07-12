@@ -3,10 +3,13 @@
 #include <stdio.h>
 #include <future>
 #include <iostream>
+#include <thread> 
 #include <list>
 #include <vector>
-#include <UIlib.h>
+//#include <UIlib.h>
 
+#include "Duilib/include/UIlib.h"
+#include "Variable.h"
 #include "resource.h"
 #include "json/json.h"
 #include "ModuleSDK/lib_http.h"
@@ -14,7 +17,8 @@
 #include "ModuleSDK/lib_Socket.h"
 #include "ModuleSDK/ChineseCode.h"
 #include "ModuleSDK/Path.h"
-#include "Duilib/include/Menu/UIMenu.h"
+//#include "ValveSDK/ssq.h"
+//#include "Duilib/include/Menu/UIMenu2.h"
 
 #import <progid:VBScript.RegExp>named_guids//no_namespace
 
@@ -23,9 +27,9 @@
 #endif // _DEBUG
 
 #ifdef _DEBUG
-#pragma comment(lib,"Duilib_d.lib")
+//#pragma comment(lib,"Duilib_d.lib")
 #else
-#pragma comment(lib,"Duilib.lib")
+//#pragma comment(lib,"Duilib.lib")
 #endif // _DEBUG
 #pragma comment(lib,"ComCtl32.lib") 
 

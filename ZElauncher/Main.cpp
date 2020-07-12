@@ -17,23 +17,23 @@ void __stdcall GetUpdateVersion(LPCTSTR sVersion)
 	std::wstring html = pTmpHtml;
 	//获取版本号
 	UINT nPos = html.find(L"#Version#") + wcslen(L"#Version#");
-	if (nPos == std::string::npos)MessageBox(NULL, _T("获取版本错误!"), NULL, MB_OK);
+	if (nPos == std::string::npos)MessageBox(NULL, _T("获取版本错误!"), NULL, MB_OK | MB_TOPMOST);
 	_bstr_t NowVersion = html.substr(nPos, html.find(L"$Version$", nPos) - nPos).c_str();
 	//获取更新地址
 	nPos = html.find(L"#UpdateUrl#") + wcslen(L"#UpdateUrl#");
-	if (nPos == std::string::npos)MessageBox(NULL, _T("获取版本错误!"), NULL, MB_OK);
+	if (nPos == std::string::npos)MessageBox(NULL, _T("获取版本错误!"), NULL, MB_OK | MB_TOPMOST);
 	CDuiString Updateurl = html.substr(nPos, html.find(L"$UpdateUrl$", nPos) - nPos).c_str();
 	Updateurl.Replace(_T("amp;"), _T(""));
 	//获取更新信息
 	nPos = html.find(L"#UpdateInfo#") + wcslen(L"#UpdateInfo#");
-	if (nPos == std::string::npos)MessageBox(NULL, _T("获取版本错误!"), NULL, MB_OK);
+	if (nPos == std::string::npos)MessageBox(NULL, _T("获取版本错误!"), NULL, MB_OK | MB_TOPMOST);
 	CDuiString UpdateTip = _T("\t有新版本发布,是否前往更新!\r\n\r\n");
 	UpdateTip += html.substr(nPos, html.find(L"$UpdateInfo$", nPos) - nPos).c_str();
 	UpdateTip.Replace(_T("\\r\\n"), _T("\r\n"));
 	if (_tcscmp(Version, NowVersion) != 0) {
-		if (MessageBox(NULL, UpdateTip, NULL, MB_YESNO) == IDYES) {
+		if (MessageBox(NULL, UpdateTip, NULL, MB_YESNO | MB_TOPMOST) == IDYES) {
 			if (Updateurl.GetLength() < 3) {
-				MessageBox(NULL, _T("更新地址获取错误!"), NULL, MB_OK);
+				MessageBox(NULL, _T("更新地址获取错误!"), NULL, MB_OK | MB_TOPMOST);
 				ExitProcess(NULL);
 			}
 			else {
@@ -57,7 +57,7 @@ int __stdcall WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 {
 	NotRepeat();
 
-	GetUpdateVersion(_T("v1.1.7"));
+	GetUpdateVersion(_T("v1.2.2"));
 	Zip7ZInitiale();
 
 	CPaintManagerUI::SetInstance(hInstance);
@@ -81,7 +81,7 @@ int __stdcall WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	{
 		IsSkinExist = false;
 		WritePrivateProfileString(_T("ZElauncher"), _T("Skin"), _T("default"), CfgPath);
-		MessageBox(NULL, _T("找不到皮肤主题文件,使用默认皮肤!"), NULL, MB_OK);
+		MessageBox(NULL, _T("找不到皮肤主题文件,使用默认皮肤!"), NULL, MB_OK | MB_TOPMOST);
 	}
 	HRESULT Hr = ::CoInitialize(NULL);
 	if (FAILED(Hr)) return 0;

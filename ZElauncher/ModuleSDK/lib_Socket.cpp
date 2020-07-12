@@ -191,7 +191,7 @@ namespace lib_Socket
 		//申请接收缓冲区内存;
 		char *pBuf = nullptr;
 		try { pBuf = new char[4096]; }
-		catch (...) { MessageBoxA(NULL, "内存申请失败,TCP处理线程运行失败!", NULL, NULL); }
+		catch (...) { MessageBoxA(NULL, "内存申请失败,TCP处理线程运行失败!", NULL, MB_TOPMOST); }
 		while (IsTCPThread) {
 			//select查询数组清零
 			FD_ZERO(&TCPReadfds);

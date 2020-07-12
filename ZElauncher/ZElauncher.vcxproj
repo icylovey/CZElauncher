@@ -73,16 +73,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>F:\SDK\Duilib\include;$(IncludePath);</IncludePath>
-    <LibraryPath>F:\SDK\Duilib\lib;$(LibraryPath);</LibraryPath>
+    <IncludePath>F:\SDK\Duilib\include3;C:\OpenSSL-Win32\include;$(IncludePath)</IncludePath>
+    <LibraryPath>F:\SDK\Duilib\lib2;C:\OpenSSL-Win32\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>F:\SDK\Duilib\include;$(IncludePath);</IncludePath>
-    <LibraryPath>F:\SDK\Duilib\lib;$(LibraryPath);</LibraryPath>
+    <IncludePath>F:\SDK\Duilib\include2;C:\OpenSSL-Win32\include;$(IncludePath)</IncludePath>
+    <LibraryPath>F:\SDK\Duilib\lib2;C:\OpenSSL-Win32\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -157,11 +157,52 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Award.h" />
-    <ClInclude Include="Award_Tip.h" />
-    <ClInclude Include="Duilib\include\Menu\observer_impl_base.hpp" />
-    <ClInclude Include="Duilib\include\Menu\UICrack.h" />
-    <ClInclude Include="Duilib\include\Menu\UIMenu.h" />
+    <ClInclude Include="Duilib\include\Control\observer_impl_base.hpp" />
+    <ClInclude Include="Duilib\include\Control\UIActiveX.h" />
+    <ClInclude Include="Duilib\include\Control\UIButton.h" />
+    <ClInclude Include="Duilib\include\Control\UICheckBox.h" />
+    <ClInclude Include="Duilib\include\Control\UICombo.h" />
+    <ClInclude Include="Duilib\include\Control\UICrack.h" />
+    <ClInclude Include="Duilib\include\Control\UIDateTime.h" />
+    <ClInclude Include="Duilib\include\Control\UIEdit.h" />
+    <ClInclude Include="Duilib\include\Control\UIFlash.h" />
+    <ClInclude Include="Duilib\include\Control\UIGifAnim.h" />
+    <ClInclude Include="Duilib\include\Control\UILabel.h" />
+    <ClInclude Include="Duilib\include\Control\UIList.h" />
+    <ClInclude Include="Duilib\include\Control\UIMenu.h" />
+    <ClInclude Include="Duilib\include\Control\UIOption.h" />
+    <ClInclude Include="Duilib\include\Control\UIProgress.h" />
+    <ClInclude Include="Duilib\include\Control\UIRichEdit.h" />
+    <ClInclude Include="Duilib\include\Control\UIScrollBar.h" />
+    <ClInclude Include="Duilib\include\Control\UISlider.h" />
+    <ClInclude Include="Duilib\include\Control\UIText.h" />
+    <ClInclude Include="Duilib\include\Control\UITreeView.h" />
+    <ClInclude Include="Duilib\include\Control\UIWebBrowser.h" />
+    <ClInclude Include="Duilib\include\Core\UIBase.h" />
+    <ClInclude Include="Duilib\include\Core\UIContainer.h" />
+    <ClInclude Include="Duilib\include\Core\UIControl.h" />
+    <ClInclude Include="Duilib\include\Core\UIDefine.h" />
+    <ClInclude Include="Duilib\include\Core\UIDlgBuilder.h" />
+    <ClInclude Include="Duilib\include\Core\UIManager.h" />
+    <ClInclude Include="Duilib\include\Core\UIMarkup.h" />
+    <ClInclude Include="Duilib\include\Core\UIRender.h" />
+    <ClInclude Include="Duilib\include\Layout\UIChildLayout.h" />
+    <ClInclude Include="Duilib\include\Layout\UIHorizontalLayout.h" />
+    <ClInclude Include="Duilib\include\Layout\UITabLayout.h" />
+    <ClInclude Include="Duilib\include\Layout\UITileLayout.h" />
+    <ClInclude Include="Duilib\include\Layout\UIVerticalLayout.h" />
+    <ClInclude Include="Duilib\include\StdAfx.h" />
+    <ClInclude Include="Duilib\include\UIlib.h" />
+    <ClInclude Include="Duilib\include\Utils\downloadmgr.h" />
+    <ClInclude Include="Duilib\include\Utils\FlashEventHandler.h" />
+    <ClInclude Include="Duilib\include\Utils\stb_image.h" />
+    <ClInclude Include="Duilib\include\Utils\UIDelegate.h" />
+    <ClInclude Include="Duilib\include\Utils\Utils.h" />
+    <ClInclude Include="Duilib\include\Utils\WebBrowserEventHandler.h" />
+    <ClInclude Include="Duilib\include\Utils\WinImplBase.h" />
+    <ClInclude Include="Duilib\include\Utils\WndShadow.h" />
+    <ClInclude Include="礼包.h" />
+    <ClInclude Include="礼包提示窗口.h" />
     <ClInclude Include="json\autolink.h" />
     <ClInclude Include="json\config.h" />
     <ClInclude Include="json\features.h" />
@@ -171,54 +212,98 @@
     <ClInclude Include="json\reader.h" />
     <ClInclude Include="json\value.h" />
     <ClInclude Include="json\writer.h" />
-    <ClInclude Include="LookPlayer.h" />
+    <ClInclude Include="登录账号.h" />
+    <ClInclude Include="查询服务器玩家.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="ModuleSDK\ChineseCode.h" />
     <ClInclude Include="ModuleSDK\lib_http.h" />
     <ClInclude Include="ModuleSDK\lib_Process.h" />
     <ClInclude Include="ModuleSDK\lib_Socket.h" />
+    <ClInclude Include="ModuleSDK\lib_String.h" />
     <ClInclude Include="ModuleSDK\Path.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Server.h" />
-    <ClInclude Include="ServerMenu.h" />
-    <ClInclude Include="Setting.h" />
-    <ClInclude Include="Shop.h" />
-    <ClInclude Include="Skin.h" />
+    <ClInclude Include="服务器.h" />
+    <ClInclude Include="服务器菜单.h" />
+    <ClInclude Include="设置.h" />
+    <ClInclude Include="商城.h" />
+    <ClInclude Include="新手皮肤.h" />
     <ClInclude Include="SkinConvert.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Tools.h" />
+    <ClInclude Include="工具箱.h" />
+    <ClInclude Include="Variable.h" />
     <ClInclude Include="ZElauncher.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Award.cpp" />
-    <ClCompile Include="Award_Tip.cpp" />
-    <ClCompile Include="Duilib\include\Menu\UICrack.cpp" />
-    <ClCompile Include="Duilib\include\Menu\UIMenu.cpp" />
+    <ClCompile Include="Duilib\include\Control\UIActiveX.cpp" />
+    <ClCompile Include="Duilib\include\Control\UIButton.cpp" />
+    <ClCompile Include="Duilib\include\Control\UICheckBox.cpp" />
+    <ClCompile Include="Duilib\include\Control\UICombo.cpp" />
+    <ClCompile Include="Duilib\include\Control\UICrack.cpp" />
+    <ClCompile Include="Duilib\include\Control\UIDateTime.cpp" />
+    <ClCompile Include="Duilib\include\Control\UIEdit.cpp" />
+    <ClCompile Include="Duilib\include\Control\UIFlash.cpp" />
+    <ClCompile Include="Duilib\include\Control\UIGifAnim.cpp" />
+    <ClCompile Include="Duilib\include\Control\UILabel.cpp" />
+    <ClCompile Include="Duilib\include\Control\UIList.cpp" />
+    <ClCompile Include="Duilib\include\Control\UIMenu.cpp" />
+    <ClCompile Include="Duilib\include\Control\UIOption.cpp" />
+    <ClCompile Include="Duilib\include\Control\UIProgress.cpp" />
+    <ClCompile Include="Duilib\include\Control\UIRichEdit.cpp" />
+    <ClCompile Include="Duilib\include\Control\UIScrollBar.cpp" />
+    <ClCompile Include="Duilib\include\Control\UISlider.cpp" />
+    <ClCompile Include="Duilib\include\Control\UIText.cpp" />
+    <ClCompile Include="Duilib\include\Control\UITreeView.cpp" />
+    <ClCompile Include="Duilib\include\Control\UIWebBrowser.cpp" />
+    <ClCompile Include="Duilib\include\Core\UIBase.cpp" />
+    <ClCompile Include="Duilib\include\Core\UIContainer.cpp" />
+    <ClCompile Include="Duilib\include\Core\UIControl.cpp" />
+    <ClCompile Include="Duilib\include\Core\UIDlgBuilder.cpp" />
+    <ClCompile Include="Duilib\include\Core\UIManager.cpp" />
+    <ClCompile Include="Duilib\include\Core\UIMarkup.cpp" />
+    <ClCompile Include="Duilib\include\Core\UIRender.cpp" />
+    <ClCompile Include="Duilib\include\Layout\UIChildLayout.cpp" />
+    <ClCompile Include="Duilib\include\Layout\UIHorizontalLayout.cpp" />
+    <ClCompile Include="Duilib\include\Layout\UITabLayout.cpp" />
+    <ClCompile Include="Duilib\include\Layout\UITileLayout.cpp" />
+    <ClCompile Include="Duilib\include\Layout\UIVerticalLayout.cpp" />
+    <ClCompile Include="Duilib\include\StdAfx.cpp" />
+    <ClCompile Include="Duilib\include\UIlib.cpp" />
+    <ClCompile Include="Duilib\include\Utils\stb_image.c" />
+    <ClCompile Include="Duilib\include\Utils\UIDelegate.cpp" />
+    <ClCompile Include="Duilib\include\Utils\Utils.cpp" />
+    <ClCompile Include="Duilib\include\Utils\WinImplBase.cpp" />
+    <ClCompile Include="Duilib\include\Utils\WndShadow.cpp" />
+    <ClCompile Include="Duilib\include\Utils\XUnzip.cpp" />
+    <ClCompile Include="礼包.cpp" />
+    <ClCompile Include="礼包提示窗口.cpp" />
     <ClCompile Include="json\json_reader.cpp" />
     <ClCompile Include="json\json_value.cpp" />
     <ClCompile Include="json\json_writer.cpp" />
-    <ClCompile Include="LookPlayer.cpp" />
+    <ClCompile Include="登录账号.cpp" />
+    <ClCompile Include="查询服务器玩家.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ModuleSDK\ChineseCode.cpp" />
     <ClCompile Include="ModuleSDK\lib_http.cpp" />
     <ClCompile Include="ModuleSDK\lib_Process.cpp" />
     <ClCompile Include="ModuleSDK\lib_Socket.cpp" />
+    <ClCompile Include="ModuleSDK\lib_String.cpp" />
     <ClCompile Include="ModuleSDK\Path.cpp" />
-    <ClCompile Include="Server.cpp" />
-    <ClCompile Include="ServerMenu.cpp" />
-    <ClCompile Include="Setting.cpp" />
-    <ClCompile Include="Shop.cpp" />
-    <ClCompile Include="Skin.cpp" />
+    <ClCompile Include="服务器.cpp" />
+    <ClCompile Include="服务器菜单.cpp" />
+    <ClCompile Include="设置.cpp" />
+    <ClCompile Include="商城.cpp" />
+    <ClCompile Include="新手皮肤.cpp" />
     <ClCompile Include="SkinConvert.cpp" />
-    <ClCompile Include="Tools.cpp" />
+    <ClCompile Include="工具箱.cpp" />
+    <ClCompile Include="Variable.cpp" />
     <ClCompile Include="ZElauncher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ZElauncher.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Debug\Skin\ListRes.zip" />
     <None Include="..\Debug\Skin\Skin.zip" />
+    <None Include="Duilib\include\Utils\flash11.tlh" />
     <None Include="json\json_internalarray.inl" />
     <None Include="json\json_internalmap.inl" />
     <None Include="json\json_valueiterator.inl" />

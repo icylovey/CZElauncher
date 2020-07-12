@@ -1,5 +1,5 @@
 #pragma once
-#include "stdafx.h"
+#include "../StdAfx.h"
 #include <comutil.h>
 
 namespace zip_7Z{
