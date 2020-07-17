@@ -13,7 +13,7 @@ public:
 	~CµÇÂ¼ÕË»§UI() {} //::PostQuitMessage(0L); }
 	CDuiString GetSkinFile();
 	CDuiString GetSkinFolder();
-	UILIB_RESOURCETYPE GetResourceType()const;
+	UILIB_RESTYPE GetResourceType()const;
 	LPCTSTR GetResourceID()const;
 	void OnFinalMessage(HWND hWnd);
 	LPCTSTR GetWindowClassName()const;

@@ -18,7 +18,7 @@ CDuiString C登录账户UI::GetSkinFolder()
 	return _T("Skin\\ListRes\\");
 }
 
-UILIB_RESOURCETYPE C登录账户UI::GetResourceType()const
+UILIB_RESTYPE C登录账户UI::GetResourceType()const
 {
 	return UILIB_FILE;
 }
@@ -42,18 +42,18 @@ CControlUI* C登录账户UI::CreateControl(LPCTSTR pstrClass)
 void C登录账户UI::设置登录UI状态()
 {
 	if (m_IsLogin) {
-		CContainerUI* pContainer = static_cast<CContainerUI*>(m_PaintManager.FindControl(_T("panel_show")));
+		CContainerUI* pContainer = static_cast<CContainerUI*>(m_pm.FindControl(_T("panel_show")));
 		if (!pContainer)MessageBox(NULL, _T("数据出错!"), NULL, NULL);
 		pContainer->SetVisible(false);
-		COptionUI* pOption = static_cast<COptionUI*>(m_PaintManager.FindControl(_T("btn_Logout")));
+		COptionUI* pOption = static_cast<COptionUI*>(m_pm.FindControl(_T("btn_Logout")));
 		if (!pOption)MessageBox(NULL, _T("数据出错!"), NULL, NULL);
 		pOption->SetVisible(true);
 	}
 	else {
-		CContainerUI* pContainer = static_cast<CContainerUI*>(m_PaintManager.FindControl(_T("panel_show")));
+		CContainerUI* pContainer = static_cast<CContainerUI*>(m_pm.FindControl(_T("panel_show")));
 		if (!pContainer)MessageBox(NULL, _T("数据出错!"), NULL, NULL);
 		pContainer->SetVisible(true);
-		COptionUI* pOption = static_cast<COptionUI*>(m_PaintManager.FindControl(_T("btn_Logout")));
+		COptionUI* pOption = static_cast<COptionUI*>(m_pm.FindControl(_T("btn_Logout")));
 		if (!pOption)MessageBox(NULL, _T("数据出错!"), NULL, NULL);
 		pOption->SetVisible(false);
 	}
@@ -72,7 +72,7 @@ void C登录账户UI::SaveEditInfo()
 	TCHAR cfgbuff[1024] = { 0 };
 	GetRunPath(cfgbuff, sizeof(cfgbuff));
 	_tcscat(cfgbuff, _T("\\bin\\Config.cfg"));
-	CEditUI* pEdit = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_UserName")));
+	CEditUI* pEdit = static_cast<CEditUI*>(m_pm.FindControl(_T("Edit_UserName")));
 	if (!pEdit)return;
 	CDuiString tmpstr = pEdit->GetText();
 	WritePrivateProfileString(_T("ZElauncher"), _T("Login_UserName"), tmpstr.GetData(), cfgbuff);
@@ -144,8 +144,8 @@ void C登录账户UI::创建POST请求数据(std::string& POST请求数据)
 	POST请求数据 = "username=";
 	strCoding 字符串编码;
 	_bstr_t 用户名 = "";
-	CEditUI* pEditUser = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_UserName")));
-	CEditUI* pEditPWD = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_PassWord")));
+	CEditUI* pEditUser = static_cast<CEditUI*>(m_pm.FindControl(_T("Edit_UserName")));
+	CEditUI* pEditPWD = static_cast<CEditUI*>(m_pm.FindControl(_T("Edit_PassWord")));
 	if (!pEditUser || !pEditPWD) {
 		MessageBox(NULL, _T("登录失败,UI信息获取失败!"), NULL, NULL);
 		return;
@@ -171,7 +171,7 @@ void C登录账户UI::初始化用户名编辑框()
 	TCHAR tmpbuff[1024] = { 0 };
 	GetRunPath(cfgbuff, sizeof(cfgbuff));
 	_tcscat(cfgbuff, _T("\\bin\\Config.cfg"));
-	CEditUI* pEdit = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_UserName")));
+	CEditUI* pEdit = static_cast<CEditUI*>(m_pm.FindControl(_T("Edit_UserName")));
 	if (!pEdit)return;
 	GetPrivateProfileString(_T("ZElauncher"), _T("Login_UserName"), NULL, tmpbuff, sizeof(tmpbuff), cfgbuff);
 	if (_tcslen(tmpbuff) > 3) {

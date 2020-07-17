@@ -147,7 +147,7 @@ void C商城UI::获取商城数据()
 			_bstr_t tmp23 = static_cast<_bstr_t>(Submatch->GetItem(0L));
 			pLabel->SetUserData(tmp23);
 			//设置皮肤图片
-			_stprintf(szbuf, _T("Temp\\%d_%d.png"), i,m_PageNum);
+			_stprintf(szbuf, _T("Temp\\%d.png"), i);
 			std::string ImgData;
 			if (sText.length() > 3)
 			{
@@ -156,7 +156,7 @@ void C商城UI::获取商城数据()
 				url = L"https://bbs.93x.net/";
 				url += sText;
 				htp.GET(url, ImgData);
-				if (ImgData.find("404") == std::string::npos) {
+				if (ImgData.size() > 20 && ImgData.find("404") == std::string::npos) {
 					HGLOBAL hGlobal = GlobalAlloc(GMEM_MOVEABLE, ImgData.size());
 					void* pData = GlobalLock(hGlobal);
 					memcpy(pData, ImgData.c_str(), ImgData.size());
@@ -165,10 +165,10 @@ void C商城UI::获取商城数据()
 					CreateStreamOnHGlobal(hGlobal, TRUE, &pStream);
 					CImage img;
 					img.Load(pStream);
-					//m_paintmanager->RemoveImage(szbuf);
+					m_paintmanager->RemoveImage(szbuf);
 					m_paintmanager->AddImage(szbuf, (HBITMAP)img, img.GetWidth(), img.GetHeight(), false);
-					img.Detach();
 					pLabel->SetBkImage(szbuf);
+					img.Detach();
 					pStream->Release();
 					GlobalFree(hGlobal);
 				}

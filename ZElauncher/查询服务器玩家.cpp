@@ -19,7 +19,7 @@ CDuiString C查询服务器玩家UI::GetSkinFolder()
 	return _T("Skin\\ListRes\\");
 }
 
-UILIB_RESOURCETYPE C查询服务器玩家UI::GetResourceType()const
+UILIB_RESTYPE C查询服务器玩家UI::GetResourceType()const
 {
 	return UILIB_FILE;
 }
@@ -43,7 +43,7 @@ CControlUI* C查询服务器玩家UI::CreateControl(LPCTSTR pstrClass)
 void C查询服务器玩家UI::InitWindow()
 {
 	pLookPlayer = this;
-	g_paintmanager = &m_PaintManager;
+	g_paintmanager = &m_pm;
 	lib_Socket::UDPClient udp;
 	udp.Initialize();
 }
@@ -106,7 +106,7 @@ void __stdcall UdpProc(SOCKET nSock, unsigned int nIndex, void* pBuf, unsigned i
 
 void C查询服务器玩家UI::GetPlayer(LPCTSTR lpServer)
 {
-	CTextUI* pText = static_cast<CTextUI*>(m_PaintManager.FindControl(_T("Text_Out")));
+	CTextUI* pText = static_cast<CTextUI*>(m_pm.FindControl(_T("Text_Out")));
 	CDuiString Out = _T("当前服务器:");
 	Out += g_ServerName_LookPlayer;
 	if (pText)pText->SetText(Out);

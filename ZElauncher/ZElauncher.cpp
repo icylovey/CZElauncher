@@ -7,7 +7,7 @@ LPCTSTR CZElauncherMain::GetWindowClassName() const
 	return _T("ZElauncherForm");
 };
 
-UILIB_RESOURCETYPE CZElauncherMain::GetResourceType() const
+UILIB_RESTYPE CZElauncherMain::GetResourceType() const
 {
 #ifdef _DEBUG
 	return UILIB_FILE;
@@ -42,7 +42,7 @@ void CZElauncherMain::OnFinalMessage(HWND hWnd)
 
 void CZElauncherMain::LogoutUser(_bstr_t Tiptext)
 {
-	CButtonUI* pLogin = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Button_Login")));
+	CButtonUI* pLogin = static_cast<CButtonUI*>(m_pm.FindControl(_T("Button_Login")));
 	if (!pLogin)return;
 	CDuiString Tip = _T("{u}{a}");
 	Tip += Tiptext.GetBSTR();
@@ -178,15 +178,15 @@ void CZElauncherMain::InitWindow()
 	_tcscat(CfgPath, _T("\\bin\\Config.cfg"));
 	GetPrivateProfileString(_T("ZElauncher"), _T("Server_Switch"), NULL, Server_Switch, sizeof(Server_Switch), CfgPath);
 	if (_tcscmp(Server_Switch, _T("true")) == 0) {
-		COptionUI* pButton = static_cast<COptionUI*>(m_PaintManager.FindControl(_T("Server_Switch")));
+		COptionUI* pButton = static_cast<COptionUI*>(m_pm.FindControl(_T("Server_Switch")));
 		if (pButton)pButton->Selected(true);
 	}
 	_bstr_t sVersion = _T("{c #386382}当前版本：");
 	sVersion += Version;
 	sVersion += _T("{/c}");
-	CTextUI* pText = static_cast<CTextUI*>(m_PaintManager.FindControl(_T("VersionTip")));
+	CTextUI* pText = static_cast<CTextUI*>(m_pm.FindControl(_T("VersionTip")));
 	if (pText)pText->SetText(sVersion);
-	CControlUI* pbkimg = static_cast<CControlUI*>(m_PaintManager.FindControl(_T("img_bkimage")));
+	CControlUI* pbkimg = static_cast<CControlUI*>(m_pm.FindControl(_T("img_bkimage")));
 	if (pbkimg) {
 		TCHAR* pszbuff = new TCHAR[MAX_PATH]();
 		GetPrivateProfileString(_T("ZElauncher"), _T("edit_bkimge"), NULL, pszbuff, (MAX_PATH * sizeof(TCHAR)), CfgPath);
@@ -210,16 +210,25 @@ void CZElauncherMain::启动获取ZE地图中文名表()
 	pServer->RefreshServer();
 }
 
+void CZElauncherMain::MenuClick(CControlUI* Click)
+{
+	if (_tcscmp(Click->GetText().GetData(), _T("选项设置")) == 0)OnSetting();
+	else if (_tcscmp(Click->GetText().GetData(), _T("默认")) == 0)SetSkinName(_T("默认"));
+	else if (_tcscmp(Click->GetText().GetData(), _T("简约")) == 0)SetSkinName(_T("简约"));
+	else if (_tcscmp(Click->GetText().GetData(), _T("卡通")) == 0)SetSkinName(_T("卡通"));
+}
+
 void CZElauncherMain::Notify(TNotifyUI& msg)
 {
 	if (_tcscmp(msg.sType, _T("windowinit")) == 0)OnInitialize();
 	else if (_tcscmp(msg.sType, _T("click")) == 0)OnClick(msg);
+	else if (_tcscmp(msg.sType, _T("itemclick")) == 0)MenuClick(msg.pSender);
 	else if (_tcscmp(msg.sType, _T("selectchanged")) == 0)
 	{
 		CDuiString name = msg.pSender->GetName();
-		CTabLayoutUI* pControl = static_cast<CTabLayoutUI*>(m_PaintManager.FindControl(_T("Tabchild")));
+		CTabLayoutUI* pControl = static_cast<CTabLayoutUI*>(m_pm.FindControl(_T("Tabchild")));
 		if (!pControl)return;
-		COptionUI* pSwitch = static_cast<COptionUI*>(m_PaintManager.FindControl(_T("Server_Switch")));
+		COptionUI* pSwitch = static_cast<COptionUI*>(m_pm.FindControl(_T("Server_Switch")));
 		if (!pSwitch)return;
 		if (name == _T("Title_Server"))pControl->SelectItem(0);
 		else if (name == _T("Title_award"))pControl->SelectItem(1);
@@ -315,15 +324,15 @@ _bstr_t CZElauncherMain::GetChineseMapName(_bstr_t Map_englishName)
 
 CControlUI* CZElauncherMain::CreateControl(LPCTSTR pstrClass)
 {
-	if (_tcscmp(pstrClass, _T("Server")) == 0)return new C服务器UI(m_PaintManager, this->m_hWnd);
-	else if (_tcscmp(pstrClass, _T("Award")) == 0)return new C礼包UI(m_PaintManager);
+	if (_tcscmp(pstrClass, _T("Server")) == 0)return new C服务器UI(m_pm, this->m_hWnd);
+	else if (_tcscmp(pstrClass, _T("Award")) == 0)return new C礼包UI(m_pm);
 	else if (_tcscmp(pstrClass, _T("Shop")) == 0) {
-		pShop = new C商城UI(m_PaintManager);
+		pShop = new C商城UI(m_pm);
 		return pShop;
 	}
-	else if (_tcscmp(pstrClass, _T("Tools")) == 0)return new C工具箱UI(m_PaintManager);
+	else if (_tcscmp(pstrClass, _T("Tools")) == 0)return new C工具箱UI(m_pm);
 	else if (_tcscmp(pstrClass, _T("Skin")) == 0) {
-		pSkin = new C新手皮肤UI(m_PaintManager);
+		pSkin = new C新手皮肤UI(m_pm);
 		return pSkin;
 	}
 	return NULL;
@@ -334,21 +343,6 @@ void CZElauncherMain::OnExit(const TNotifyUI& msg)
 	::PostQuitMessage(0L);
 	__super::Close();
 	ExitProcess(0L);
-}
-
-void _stdcall MenuProc_Main(HWND hWnd, MenuInfo* MenuInfo)
-{
-	if (g_pZElauncher) {
-		if (_tcscmp(MenuInfo->MenuText.GetData(), _T("选项设置")) == 0)g_pZElauncher->OnSetting();
-		/*{
-			std::thread t1 = std::thread(&CZElauncherMain::OnSetting, g_pZElauncher, true);
-			t1.detach();
-		}*/
-		else if (_tcscmp(MenuInfo->MenuText.GetData(), _T("默认")) == 0)g_pZElauncher->SetSkinName(_T("默认"));
-		else if (_tcscmp(MenuInfo->MenuText.GetData(), _T("简约")) == 0)g_pZElauncher->SetSkinName(_T("简约"));
-		else if (_tcscmp(MenuInfo->MenuText.GetData(), _T("卡通")) == 0)g_pZElauncher->SetSkinName(_T("卡通"));
-
-	}
 }
 
 void __stdcall ThreadTip()
@@ -445,11 +439,10 @@ void CZElauncherMain::OnLogin(bool IsLogin, bool IsModel)
 
 void CZElauncherMain::OnMenu(const TNotifyUI& msg)
 {
-	CMenuWnd* pMenu = new CMenuWnd(m_hWnd);
-	CDuiPoint point = msg.ptMouse;
-	ClientToScreen(m_hWnd, &point);
-	STRINGorID xml(IDR_XML2);
-	pMenu->Init(NULL, xml, _T("xml"), point, MenuProc_Main);
+	CDuiPoint point(0, 0);
+	GetCursorPos(&point);
+	STRINGorID xml(_T("Menu_Main.xml"));
+	CMenuWnd* pMenu = CMenuWnd::CreateMenu(nullptr, xml, point, &m_pm);
 }
 
 void CZElauncherMain::OnInitialize()
@@ -481,7 +474,7 @@ void CZElauncherMain::OnInitialize()
 
 void CZElauncherMain::OutTip(_bstr_t pOutTip)
 {
-	CTextUI* pText = static_cast<CTextUI*>(m_PaintManager.FindControl(_T("Outtip")));
+	CTextUI* pText = static_cast<CTextUI*>(m_pm.FindControl(_T("Outtip")));
 	if (!pText)return;
 	CDuiString Out = _T("{c #FF0000}");//#386382
 	Out += pOutTip.GetBSTR();
@@ -491,7 +484,7 @@ void CZElauncherMain::OutTip(_bstr_t pOutTip)
 
 void CZElauncherMain::OutTip2(_bstr_t pOutTip2)
 {
-	CTextUI* pText = static_cast<CTextUI*>(m_PaintManager.FindControl(_T("Outtip2")));
+	CTextUI* pText = static_cast<CTextUI*>(m_pm.FindControl(_T("Outtip2")));
 	if (!pText)return;
 	CDuiString Out = _T("{c #FF0000}");
 	Out += pOutTip2.GetBSTR();
@@ -501,7 +494,7 @@ void CZElauncherMain::OutTip2(_bstr_t pOutTip2)
 
 void CZElauncherMain::InitLogin()
 {
-	CButtonUI* pLogin = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Button_Login")));
+	CButtonUI* pLogin = static_cast<CButtonUI*>(m_pm.FindControl(_T("Button_Login")));
 	if (!pLogin)return;
 	//获取个人信息;
 	lib_http::CLibhttp http;
@@ -540,7 +533,7 @@ void CZElauncherMain::InitLogin()
 
 bool CZElauncherMain::UserIslogin()
 {
-	CButtonUI* pLogin = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Button_Login")));
+	CButtonUI* pLogin = static_cast<CButtonUI*>(m_pm.FindControl(_T("Button_Login")));
 	if (!pLogin)return false;
 	if (_tcscmp(pLogin->GetText(), _T("{u}{a}未登录{/a}{/u}")) == 0 || _tcscmp(pLogin->GetText(), _T("{u}{a}登录失败{/a}{/u}")) == 0 || _tcscmp(pLogin->GetText(), _T("{u}{a}Cookies获取为空{/a}{/u}")) == 0)
 		return false;

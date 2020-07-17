@@ -39,6 +39,7 @@ private:
 	//新版获取服务器列表
 	void GetServerList2(const char* pName, UINT type = NULL);
 	void Get93xServerList2(const char* pName, UINT type = NULL);
+	void MenuClick(CControlUI* Click);
 	void OnCreate();
 	void OnClick(CControlUI* Click);
 	//编辑框清空

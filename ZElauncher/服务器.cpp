@@ -52,21 +52,6 @@ void C服务器UI::RefreshServer()
 	ShowServerList(g_Current_server_name.name.c_str(), g_Current_server_name.type, g_Current_server_name.Is93x);
 }
 
-void _stdcall MenuProc(HWND hWnd, MenuInfo* MenuInfo)
-{
-	if (pServer) {
-		if (_tcscmp(MenuInfo->MenuText.GetData(), _T("刷新服务器")) == 0)pServer->ShowServerList(g_Current_server_name.name.c_str(), g_Current_server_name.type, g_Current_server_name.Is93x);
-		else if (_tcscmp(MenuInfo->MenuText.GetData(), _T("复制IP地址")) == 0)pServer->CopyServerInfo(3);
-		else if (_tcscmp(MenuInfo->MenuText.GetData(), _T("复制地图名")) == 0)pServer->CopyServerInfo(1);
-		else if (_tcscmp(MenuInfo->MenuText.GetData(), _T("加入服务器")) == 0)pServer->JoinServer();
-		else if (_tcscmp(MenuInfo->MenuText.GetData(), _T("查看玩家")) == 0)pServer->OnLookPlayer();
-		else if (_tcscmp(MenuInfo->MenuText.GetData(), _T("切换地图名显示方式")) == 0) {
-			IsChineseMap = !IsChineseMap;
-			pServer->ShowServerList(g_Current_server_name.name.c_str(), g_Current_server_name.type, g_Current_server_name.Is93x);
-		}
-	}
-} 
-
 void C服务器UI::OnLookPlayer()
 {
 	CListUI* pList = static_cast<CListUI*>(m_paManager->FindControl(_T("List_Server")));
@@ -87,20 +72,34 @@ void C服务器UI::ClearEdit()
 	if (pSearch)pSearch->SetText(_T(""));
 }
 
+void C服务器UI::MenuClick(CControlUI* Click)
+{
+	//if(_tcscmp(Click->GetName(),_T("加入服务器"))==0)JoinServer();
+	if (_tcscmp(Click->GetText().GetData(), _T("刷新服务器")) == 0)ShowServerList(g_Current_server_name.name.c_str(), g_Current_server_name.type, g_Current_server_name.Is93x);
+	else if (_tcscmp(Click->GetText().GetData(), _T("复制IP地址")) == 0)CopyServerInfo(3);
+	else if (_tcscmp(Click->GetText().GetData(), _T("复制地图名")) == 0)CopyServerInfo(1);
+	else if (_tcscmp(Click->GetText().GetData(), _T("加入服务器")) == 0)JoinServer();
+	else if (_tcscmp(Click->GetText().GetData(), _T("查看玩家")) == 0)OnLookPlayer();
+	else if (_tcscmp(Click->GetText().GetData(), _T("切换地图名显示方式")) == 0) {
+		IsChineseMap = !IsChineseMap;
+		ShowServerList(g_Current_server_name.name.c_str(), g_Current_server_name.type, g_Current_server_name.Is93x);
+	}
+}
+
 void C服务器UI::Notify(TNotifyUI& msg)
 {
 	if (_tcscmp(msg.sType, _T("windowinit")) == 0)OnCreate();
 	else if (_tcscmp(msg.sType, _T("click")) == 0)OnClick(msg.pSender);
+	else if (_tcscmp(msg.sType, _T("itemclick")) == 0)MenuClick(msg.pSender);
 	else if (_tcscmp(msg.sType, _T("itemactivate")) == 0)JoinServer();
 	else if (_tcscmp(msg.sType, _T("setfocus")) == 0) {
 		if (_tcscmp(msg.pSender->GetName(), _T("Edit_Search")) == 0)ClearEdit();
 	}
 	else if (_tcscmp(msg.sType, _T("menu")) == 0) {
-		CMenuWnd* pMenu = new CMenuWnd(m_hWnd);
-		CDuiPoint point = msg.ptMouse;
-		ClientToScreen(m_hWnd, &point);
-		STRINGorID xml(IDR_XML1);
-		pMenu->Init(NULL, xml, _T("xml"), point, MenuProc);
+		CDuiPoint point(0, 0);
+		GetCursorPos(&point);
+		STRINGorID xml(_T("Menu_server.xml"));
+		CMenuWnd* pMenu = CMenuWnd::CreateMenu(nullptr, xml, point, m_paManager);
 	}
 
 }

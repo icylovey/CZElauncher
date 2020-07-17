@@ -13,7 +13,7 @@ public:
 	LPCTSTR GetWindowClassName()const;
 	CDuiString GetSkinFile();
 	CDuiString GetSkinFolder();
-	UILIB_RESOURCETYPE GetResourceType()const;
+	UILIB_RESTYPE GetResourceType()const;
 	LPCTSTR GetResourceID()const;
 	CControlUI* CreateControl(LPCTSTR pstrClass);
 	void InitWindow();

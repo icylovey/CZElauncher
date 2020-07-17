@@ -18,7 +18,7 @@ CDuiString C设置UI::GetSkinFolder()
 	return _T("Skin\\ListRes\\");
 }
 
-UILIB_RESOURCETYPE C设置UI::GetResourceType()const
+UILIB_RESTYPE C设置UI::GetResourceType()const
 {
 	return UILIB_FILE;
 }
@@ -42,7 +42,7 @@ CControlUI* C设置UI::CreateControl(LPCTSTR pstrClass)
 void C设置UI::InitEditInfo()
 {
 	//获取CSGO目录
-	CEditUI* pEdit = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("edit_csgo")));
+	CEditUI* pEdit = static_cast<CEditUI*>(m_pm.FindControl(_T("edit_csgo")));
 	if (!pEdit)return;
 	TCHAR csgobuff[1024] = { 0 };
 	TCHAR steambuff[1024] = { 0 };
@@ -59,7 +59,7 @@ void C设置UI::InitEditInfo()
 		pEdit->SetText(csgobuff);
 	}
 	//获取Steam目录
-	pEdit = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("edit_steam")));
+	pEdit = static_cast<CEditUI*>(m_pm.FindControl(_T("edit_steam")));
 	if (!pEdit)return;
 	GetPrivateProfileString(_T("ZElauncher"), _T("SteamPath"), NULL, steambuff, sizeof(steambuff), cfgbuff);
 	if (_tcslen(steambuff) > 3) {
@@ -71,21 +71,21 @@ void C设置UI::InitEditInfo()
 		pEdit->SetText(steambuff);
 	}
 	//获取背景图片目录
-	pEdit = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("edit_bkimge")));
+	pEdit = static_cast<CEditUI*>(m_pm.FindControl(_T("edit_bkimge")));
 	if (!pEdit)return;
 	GetPrivateProfileString(_T("ZElauncher"), _T("edit_bkimge"), NULL, steambuff, sizeof(steambuff), cfgbuff);
 	if (_tcslen(steambuff) > 3) {
 		pEdit->SetText(steambuff);
 	}
 	//获取服务器列表背景图片目录
-	pEdit = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("edit_listbkimge")));
+	pEdit = static_cast<CEditUI*>(m_pm.FindControl(_T("edit_listbkimge")));
 	if (!pEdit)return;
 	GetPrivateProfileString(_T("ZElauncher"), _T("edit_listbkimge"), NULL, steambuff, sizeof(steambuff), cfgbuff);
 	if (_tcslen(steambuff) > 3) {
 		pEdit->SetText(steambuff);
 	}
 	//获取预热下载状态
-	DuiLib::CCheckBoxUI* pOption = static_cast<DuiLib::CCheckBoxUI*>(m_PaintManager.FindControl(_T("Option_HotMap")));
+	DuiLib::CCheckBoxUI* pOption = static_cast<DuiLib::CCheckBoxUI*>(m_pm.FindControl(_T("Option_HotMap")));
 	if (pOption)pOption->SetCheck(g_IsDownloadHotmap);
 }
 
@@ -101,21 +101,21 @@ void C设置UI::SaveEditInfo()
 	TCHAR cfgbuff[1024] = { 0 };
 	GetRunPath(cfgbuff, sizeof(cfgbuff));
 	_tcscat(cfgbuff, _T("\\bin\\Config.cfg"));
-	CEditUI* pEdit = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("edit_csgo")));
+	CEditUI* pEdit = static_cast<CEditUI*>(m_pm.FindControl(_T("edit_csgo")));
 	if (!pEdit)return;
 	CDuiString tmpstr = pEdit->GetText();
 	WritePrivateProfileString(_T("ZElauncher"), _T("CSGOPath"), tmpstr.GetData(), cfgbuff);
-	pEdit = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("edit_steam")));
+	pEdit = static_cast<CEditUI*>(m_pm.FindControl(_T("edit_steam")));
 	if (!pEdit)return;
 	tmpstr = pEdit->GetText();
 	WritePrivateProfileString(_T("ZElauncher"), _T("SteamPath"), tmpstr.GetData(), cfgbuff);
 
-	pEdit = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("edit_listbkimge")));
+	pEdit = static_cast<CEditUI*>(m_pm.FindControl(_T("edit_listbkimge")));
 	if (!pEdit)return;
 	tmpstr = pEdit->GetText();
 	WritePrivateProfileString(_T("ZElauncher"), _T("edit_listbkimge"), tmpstr.GetData(), cfgbuff);
 
-	pEdit = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("edit_bkimge")));
+	pEdit = static_cast<CEditUI*>(m_pm.FindControl(_T("edit_bkimge")));
 	if (!pEdit)return;
 	tmpstr = pEdit->GetText();
 	WritePrivateProfileString(_T("ZElauncher"), _T("edit_bkimge"), tmpstr.GetData(), cfgbuff);
@@ -148,7 +148,7 @@ void C设置UI::GetNewPath(LPCTSTR pEditName)
 		return;
 	}
 	SHGetPathFromIDList(idl, szBuffer);
-	CEditUI* pEdit = static_cast<CEditUI*>(m_PaintManager.FindControl(pEditName));
+	CEditUI* pEdit = static_cast<CEditUI*>(m_pm.FindControl(pEditName));
 	if (!pEdit)return;
 	pEdit->SetText(szBuffer);
 	/*::SendMessage(m_hWnd, WM_LBUTTONDOWN, NULL, NULL);
@@ -167,14 +167,14 @@ void C设置UI::GetImagePath(LPCTSTR pEditName)
 	ofn.nFilterIndex = 0;
 	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_EXPLORER;//标志如果是多选要加上OFN_ALLOWMULTISELECT
 	BOOL bSel = GetOpenFileName(&ofn);
-	CEditUI* pEdit = static_cast<CEditUI*>(m_PaintManager.FindControl(pEditName));
+	CEditUI* pEdit = static_cast<CEditUI*>(m_pm.FindControl(pEditName));
 	if (!pEdit)return;
 	if (_tcslen(szBuffer) > 3)pEdit->SetText(szBuffer);
 }
 
 void C设置UI::SetDownloadHotMap()
 {
-	DuiLib::CCheckBoxUI* pOption = static_cast<DuiLib::CCheckBoxUI*>(m_PaintManager.FindControl(_T("Option_HotMap")));
+	DuiLib::CCheckBoxUI* pOption = static_cast<DuiLib::CCheckBoxUI*>(m_pm.FindControl(_T("Option_HotMap")));
 	if (!pOption)return;
 	g_IsDownloadHotmap = !pOption->IsSelected();
 	SaveEditInfo();

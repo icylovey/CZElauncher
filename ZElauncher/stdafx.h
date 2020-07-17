@@ -6,9 +6,8 @@
 #include <thread> 
 #include <list>
 #include <vector>
-//#include <UIlib.h>
 
-#include "Duilib/include/UIlib.h"
+#include "Duilib/StdAfx.h"
 #include "Variable.h"
 #include "resource.h"
 #include "json/json.h"
@@ -17,8 +16,6 @@
 #include "ModuleSDK/lib_Socket.h"
 #include "ModuleSDK/ChineseCode.h"
 #include "ModuleSDK/Path.h"
-//#include "ValveSDK/ssq.h"
-//#include "Duilib/include/Menu/UIMenu2.h"
 
 #import <progid:VBScript.RegExp>named_guids//no_namespace
 

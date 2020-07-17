@@ -23,7 +23,7 @@ public:
 	CDuiString GetSkinFile();
 	CDuiString GetSkinFolder();
 	LPCTSTR GetResourceID() const;
-	UILIB_RESOURCETYPE GetResourceType() const;
+	UILIB_RESTYPE GetResourceType() const;
 	CControlUI* CreateControl(LPCTSTR pstrClass);
 	void SetSkinName(LPCTSTR SkinName);
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -45,6 +45,7 @@ private:
 	void OnExit(const TNotifyUI& msg);
 	void OnClick(const TNotifyUI& msg);
 	void OnMenu(const TNotifyUI& msg);
+	void MenuClick(CControlUI* Click);
 	void OnInitialize();
 	void Get93xServerListInfo();
 private:
