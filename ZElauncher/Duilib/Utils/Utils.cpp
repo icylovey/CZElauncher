@@ -153,7 +153,10 @@ namespace DuiLib
     CStdPtrArray::CStdPtrArray(int iPreallocSize) : m_ppVoid(NULL), m_nCount(0), m_nAllocated(iPreallocSize)
     {
         ASSERT(iPreallocSize>=0);
-        if( iPreallocSize > 0 ) m_ppVoid = static_cast<LPVOID*>(malloc(iPreallocSize * sizeof(LPVOID)));
+        if (iPreallocSize > 0) {
+            m_ppVoid = static_cast<LPVOID*>(malloc(iPreallocSize * sizeof(LPVOID)));
+            if(m_ppVoid)ZeroMemory(m_ppVoid, iPreallocSize * sizeof(LPVOID));
+        }
     }
 
     CStdPtrArray::CStdPtrArray(const CStdPtrArray& src) : m_ppVoid(NULL), m_nCount(0), m_nAllocated(0)

@@ -37,8 +37,9 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140_xp</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -129,8 +130,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;UILIB_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalIncludeDirectories>./;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -221,6 +223,9 @@
     <ClInclude Include="Duilib\Utils\VersionHelpers.h" />
     <ClInclude Include="Duilib\Utils\WebBrowserEventHandler.h" />
     <ClInclude Include="Duilib\Utils\WinImplBase.h" />
+    <ClInclude Include="htmlsdk\html_parser.hpp" />
+    <ClInclude Include="json\json_tool.h" />
+    <ClInclude Include="查看帖子.h" />
     <ClInclude Include="礼包.h" />
     <ClInclude Include="礼包提示窗口.h" />
     <ClInclude Include="json\autolink.h" />
@@ -244,6 +249,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="服务器.h" />
     <ClInclude Include="服务器菜单.h" />
+    <ClInclude Include="论坛.h" />
     <ClInclude Include="设置.h" />
     <ClInclude Include="商城.h" />
     <ClInclude Include="新手皮肤.h" />
@@ -309,6 +315,7 @@
     <ClCompile Include="Duilib\Utils\unzip.cpp" />
     <ClCompile Include="Duilib\Utils\Utils.cpp" />
     <ClCompile Include="Duilib\Utils\WinImplBase.cpp" />
+    <ClCompile Include="查看帖子.cpp" />
     <ClCompile Include="礼包.cpp" />
     <ClCompile Include="礼包提示窗口.cpp" />
     <ClCompile Include="json\json_reader.cpp" />
@@ -325,6 +332,7 @@
     <ClCompile Include="ModuleSDK\Path.cpp" />
     <ClCompile Include="服务器.cpp" />
     <ClCompile Include="服务器菜单.cpp" />
+    <ClCompile Include="论坛.cpp" />
     <ClCompile Include="设置.cpp" />
     <ClCompile Include="商城.cpp" />
     <ClCompile Include="新手皮肤.cpp" />

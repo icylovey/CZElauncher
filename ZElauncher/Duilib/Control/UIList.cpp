@@ -2377,8 +2377,9 @@ namespace DuiLib {
     //
     IMPLEMENT_DUICONTROL(CListTextElementUI)
 
-    CListTextElementUI::CListTextElementUI() : m_nLinks(0), m_nHoverLink(-1), m_pOwner(NULL)
+		CListTextElementUI::CListTextElementUI() : m_nLinks(0), m_nHoverLink(-1), m_pOwner(NULL)
     {
+        m_aTextsColors = 0;
         ::ZeroMemory(&m_rcLinks, sizeof(m_rcLinks));
     }
 
@@ -2411,9 +2412,22 @@ namespace DuiLib {
     LPCTSTR CListTextElementUI::GetText(int iIndex) const
     {
         CDuiString* pText = static_cast<CDuiString*>(m_aTexts.GetAt(iIndex));
+        LPCTSTR re;
         if( pText ) {
-            if (!IsResourceText()) 
-                return pText->GetData();
+           /*if (!IsResourceText()){
+                re = pText->GetData();
+                if (re == (LPCTSTR)0xDDDDDDDD) {
+                    return NULL;
+                }
+                return re;
+            }
+            re = CResourceManager::GetInstance()->GetText(*pText);
+			if (re == (LPCTSTR)0xDDDDDDDD) {
+				return NULL;
+			}
+			return re;*/
+            if (!IsResourceText())
+				return re = pText->GetData();
             return CResourceManager::GetInstance()->GetText(*pText);
         }
         return NULL;
@@ -2432,8 +2446,12 @@ namespace DuiLib {
 
         if ( pText ) {delete pText; pText = NULL;}
         m_aTexts.SetAt(iIndex, new CDuiString(pstrText));
-
         Invalidate();
+    }
+
+    void CListTextElementUI::SetTextColor_(COLORREF color)
+    {
+        m_aTextsColors = color;
     }
 
     void CListTextElementUI::SetOwner(CControlUI* pOwner)
@@ -2514,8 +2532,10 @@ namespace DuiLib {
     {
         if( m_pOwner == NULL ) return;
         TListInfoUI* pInfo = m_pOwner->GetListInfo();
-        DWORD iTextColor = pInfo->dwTextColor;
-
+        DWORD iTextColor;
+        if (m_aTextsColors)iTextColor = m_aTextsColors;
+        else iTextColor = pInfo->dwTextColor;
+       //DWORD iTextColor = m_aTextsColors;
         if( (m_uButtonState & UISTATE_HOT) != 0 ) {
             iTextColor = pInfo->dwHotTextColor;
         }

@@ -7,6 +7,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZElauncher", "ZElauncher\ZE
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SteamUser", "SteamUser\SteamUser.vcxproj", "{00E3560B-79AA-4659-B269-6E80B5888672}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UpdateDownload", "UpdateDownload\UpdateDownload.vcxproj", "{CA09C1DC-4FC6-44AB-AC36-77EDFD217F3E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8698EE4E-0C29-4E0E-A2AD-97E65856EEF1} = {8698EE4E-0C29-4E0E-A2AD-97E65856EEF1}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +36,14 @@ Global
 		{00E3560B-79AA-4659-B269-6E80B5888672}.Release|x64.Build.0 = Release|x64
 		{00E3560B-79AA-4659-B269-6E80B5888672}.Release|x86.ActiveCfg = Release|Win32
 		{00E3560B-79AA-4659-B269-6E80B5888672}.Release|x86.Build.0 = Release|Win32
+		{CA09C1DC-4FC6-44AB-AC36-77EDFD217F3E}.Debug|x64.ActiveCfg = Debug|x64
+		{CA09C1DC-4FC6-44AB-AC36-77EDFD217F3E}.Debug|x64.Build.0 = Debug|x64
+		{CA09C1DC-4FC6-44AB-AC36-77EDFD217F3E}.Debug|x86.ActiveCfg = Debug|Win32
+		{CA09C1DC-4FC6-44AB-AC36-77EDFD217F3E}.Debug|x86.Build.0 = Debug|Win32
+		{CA09C1DC-4FC6-44AB-AC36-77EDFD217F3E}.Release|x64.ActiveCfg = Release|x64
+		{CA09C1DC-4FC6-44AB-AC36-77EDFD217F3E}.Release|x64.Build.0 = Release|x64
+		{CA09C1DC-4FC6-44AB-AC36-77EDFD217F3E}.Release|x86.ActiveCfg = Release|Win32
+		{CA09C1DC-4FC6-44AB-AC36-77EDFD217F3E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

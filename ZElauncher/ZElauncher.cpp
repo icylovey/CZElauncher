@@ -131,9 +131,9 @@ void ServerHotDownloadJsonEvent(std::string &Resulthtml)
 		else str_outtip += map_name;
 		str_outtip += " >";
 		str_outtip += "  正在游玩[ ";
-		for (UINT i = 0; i < g_ServerListInfo.size(); i++) {
-			if (_tcsstr(g_ServerListInfo[i].ServerIp.GetBSTR(), ServerIpinfo.GetBSTR())) {
-				ServerIpinfo = g_ServerListInfo[i].ServerName;
+		for (auto Server : g_ServerListInfo) {
+			if (_tcsstr(Server.ServerIp, ServerIpinfo.GetBSTR())) {
+				ServerIpinfo = Server.ServerName;
 				break;
 			}
 		}
@@ -192,22 +192,37 @@ void CZElauncherMain::InitWindow()
 		GetPrivateProfileString(_T("ZElauncher"), _T("edit_bkimge"), NULL, pszbuff, (MAX_PATH * sizeof(TCHAR)), CfgPath);
 		if (_tcslen(pszbuff) > 5)pbkimg->SetBkImage(pszbuff);
 	}
-	std::thread t1 = std::thread(&CZElauncherMain::启动获取ZE地图中文名表, this);
-	t1.detach();
+	刷新ZE地图中文名表();
+	std::thread t2 = std::thread(&CZElauncherMain::Get93xServerListInfo, this);
+	t2.detach();
 	//SetTimer(m_hWnd, 12313, 2000, (TIMERPROC)Timeproc);
 	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)ThreadhotProc, NULL, NULL, NULL);
 }
 
+bool IsThread = false;
+
+void CZElauncherMain::刷新ZE地图中文名表()
+{
+	if (!IsThread) {
+		std::thread t1 = std::thread(&CZElauncherMain::启动获取ZE地图中文名表, this);
+		t1.detach();
+	}
+}
+
 void CZElauncherMain::启动获取ZE地图中文名表()
 {
-	std::thread t2 = std::thread(&CZElauncherMain::Get93xServerListInfo, this);
-	t2.detach();
-	TCHAR Maptype[9][10] = { L"ze",L"ttt",L"jb",L"mgdk" ,L"newmaps" ,L"bhop" ,L"zm" ,L"awp",L"35hp" };
+	IsThread = true;
+	TCHAR Maptype[9][10] = { L"ze",L"ttt",L"jb",L"mgdk" ,L"newmaps" ,L"zm",L"bhop" ,L"awp",L"35hp" };
+	g_pZElauncher->OutTip("正在获取地图中文名......");
+	g_MapChinese.clear();
+	g_MapChinese.shrink_to_fit();
 	for (int i = 0; i < 5; i++) {
 		std::thread t1 = std::thread(&CZElauncherMain::获取ZE地图中文名表, this, Maptype[i]);
 		t1.join();
 	}
-	pServer->RefreshServer();
+	g_pZElauncher->OutTip("地图中文名表获取完毕!");
+	IsThread = false;
+	if (IsChineseMap)pServer->RefreshServer();
 }
 
 void CZElauncherMain::MenuClick(CControlUI* Click)
@@ -247,6 +262,7 @@ void CZElauncherMain::Notify(TNotifyUI& msg)
 				pSkin->获取新手皮肤数据();
 			}
 		}
+		else if (name == _T("Title_BBS"))pControl->SelectItem(5);
 		else if (name == _T("Server_Switch")) {
 			TCHAR CfgPath[MAX_PATH] = { 0 };
 			GetRunPath(CfgPath, sizeof(CfgPath));
@@ -269,11 +285,10 @@ void CZElauncherMain::Get93xServerListInfo()
 	}
 	//编码转换
 	UINT nLen = StrResult.size() * sizeof(TCHAR);
-	TCHAR* pStrHtml = new TCHAR[nLen];
+	TCHAR* pStrHtml = new TCHAR[nLen]();
 	_MultiByteToWideChar(CP_UTF8, NULL, StrResult.c_str(), StrResult.length(), pStrHtml, nLen);
 	UINT nLen2 = StrResult.size() * sizeof(TCHAR);
-	char* pStrMulti = new char[nLen2];
-	ZeroMemory(pStrMulti, nLen2);
+	char* pStrMulti = new char[nLen2]();
 	WideCharToMultiByte(CP_ACP, NULL, pStrHtml, nLen, pStrMulti, nLen2, NULL, NULL);
 #pragma region 服务器列表Json获取
 	Json::Reader reader;
@@ -282,23 +297,23 @@ void CZElauncherMain::Get93xServerListInfo()
 	if (reader.parse(pStrMulti, root))  // reader将Json字符串解析到root，root将包含Json里所有子元素  
 	{
 		//未排序
-		for (UINT i = 0; i < root.size(); i++) {
+		for (auto Item : root) {
 			std::string tmpStr;
-			if (root[i]["name"].isNull())break;
-			tmpStr = root[i]["name"].asCString();
+			if (Item["name"].isNull())break;
+			tmpStr = Item["name"].asCString();
 			if (tmpStr.empty())break;
 			_bstr_t sText = "";
-			sText = root[i]["name"].asCString();
+			sText = Item["name"].asCString();
 			ServerListInfo tmpServerListInfo;
-			tmpServerListInfo.ServerName = sText;
+			tmpServerListInfo.ServerName = sText.GetBSTR();
 
 			TCHAR tmpbuf[250] = { 0 };
-			if (root[i]["port"].isNull())continue;
-			sText = root[i]["ip"].asCString();
-			_bstr_t port = root[i]["port"].asCString();
+			if (Item["port"].isNull())continue;
+			sText = Item["ip"].asCString();
+			_bstr_t port = Item["port"].asCString();
 			_stprintf(tmpbuf, _T("%s:%s"), static_cast<TCHAR*>(sText), static_cast<TCHAR*>(port));
 			tmpServerListInfo.ServerIp = tmpbuf;
-			g_ServerListInfo.push_back(tmpServerListInfo);
+			g_ServerListInfo.emplace_back(tmpServerListInfo);
 		}
 
 	}
@@ -307,19 +322,24 @@ void CZElauncherMain::Get93xServerListInfo()
 	delete[] pStrMulti;
 }
 
+HWND CZElauncherMain::GethWnd()
+{
+	return this->m_hWnd;
+}
+
 _bstr_t CZElauncherMain::GetChineseMapName(_bstr_t Map_englishName)
 {
 	_bstr_t Result_map = "";
-	for (UINT j = 0; j < g_MapChinese.size(); j++) {
-		if (strcmp(Map_englishName, g_MapChinese[j].Map_en) == 0 && g_MapChinese[j].Map_cn.length() > 1) {
-			Result_map = g_MapChinese[j].Map_cn;
+	for (auto MapChinese : g_MapChinese) {
+		if (_tcscmp(Map_englishName, MapChinese.Map_en) == 0 && MapChinese.Map_cn.GetLength() > 1) {
+			Result_map = MapChinese.Map_cn;
 			Result_map += "<";
-			Result_map += g_MapChinese[j].Map_en;
+			Result_map += MapChinese.Map_en.GetData();
 			Result_map += ">";
 			break;
 		}
 	}
-	return Result_map;
+	return std::move(Result_map);
 }
 
 CControlUI* CZElauncherMain::CreateControl(LPCTSTR pstrClass)
@@ -335,6 +355,7 @@ CControlUI* CZElauncherMain::CreateControl(LPCTSTR pstrClass)
 		pSkin = new C新手皮肤UI(m_pm);
 		return pSkin;
 	}
+	else if (_tcscmp(pstrClass, _T("BBS")) == 0)return new C论坛UI(m_pm);
 	return NULL;
 }
 
@@ -403,6 +424,10 @@ void CZElauncherMain::获取ZE地图中文名表(LPCTSTR maptype)
 	url += maptype;
 	url += ".html";
 	http.GET(url.GetBSTR(), htmlResult);
+	if (htmlResult.find("404 Not Found") != std::string::npos || htmlResult.length() < 20) {
+		g_pZElauncher->OutTip("地图中文名表获取数据失败!");
+		return;
+	}
 	Json::Reader reader;
 	Json::Value root;
 	if (reader.parse(htmlResult, root)) {
@@ -415,13 +440,13 @@ void CZElauncherMain::获取ZE地图中文名表(LPCTSTR maptype)
 				map_cn = json_Array["cn_name"].asCString();
 			if (!json_Array["mapname"].isNull())
 				map_en = json_Array["mapname"].asCString();
-			if (!json_Array["download"].isNull())
-				map_downloadurl = json_Array["download"].asCString();
+			/*if (!json_Array["download"].isNull())
+				map_downloadurl = json_Array["download"].asCString();*/
 			MapChineseName tmp;
-			tmp.Map_cn = map_cn;
-			tmp.Map_en = map_en;
-			tmp.MapDownloadurl = map_downloadurl;
-			g_MapChinese.push_back(tmp);
+			tmp.Map_cn = map_cn.GetBSTR();
+			tmp.Map_en = map_en.GetBSTR();
+			tmp.MapDownloadurl = map_downloadurl.GetBSTR();
+			g_MapChinese.emplace_back(tmp);
 		}
 	}
 }
@@ -546,7 +571,7 @@ void CZElauncherMain::OnClick(const TNotifyUI& msg)
 	else if (_tcscmp(msg.pSender->GetName(), m_pMinBtn) == 0)SendMessage(WM_SYSCOMMAND, SC_MINIMIZE, NULL);
 	else if (_tcscmp(msg.pSender->GetName(), m_pMenuBtn) == 0)OnMenu(msg);
 	else if (_tcscmp(msg.pSender->GetName(), m_pBBSBtn) == 0)ShellExecute(NULL, _T("open"), _T("https://bbs.93x.net/"), NULL, NULL, NULL);
-	else if (_tcscmp(msg.pSender->GetName(), m_pBugBtn) == 0)ShellExecute(NULL, _T("open"), _T("https://bbs.93x.net/forum.php?mod=viewthread&tid=216568"), NULL, NULL, NULL);
+	else if (_tcscmp(msg.pSender->GetName(), m_pBugBtn) == 0)ShellExecute(NULL, _T("open"), _T("https://bbs.93x.net/forum.php?mod=viewthread&tid=234653"), NULL, NULL, NULL);
 	else if (_tcscmp(msg.pSender->GetName(), _T("Button_Login")) == 0) {
 		if (!UserIslogin())
 			g_pZElauncher->OnLogin(false);

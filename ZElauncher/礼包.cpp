@@ -58,11 +58,11 @@ void C礼包UI::Sign93x()
 				Result = "";
 				http.GET(url, Result);
 				UINT nLen = Result.size() * sizeof(TCHAR);
-				TCHAR* pStrHtml = new TCHAR[nLen];
+				TCHAR* pStrHtml = new TCHAR[nLen]();
 				_MultiByteToWideChar(CP_UTF8, NULL, Result.c_str(), Result.length(), pStrHtml, nLen);
 				if (wcsstr(pStrHtml, L"您已获得")) {
 					CAwardTipUI* pAwardTip = new CAwardTipUI(*m_paintmanager, pStrHtml);
-					if (pAwardTip == NULL) return;
+					if (pAwardTip == NULL) { delete[]pStrHtml; return; }
 					pAwardTip->Create(NULL, _T("AwardUI"), UI_WNDSTYLE_DIALOG, WS_EX_STATICEDGE | WS_EX_APPWINDOW, 0, 0, 900, 500);
 					pAwardTip->CenterWindow();
 					::ShowWindow(*pAwardTip, SW_SHOW);
@@ -75,6 +75,7 @@ void C礼包UI::Sign93x()
 				CDuiString szFile = CPaintManagerUI::GetInstancePath() + _T("\\bin\\Data.dat");
 				WritePrivateProfileString(_T("CSGO"), szBuf, _T("true"), szFile);
 				DrawCalendar(this);
+				delete[]pStrHtml;
 			}
 		}
 		else MessageBox(NULL, _T("获取信息失败,Cookie过期请重新登录!"), NULL, NULL);
@@ -97,8 +98,8 @@ _bstr_t C礼包UI::GetFormhash(LPCTSTR pUrl)
 	nPos += strlen("formhash=");
 	UINT nNextpos = strHtml.find("\">", nPos);
 	if (nNextpos == std::string::npos)return _T("");
-	std::string result = strHtml.substr(nPos, nNextpos - nPos);
-	return result.c_str();
+	_bstr_t result = strHtml.substr(nPos, nNextpos - nPos).c_str();
+	return std::move(result);
 }
 
 bool C礼包UI::IsStart_yaoyiyao(LPCTSTR pUrl)
@@ -116,9 +117,10 @@ bool C礼包UI::IsStart_yaoyiyao(LPCTSTR pUrl)
 		}
 	}
 	UINT nLen = Result.size() * sizeof(TCHAR);
-	TCHAR* pStrHtml = new TCHAR[nLen];
+	TCHAR* pStrHtml = new TCHAR[nLen]();
 	_MultiByteToWideChar(CP_UTF8, NULL, Result.c_str(), Result.length(), pStrHtml, nLen);
 	std::wstring StrHtml = pStrHtml;
+	delete[]pStrHtml;
 	if (StrHtml.find(L"请求来路不明,请返回") != std::wstring::npos) {
 		MessageBox(NULL, _T("亲,Cookies过期或其他未知原因,导致领取失败!"), _T("Tip:"), MB_OK);
 		return false;
@@ -174,9 +176,10 @@ void C礼包UI::yaoyiyao()
 		}
 	}
 	UINT nLen = Result.size() * sizeof(TCHAR);
-	TCHAR* pStrHtml = new TCHAR[nLen];
+	TCHAR* pStrHtml = new TCHAR[nLen]();
 	_MultiByteToWideChar(CP_UTF8, NULL, Result.c_str(), Result.length(), pStrHtml, nLen);
 	std::wstring StrHtml = pStrHtml;
+	delete[]pStrHtml;
 	if (StrHtml.find(L"请求来路不明,请返回") != std::wstring::npos) {
 		MessageBox(NULL, _T("亲,请求失败，出现未知错误!"), _T("Tip:"), MB_OK);
 		return;
@@ -213,7 +216,7 @@ void C礼包UI::online_Award(LPCTSTR pUrl, LPCTSTR szAward)
 		}
 	}
 	UINT nLen = Result.size() * sizeof(TCHAR);
-	TCHAR* pStrHtml = new TCHAR[nLen];
+	TCHAR* pStrHtml = new TCHAR[nLen]();
 	_MultiByteToWideChar(CP_UTF8, NULL, Result.c_str(), Result.length(), pStrHtml, nLen);
 	std::wstring StrHtml = pStrHtml;
 #pragma region 获取返回结果
@@ -223,7 +226,7 @@ void C礼包UI::online_Award(LPCTSTR pUrl, LPCTSTR szAward)
 	TCHAR dbPath[MAX_PATH] = { 0 };
 	GetRunPath(dbPath, sizeof(dbPath));
 	_tcscat(dbPath, _T("\\bin\\Regex.db"));
-	TCHAR* pTpattern = new TCHAR[4096];
+	TCHAR* pTpattern = new TCHAR[4096]();
 	ZeroMemory(pTpattern, 4096);
 	//读取表达式数据
 	GetPrivateProfileString(_T("ZElauncher"), _T("SkinConvertResult"), NULL, pTpattern, 4096, dbPath);

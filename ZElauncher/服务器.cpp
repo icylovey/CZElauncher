@@ -17,7 +17,7 @@ C服务器UI::C服务器UI(CPaintManagerUI& m_paintmanager, HWND hWnd)
 	m_paManager = &m_paintmanager;
 	m_hWnd = hWnd;
 	pServer = this;
-	CContainerUI* pServer = static_cast<CContainerUI*>(builder.Create(_T("server.xml"), NULL, NULL, &m_pTmpManager));
+	CContainerUI* pServer = static_cast<CContainerUI*>(builder.Create(_T("Server.xml"), NULL, NULL, &m_pTmpManager));
 	if (pServer) {
 		this->Add(pServer);
 		m_paManager->AddNotifier(this);
@@ -55,7 +55,9 @@ void C服务器UI::RefreshServer()
 void C服务器UI::OnLookPlayer()
 {
 	CListUI* pList = static_cast<CListUI*>(m_paManager->FindControl(_T("List_Server")));
+	if (!pList)return;
 	CListTextElementUI* pItem = static_cast<CListTextElementUI*>(pList->GetItemAt(pList->GetCurSel()));
+	if (!pItem)return;
 	CDuiString ItemText = pItem->GetText(3);
 	g_ServerName_LookPlayer = ItemText;
 	C查询服务器玩家UI* pSetting = new C查询服务器玩家UI();
@@ -82,6 +84,7 @@ void C服务器UI::MenuClick(CControlUI* Click)
 	else if (_tcscmp(Click->GetText().GetData(), _T("查看玩家")) == 0)OnLookPlayer();
 	else if (_tcscmp(Click->GetText().GetData(), _T("切换地图名显示方式")) == 0) {
 		IsChineseMap = !IsChineseMap;
+		if(!IsChineseMap)g_pZElauncher->刷新ZE地图中文名表();
 		ShowServerList(g_Current_server_name.name.c_str(), g_Current_server_name.type, g_Current_server_name.Is93x);
 	}
 }
@@ -91,11 +94,11 @@ void C服务器UI::Notify(TNotifyUI& msg)
 	if (_tcscmp(msg.sType, _T("windowinit")) == 0)OnCreate();
 	else if (_tcscmp(msg.sType, _T("click")) == 0)OnClick(msg.pSender);
 	else if (_tcscmp(msg.sType, _T("itemclick")) == 0)MenuClick(msg.pSender);
-	else if (_tcscmp(msg.sType, _T("itemactivate")) == 0)JoinServer();
+	else if (_tcscmp(msg.sType, _T("itemactivate")) == 0 && _tcscmp(msg.pSender->GetUserData(), _T("ServerListItem")) == 0)JoinServer();
 	else if (_tcscmp(msg.sType, _T("setfocus")) == 0) {
 		if (_tcscmp(msg.pSender->GetName(), _T("Edit_Search")) == 0)ClearEdit();
 	}
-	else if (_tcscmp(msg.sType, _T("menu")) == 0) {
+	else if (_tcscmp(msg.sType, _T("menu")) == 0 && _tcscmp(msg.pSender->GetName(), _T("List_Server")) == 0) {
 		CDuiPoint point(0, 0);
 		GetCursorPos(&point);
 		STRINGorID xml(_T("Menu_server.xml"));
@@ -113,6 +116,14 @@ void C服务器UI::ShowServerList(const char* pName, UINT type /* = NULL */, bool I
 	if (Is93x) {
 		std::thread t1 = std::thread(&C服务器UI::Get93xServerList2, this, pName, type);
 		t1.detach();
+		/*if (strstr(pName, "建")) {
+			std::thread t1 = std::thread(&C服务器UI::GetServerList2, this, pName, type);
+			t1.detach();
+		}
+		else {
+			std::thread t1 = std::thread(&C服务器UI::Get93xServerList2, this, pName, type);
+			t1.detach();
+		}*/
 		//Get93xServerList2(pName, type);
 	}
 	else {
@@ -120,246 +131,17 @@ void C服务器UI::ShowServerList(const char* pName, UINT type /* = NULL */, bool I
 		t1.detach();
 	}
 	g_pZElauncher->OutTip(_T("服务器获取完毕"));
+
 }
 
-void C服务器UI::GetServerList(const char* pName, UINT type)
-{
-	CListUI* pList = static_cast<CListUI*>(m_paManager->FindControl(_T("List_Server")));
-	pList->RemoveAll();
-	std::string StrResult;
-#pragma region 获取服务器Url
-	{
-		lib_http::CLibhttp phttp;
-		string url;
-		strCoding encod;
-		switch (type)
-		{
-		case 1:
-			url = "https://csgo.wanmei.com/communityserver/2019?task=getlist&t=" + encod.UrlUTF8(const_cast<char*>(pName));
-			break;
-		case 2:
-		{
-			CEditUI* pSearch = static_cast<CEditUI*>(m_paManager->FindControl(_T("Edit_Search")));
-			_bstr_t sSearchText = _T("");
-			if (pSearch)sSearchText = pSearch->GetText().GetData();
-			url = "https://csgo.wanmei.com/communityserver/2019?task=getlist&q=" + encod.UrlUTF8(static_cast<char*>(sSearchText));
-		}
-		break;
-		default:
-			url = "https://csgo.wanmei.com/communityserver/2019?task=getlist&q=" + encod.UrlUTF8(const_cast<char*>(pName));
-			break;
-		}
-		phttp.GET(url, StrResult);
-	}
-#pragma endregion
-	if (StrResult.length() < 10) { MessageBox(NULL, _T("获取服务器信息失败!"), NULL, NULL); return; }
-	UINT nLen = StrResult.size() * sizeof(TCHAR);
-	TCHAR* pStrHtml = new TCHAR[nLen];
-	_MultiByteToWideChar(CP_UTF8, NULL, StrResult.c_str(), StrResult.length(), pStrHtml, nLen);
-	UINT nLen2 = StrResult.size() * sizeof(TCHAR);
-	char* pStrMulti = new char[nLen2];
-	ZeroMemory(pStrMulti, nLen2);
-	WideCharToMultiByte(CP_ACP, NULL, pStrHtml, nLen, pStrMulti, nLen2, NULL, NULL);
-
-	Json::Reader reader;
-	Json::Value root;
-	if (reader.parse(pStrMulti, root))  // reader将Json字符串解析到root，root将包含Json里所有子元素  
-	{
-		if (root.isNull())goto Exit;
-		if (strcmp(root["status"].asCString(), "success") == 0) {
-			Json::Value ServerList = root["result"]["serverList"];
-			if (ServerList.isNull())goto Exit;
-			for (UINT i = 0; i < ServerList.size(); i++) {
-				std::string tmpStr;
-				tmpStr = ServerList[i]["server_name"].asCString();
-				if (strstr(tmpStr.c_str(), "X社区")) {
-					CListTextElementUI* pListElement = new CListTextElementUI;
-					pListElement->SetTag(i);
-					pList->Add(pListElement);
-					_MultiByteToWideChar(CP_ACP, NULL, tmpStr.c_str(), tmpStr.size(), pStrHtml, nLen);
-					pListElement->SetText(0, pStrHtml);
-
-					tmpStr = ServerList[i]["Map"].asCString();
-					_MultiByteToWideChar(CP_ACP, NULL, tmpStr.c_str(), tmpStr.size(), pStrHtml, nLen);
-					pListElement->SetText(1, pStrHtml);
-
-					char tmpbuf[50] = { 0 };
-					sprintf(tmpbuf, "%d/%d", ServerList[i]["Players"].asInt(), ServerList[i]["MaxPlayers"].asInt());
-					_MultiByteToWideChar(CP_ACP, NULL, tmpbuf, sizeof(tmpbuf), pStrHtml, nLen);
-					pListElement->SetText(2, pStrHtml);
-
-					tmpStr = ServerList[i]["server_addr"].asCString();
-					_MultiByteToWideChar(CP_ACP, NULL, tmpStr.c_str(), tmpStr.size(), pStrHtml, nLen);
-					pListElement->SetText(3, pStrHtml);
-				}
-			}
-			for (UINT i = 0; i < ServerList.size(); i++) {
-				std::string tmpStr;
-				tmpStr = ServerList[i]["server_name"].asCString();
-				if (!strstr(tmpStr.c_str(), "X社区")) {
-					CListTextElementUI* pListElement = new CListTextElementUI;
-					pListElement->SetTag(i);
-					pList->Add(pListElement);
-					_MultiByteToWideChar(CP_ACP, NULL, tmpStr.c_str(), tmpStr.size(), pStrHtml, nLen);
-					pListElement->SetText(0, pStrHtml);
-
-					tmpStr = ServerList[i]["Map"].asCString();
-					_MultiByteToWideChar(CP_ACP, NULL, tmpStr.c_str(), tmpStr.size(), pStrHtml, nLen);
-					pListElement->SetText(1, pStrHtml);
-
-					char tmpbuf[50] = { 0 };
-					sprintf(tmpbuf, "%d/%d", ServerList[i]["Players"].asInt(), ServerList[i]["MaxPlayers"].asInt());
-					_MultiByteToWideChar(CP_ACP, NULL, tmpbuf, sizeof(tmpbuf), pStrHtml, nLen);
-					pListElement->SetText(2, pStrHtml);
-
-					tmpStr = ServerList[i]["server_addr"].asCString();
-					_MultiByteToWideChar(CP_ACP, NULL, tmpStr.c_str(), tmpStr.size(), pStrHtml, nLen);
-					pListElement->SetText(3, pStrHtml);
-				}
-			}
-		}
-	}
-Exit:
-	delete[] pStrHtml;
-	delete[] pStrMulti;
-}
-
-void C服务器UI::Get93xServerList(const char* pName, UINT type)
-{
-	CListUI* pList = static_cast<CListUI*>(m_paManager->FindControl(_T("List_Server")));
-	pList->RemoveAll();
-	//获取网页Json内容
-	std::string StrResult;
-	{
-		lib_http::CLibhttp phttp;
-		string url = "https://serverssoftware.93x.net/api/servers?game=csgo";
-		if (!phttp.GET(url, StrResult))MessageBox(NULL, _T("获取服务器信息失败!"), NULL, NULL);
-	}
-	//设置服务器显示类型
-	std::vector<std::string> VectorType;
-	string pType;
-#pragma region 服务器类型
-	//新版识别
-	if (strstr(pName, "逃跑"))VectorType.emplace_back("ze");
-	else if (strstr(pName, "感染"))VectorType.emplace_back("zm");
-	else if (strstr(pName, "娱乐")) {
-		VectorType.emplace_back("mg");
-		VectorType.emplace_back("hg");
-		VectorType.emplace_back("warmod");
-	}
-	else if (strstr(pName, "躲")) {
-		VectorType.emplace_back("prophurt");
-		VectorType.emplace_back("hns");
-	}
-	else if (strstr(pName, "kz")) {
-		VectorType.emplace_back("kz");
-		VectorType.emplace_back("surf");
-		VectorType.emplace_back("bhop");
-	}
-	else if (strstr(pName, "谍")) {
-		VectorType.emplace_back("ttt");
-		VectorType.emplace_back("ba");
-	}
-	else if (strstr(pName, "竞技")) {
-		VectorType.emplace_back("awp");
-		VectorType.emplace_back("dm");
-		VectorType.emplace_back("1hp");
-		VectorType.emplace_back("duel");
-		VectorType.emplace_back("de");
-		VectorType.emplace_back("35hp");
-	}
-	else if (strstr(pName, "建"))VectorType.emplace_back("builder");
-	else VectorType.emplace_back("");;
-	//旧版识别
-	/*if (strstr(pName, "逃跑"))pType = "ze";
-	else if (strstr(pName, "感染"))pType = "zm";
-	else if (strstr(pName, "娱乐"))pType = "mg";
-	else if (strstr(pName, "躲"))pType = "prophurt";
-	else if (strstr(pName, "kz"))pType = "kz";
-	else if (strstr(pName, "谍"))pType = "ttt";
-	else if (strstr(pName, "竞技"))pType = "Builder";
-	else if (strstr(pName, "建"))pType = "Builder";
-	else pType = "";*/
-#pragma endregion
-	//编码转换
-	UINT nLen = StrResult.size() * sizeof(TCHAR);
-	TCHAR* pStrHtml = new TCHAR[nLen];
-	_MultiByteToWideChar(CP_UTF8, NULL, StrResult.c_str(), StrResult.length(), pStrHtml, nLen);
-	UINT nLen2 = StrResult.size() * sizeof(TCHAR);
-	char* pStrMulti = new char[nLen2];
-	ZeroMemory(pStrMulti, nLen2);
-	WideCharToMultiByte(CP_ACP, NULL, pStrHtml, nLen, pStrMulti, nLen2, NULL, NULL);
-#pragma region 服务器列表Json获取
-	Json::Reader reader;
-	Json::Value root;
-	if (reader.parse(pStrMulti, root))  // reader将Json字符串解析到root，root将包含Json里所有子元素  
-	{
-		if (root.isNull())goto Exit;
-		for (UINT i = 0; i < root.size(); i++) {
-			std::string tmpStr;
-			tmpStr = root[i]["mode"].asCString();
-			//新版识别
-			for (UINT n = 0; n < VectorType.size(); n++) {
-				if (strstr(tmpStr.c_str(), VectorType[n].c_str())) {
-					tmpStr = root[i]["name"].asCString();
-					CListTextElementUI* pListElement = new CListTextElementUI;
-					pListElement->SetTag(i);
-					pList->Add(pListElement);
-					_MultiByteToWideChar(CP_ACP, NULL, tmpStr.c_str(), tmpStr.size(), pStrHtml, nLen);
-					pListElement->SetText(0, pStrHtml);
-
-					tmpStr = root[i]["map_name"].asCString();
-					_MultiByteToWideChar(CP_ACP, NULL, tmpStr.c_str(), tmpStr.size(), pStrHtml, nLen);
-					pListElement->SetText(1, pStrHtml);
-
-					char tmpbuf[250] = { 0 };
-					sprintf(tmpbuf, "%d/%d", root[i]["players"].asInt(), root[i]["max_players"].asInt());
-					_MultiByteToWideChar(CP_ACP, NULL, tmpbuf, sizeof(tmpbuf), pStrHtml, nLen);
-					pListElement->SetText(2, pStrHtml);
-
-					tmpStr = root[i]["ip"].asCString();
-					sprintf(tmpbuf, "%s:%s", tmpStr.c_str(), root[i]["port"].asCString());
-					_MultiByteToWideChar(CP_ACP, NULL, tmpbuf, sizeof(tmpbuf), pStrHtml, nLen);
-					pListElement->SetText(3, pStrHtml);
-				}
-			}
-			//旧版识别
-			/*if (strstr(tmpStr.c_str(), pType.c_str())) {
-				tmpStr = root[i]["name"].asCString();
-				CListTextElementUI* pListElement = new CListTextElementUI;
-				pListElement->SetTag(i);
-				pList->Add(pListElement);
-				_MultiByteToWideChar(CP_ACP, NULL, tmpStr.c_str(), tmpStr.size(), pStrHtml, nLen);
-				pListElement->SetText(0, pStrHtml);
-
-				tmpStr = root[i]["map_name"].asCString();
-				_MultiByteToWideChar(CP_ACP, NULL, tmpStr.c_str(), tmpStr.size(), pStrHtml, nLen);
-				pListElement->SetText(1, pStrHtml);
-
-				char tmpbuf[250] = { 0 };
-				sprintf(tmpbuf, "%d/%d", root[i]["players"].asInt(), root[i]["max_players"].asInt());
-				_MultiByteToWideChar(CP_ACP, NULL, tmpbuf, sizeof(tmpbuf), pStrHtml, nLen);
-				pListElement->SetText(2, pStrHtml);
-
-				tmpStr = root[i]["ip"].asCString();
-				sprintf(tmpbuf, "%s:%s", tmpStr.c_str(), root[i]["port"].asCString());
-				_MultiByteToWideChar(CP_ACP, NULL, tmpbuf, sizeof(tmpbuf), pStrHtml, nLen);
-				pListElement->SetText(3, pStrHtml);
-			}*/
-		}
-	}
-#pragma endregion
-	Exit:
-	VectorType.clear();
-	//std::vector<std::string>().swap(VectorType);
-	VectorType.shrink_to_fit();
-	delete[] pStrHtml;
-	delete[] pStrMulti;
-}
+bool IsThread2 = false;
 
 void C服务器UI::GetServerList2(const char* pName, UINT type)
 {
+	if (IsThread2) { MessageBox(NULL, _T("正在获取服务器数据中,请耐心等待!"), NULL, MB_ICONWARNING | MB_TOPMOST); return; }
+	IsThread2 = true;
 	CListUI* pList = static_cast<CListUI*>(m_paManager->FindControl(_T("List_Server")));
+	if (!pList) { MessageBox(NULL, _T("获取服务器数据失败!"), NULL, MB_ICONWARNING); IsThread2 = false; return; }
 	pList->RemoveAll();
 
 	std::string StrResult;
@@ -421,13 +203,12 @@ void C服务器UI::GetServerList2(const char* pName, UINT type)
 	lib_http::CLibhttp http;
 	http.GET(_T("https://csgo.wanmei.com/communityserver/2019?task=getlist"), StrResult);
 #pragma endregion
-	if (StrResult.length() < 10) { MessageBox(NULL, _T("获取服务器信息失败!"), NULL, NULL); return; }
+	if (StrResult.length() < 10) { MessageBox(NULL, _T("获取服务器信息失败!"), NULL, NULL); IsThread2 = false; return; }
 	UINT nLen = StrResult.size() * sizeof(TCHAR);
-	TCHAR* pStrHtml = new TCHAR[nLen];
+	TCHAR* pStrHtml = new TCHAR[nLen]();
 	_MultiByteToWideChar(CP_UTF8, NULL, StrResult.c_str(), StrResult.length(), pStrHtml, nLen);
 	UINT nLen2 = StrResult.size() * sizeof(TCHAR);
-	char* pStrMulti = new char[nLen2];
-	ZeroMemory(pStrMulti, nLen2);
+	char* pStrMulti = new char[nLen2]();
 	WideCharToMultiByte(CP_ACP, NULL, pStrHtml, nLen, pStrMulti, nLen2, NULL, NULL);
 
 	Json::Reader reader;
@@ -440,36 +221,39 @@ void C服务器UI::GetServerList2(const char* pName, UINT type)
 			Json::Value ServerList = root["result"]["serverList"];
 			if (ServerList.isNull())goto Exit;
 #pragma region X社区服务器获取
-			for (UINT i = 0; i < ServerList.size(); i++) {
+			for (auto ServerInfo : ServerList) {
 				std::string tmpStr;
-				if(ServerList[i]["server_name"].isNull())continue;
-				tmpStr = ServerList[i]["server_name"].asCString();
+				if(ServerInfo["server_name"].isNull())continue;
+				tmpStr = ServerInfo["server_name"].asCString();
 				transform(tmpStr.begin(), tmpStr.end(), tmpStr.begin(), ::tolower);
-				for (UINT j = 0; j < VectorType.size(); j++) {
-					if (strstr(tmpStr.c_str(), VectorType[j]) && strstr(tmpStr.c_str(), "x社区")) {
-						CListTextElementUI* pListElement = new CListTextElementUI;
-						pListElement->SetTag(i);
-						pList->Add(pListElement);
-						_bstr_t sText = ServerList[i]["server_name"].asCString();
-						pListElement->SetText(0, sText);
+				for (auto ServerType : VectorType) {
+					if (strstr(tmpStr.c_str(), ServerType)) {
+						if (strstr(tmpStr.c_str(), "x社区") || wcsstr(ServerType.GetBSTR(), L"建")) {
+							CListTextElementUI* pListElement = new CListTextElementUI;
+							pListElement->SetTag(pListElement->GetTag() + 1);
+							pListElement->SetUserData(_T("ServerListItem"));
+							pList->Add(pListElement);
+							_bstr_t sText = ServerInfo["server_name"].asCString();
+							pListElement->SetText(0, sText);
 
-						if (ServerList[i]["Map"].isNull())continue;
-						sText = ServerList[i]["Map"].asCString();
-						if (IsChineseMap) {
-							_bstr_t tmptext = g_pZElauncher->GetChineseMapName(sText);
-							if (tmptext.length() > 5)sText = tmptext;
+							if (ServerInfo["Map"].isNull())continue;
+							sText = ServerInfo["Map"].asCString();
+							if (IsChineseMap) {
+								_bstr_t tmptext = g_pZElauncher->GetChineseMapName(sText);
+								if (tmptext.length() > 5)sText = tmptext;
+							}
+							pListElement->SetText(1, sText);
+							if (!ServerInfo["Players"].isInt())continue;
+							if (!ServerInfo["MaxPlayers"].isInt())continue;
+							TCHAR tmpbuf[50] = { 0 };
+							_stprintf(tmpbuf, _T("%d/%d"), ServerInfo["Players"].asInt(), ServerInfo["MaxPlayers"].asInt());
+							pListElement->SetText(2, tmpbuf);
+							if (ServerInfo["server_addr"].isNull())continue;
+							sText = ServerInfo["server_addr"].asCString();
+							pListElement->SetText(3, sText);
+
+							break;//避免类型相同造成重复加入的情况
 						}
-						pListElement->SetText(1, sText);
-						if (ServerList[i]["Players"].isNull())continue;
-						if (ServerList[i]["MaxPlayers"].isNull())continue;
-						TCHAR tmpbuf[50] = { 0 };
-						_stprintf(tmpbuf, _T("%d/%d"), ServerList[i]["Players"].asInt(), ServerList[i]["MaxPlayers"].asInt());
-						pListElement->SetText(2, tmpbuf);
-						if (ServerList[i]["server_addr"].isNull())continue;
-						sText = ServerList[i]["server_addr"].asCString();
-						pListElement->SetText(3, sText);
-
-						break;//避免类型相同造成重复加入的情况
 					}
 				}
 
@@ -522,14 +306,9 @@ void C服务器UI::GetServerList2(const char* pName, UINT type)
 						if (ServerList[i]["Map"].isNull())continue;
 						sText = ServerList[i]["Map"].asCString();
 						if (IsChineseMap) {
-							for (UINT j = 0; j < g_MapChinese.size(); j++) {
-								if (strcmp(sText, g_MapChinese[j].Map_en.c_str()) == 0) {
-									sText = g_MapChinese[j].Map_cn.c_str();
-									sText += "(";
-									sText += g_MapChinese[j].Map_en.c_str();
-									sText += ")";
-									break;
-								}
+							if (IsChineseMap) {
+								_bstr_t tmptext = g_pZElauncher->GetChineseMapName(sText);
+								if (tmptext.length() > 5)sText = tmptext;
 							}
 						}
 						pListElement->SetText(1, sText);
@@ -586,18 +365,26 @@ Exit:
 	VectorType.shrink_to_fit();
 	delete[] pStrHtml;
 	delete[] pStrMulti;
+	IsThread2 = false;
 }
 
 void C服务器UI::Get93xServerList2(const char* pName, UINT type)
 {
+	if (IsThread2) { MessageBox(NULL, _T("正在获取服务器数据中,请耐心等待!"), NULL, MB_ICONWARNING | MB_TOPMOST); return; }
+	IsThread2 = true;
 	CListUI* pList = static_cast<CListUI*>(m_paManager->FindControl(_T("List_Server")));
+	if (!pList) { MessageBox(NULL, _T("获取服务器数据失败!"), NULL, MB_ICONWARNING); IsThread2 = false; return; }
 	pList->RemoveAll();
 	//获取网页Json内容
 	std::string StrResult;
 	{
 		lib_http::CLibhttp phttp;
 		string url = "https://serverssoftware.93x.net/api/servers?game=csgo";
-		if (!phttp.GET(url, StrResult))MessageBox(NULL, _T("获取服务器信息失败!"), NULL, NULL);
+		if (!phttp.GET(url, StrResult)) {
+			MessageBox(NULL, _T("获取服务器信息失败!"), NULL, NULL);
+			IsThread2 = false;
+			return;
+		}
 	}
 	//设置服务器显示类型
 	std::vector<_bstr_t> VectorType;
@@ -660,11 +447,10 @@ void C服务器UI::Get93xServerList2(const char* pName, UINT type)
 #pragma endregion
 	//编码转换
 	UINT nLen = StrResult.size() * sizeof(TCHAR);
-	TCHAR* pStrHtml = new TCHAR[nLen];
+	TCHAR* pStrHtml = new TCHAR[nLen]();
 	_MultiByteToWideChar(CP_UTF8, NULL, StrResult.c_str(), StrResult.length(), pStrHtml, nLen);
 	UINT nLen2 = StrResult.size() * sizeof(TCHAR);
-	char* pStrMulti = new char[nLen2];
-	ZeroMemory(pStrMulti, nLen2);
+	char* pStrMulti = new char[nLen2]();
 	WideCharToMultiByte(CP_ACP, NULL, pStrHtml, nLen, pStrMulti, nLen2, NULL, NULL);
 #pragma region 服务器列表Json获取
 	Json::Reader reader;
@@ -679,13 +465,14 @@ void C服务器UI::Get93xServerList2(const char* pName, UINT type)
 			tmpStr = root[i]["name"].asCString();
 			if (tmpStr.empty())break;
 			//新版识别
-			for (UINT n = 0; n < VectorType.size(); n++) {
+			for (auto ServerType : VectorType) {
 				transform(tmpStr.begin(), tmpStr.end(), tmpStr.begin(), ::tolower);
-				if (strstr(tmpStr.c_str(), VectorType[n])) {
+				if (strstr(tmpStr.c_str(), ServerType)) {
 					_bstr_t sText = "";
 					sText = root[i]["name"].asCString();
 					CListTextElementUI* pListElement = new CListTextElementUI;
 					pListElement->SetTag(i);
+					pListElement->SetUserData(_T("ServerListItem"));
 					pList->Add(pListElement);
 					pListElement->SetText(0, sText);
 
@@ -717,25 +504,27 @@ void C服务器UI::Get93xServerList2(const char* pName, UINT type)
 	else goto Exit;
 #pragma region 排序
 	//典型的冒泡排序
-	listcount = pList->GetCount();
-	for (int j = 1; j <= listcount; j++)
-	{
-		for (int i = 0; i < listcount - j; i++)
+	if (!strstr(pName, "kz")) {
+		listcount = pList->GetCount();
+		for (int j = 1; j <= listcount; j++)
 		{
-			CListTextElementUI* pItem = static_cast<CListTextElementUI*>(pList->GetItemAt(i));
-			CListTextElementUI* pItem2 = static_cast<CListTextElementUI*>(pList->GetItemAt(i + 1));
-			_bstr_t temp1 = pItem->GetText(2);
-			_bstr_t temp2 = pItem2->GetText(2);
-			UINT num1 = _wtoi(temp1);
-			UINT num2 = _wtoi(temp2);
-			if (num1 < num2)
+			for (int i = 0; i < listcount - j; i++)
 			{
-				for (int n = 0; n < 4; n++)//因为本列表为列
+				CListTextElementUI* pItem = static_cast<CListTextElementUI*>(pList->GetItemAt(i));
+				CListTextElementUI* pItem2 = static_cast<CListTextElementUI*>(pList->GetItemAt(i + 1));
+				_bstr_t temp1 = pItem->GetText(2);
+				_bstr_t temp2 = pItem2->GetText(2);
+				UINT num1 = _wtoi(temp1);
+				UINT num2 = _wtoi(temp2);
+				if (num1 < num2)
 				{
-					CDuiString st1 = pItem->GetText(n);
-					CDuiString st2 = pItem2->GetText(n);
-					pItem->SetText(n, st2);
-					pItem2->SetText(n, st1);
+					for (int n = 0; n < 4; n++)//因为本列表为列
+					{
+						CDuiString st1 = pItem->GetText(n);
+						CDuiString st2 = pItem2->GetText(n);
+						pItem->SetText(n, st2);
+						pItem2->SetText(n, st1);
+					}
 				}
 			}
 		}
@@ -748,6 +537,7 @@ void C服务器UI::Get93xServerList2(const char* pName, UINT type)
 	VectorType.shrink_to_fit();
 	delete[] pStrHtml;
 	delete[] pStrMulti;
+	IsThread2 = false;
 }
 
 void C服务器UI::OnCreate()
@@ -770,7 +560,9 @@ void C服务器UI::OnCreate()
 void C服务器UI::CopyServerInfo(UINT nIndex)
 {
 	CListUI* pList = static_cast<CListUI*>(m_paManager->FindControl(_T("List_Server")));
+	if (!pList)return;
 	CListTextElementUI* pItem = static_cast<CListTextElementUI*>(pList->GetItemAt(pList->GetCurSel()));
+	if (!pItem)return;
 	CDuiString ItemText = pItem->GetText(nIndex);
 	int npos = ItemText.Find(_T("<"));
 	if (npos != -1) {

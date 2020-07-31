@@ -34,8 +34,6 @@ public:
 	bool IsFileExist(LPCTSTR lpFileName);
 private:
 	void Notify(TNotifyUI& msg);
-	void GetServerList(const char* pName, UINT type = NULL);
-	void Get93xServerList(const char* pName, UINT type = NULL);
 	//新版获取服务器列表
 	void GetServerList2(const char* pName, UINT type = NULL);
 	void Get93xServerList2(const char* pName, UINT type = NULL);

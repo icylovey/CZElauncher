@@ -55,9 +55,10 @@ void __stdcall NotRepeat()
 
 int __stdcall WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
 {
-	//NotRepeat();
+	_CrtSetBreakAlloc(469650);
+	NotRepeat();
 
-	GetUpdateVersion(_T("v1.2.2"));
+	GetUpdateVersion(_T("v1.2.3"));
 	Zip7ZInitiale();
 
 	CPaintManagerUI::SetInstance(hInstance);

@@ -7,14 +7,14 @@
 class CZElauncherMain;
 struct MapChineseName
 {
-	_bstr_t Map_en = "";
-	_bstr_t Map_cn = "";
-	_bstr_t MapDownloadurl = "";
+	DuiLib::CDuiString Map_en;
+	DuiLib::CDuiString Map_cn;
+	DuiLib::CDuiString MapDownloadurl;
 };
 struct ServerListInfo  
 {
-	_bstr_t ServerName = "";
-	_bstr_t ServerIp = "";
+	DuiLib::CDuiString ServerName;
+	DuiLib::CDuiString ServerIp;
 };
 
 extern _bstr_t gCookies;

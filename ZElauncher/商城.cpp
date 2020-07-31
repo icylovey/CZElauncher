@@ -56,7 +56,7 @@ std::string C商城UI::获取皮肤html数据(const TCHAR* Page)
 		http.GET(url.GetData(), Result, _T(""), Cookies.GetData());
 		//http.GET(url.GetData(), Result);
 	}
-	return Result;
+	return std::move(Result);
 }
 
 void C商城UI::设置图片可视状态()
@@ -105,7 +105,7 @@ void C商城UI::获取商城数据()
 		return;
 	}
 	UINT nLen = Result.size() * sizeof(TCHAR);
-	TCHAR* pStrHtml = new TCHAR[nLen];
+	TCHAR* pStrHtml = new TCHAR[nLen]();
 	_MultiByteToWideChar(CP_UTF8, NULL, Result.c_str(), Result.length(), pStrHtml, nLen);
 	if (wcsstr(pStrHtml,L"提示信息"))return;
 #pragma region 正则表达式算法

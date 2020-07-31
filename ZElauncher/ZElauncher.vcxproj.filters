@@ -49,6 +49,9 @@
     <Filter Include="DuilibSDK\Utiles">
       <UniqueIdentifier>{b190a0da-32ca-4c96-88e0-92551fd6f87f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="htmlsdk">
+      <UniqueIdentifier>{4faf6be4-824e-4bdb-8812-04655b7e928a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h">
@@ -330,6 +333,18 @@
     <ClInclude Include="Duilib\UIlib.h">
       <Filter>DuilibSDK</Filter>
     </ClInclude>
+    <ClInclude Include="论坛.h">
+      <Filter>头文件\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="htmlsdk\html_parser.hpp">
+      <Filter>htmlsdk</Filter>
+    </ClInclude>
+    <ClInclude Include="查看帖子.h">
+      <Filter>头文件\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="json\json_tool.h">
+      <Filter>JSON</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="json\json_reader.cpp">
@@ -565,6 +580,12 @@
     </ClCompile>
     <ClCompile Include="Duilib\UIlib.cpp">
       <Filter>DuilibSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="论坛.cpp">
+      <Filter>源文件\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="查看帖子.cpp">
+      <Filter>源文件\Util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

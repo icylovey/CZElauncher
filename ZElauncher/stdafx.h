@@ -1,4 +1,7 @@
 #pragma once 
+/*
+#define _AFXDLL
+#include <afx.h>*/
 #include <windows.h>
 #include <stdio.h>
 #include <future>

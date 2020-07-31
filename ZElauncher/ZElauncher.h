@@ -4,6 +4,7 @@
 #include "礼包.h"
 #include "设置.h"
 #include "商城.h"
+#include "论坛.h"
 #include "工具箱.h"
 #include "新手皮肤.h"
 #include "登录账号.h"
@@ -27,8 +28,6 @@ public:
 	CControlUI* CreateControl(LPCTSTR pstrClass);
 	void SetSkinName(LPCTSTR SkinName);
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
-	void 获取ZE地图中文名表(LPCTSTR maptype);
-	void 启动获取ZE地图中文名表();
 	_bstr_t GetChineseMapName(_bstr_t Map_englishName);
 public:
 	void OnSetting(bool IsModel = false);
@@ -38,8 +37,8 @@ public:
 	bool UserIslogin();
 	void OutTip(_bstr_t pOutTip);
 	void OutTip2(_bstr_t pOutTip2);
-	bool IsCreateShop = false;
-	bool IsCreateSkin = false;
+	void 刷新ZE地图中文名表();
+	HWND GethWnd();
 private:
 	void Notify(TNotifyUI& msg);
 	void OnExit(const TNotifyUI& msg);
@@ -48,6 +47,8 @@ private:
 	void MenuClick(CControlUI* Click);
 	void OnInitialize();
 	void Get93xServerListInfo();
+	void 获取ZE地图中文名表(LPCTSTR maptype);
+	void 启动获取ZE地图中文名表();
 private:
 	const TCHAR* m_pMenuBtn = _T("menubtn");
 	const TCHAR* m_pMinBtn = _T("minbtn");
@@ -56,5 +57,7 @@ private:
 	const TCHAR* m_pBBSBtn = _T("BBSbtn");
 	C商城UI* pShop = nullptr;
 	C新手皮肤UI* pSkin = nullptr;
-
+public:
+	bool IsCreateShop = false;
+	bool IsCreateSkin = false;
 };

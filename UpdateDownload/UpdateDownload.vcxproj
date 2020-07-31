@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{ca09c1dc-4fc6-44ab-ac36-77edfd217f3e}</ProjectGuid>
+    <RootNamespace>UpdateDownload</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\OpenSSL-Win32\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\OpenSSL-Win32\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\OpenSSL-Win32\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\OpenSSL-Win32\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>WIN32;UILIB_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>./;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>./;</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Duilib\Control\UIActiveX.cpp" />
+    <ClCompile Include="Duilib\Control\UIAnimation.cpp" />
+    <ClCompile Include="Duilib\Control\UIButton.cpp" />
+    <ClCompile Include="Duilib\Control\UIColorPalette.cpp" />
+    <ClCompile Include="Duilib\Control\UICombo.cpp" />
+    <ClCompile Include="Duilib\Control\UIComboBox.cpp" />
+    <ClCompile Include="Duilib\Control\UIDateTime.cpp" />
+    <ClCompile Include="Duilib\Control\UIEdit.cpp" />
+    <ClCompile Include="Duilib\Control\UIFadeButton.cpp" />
+    <ClCompile Include="Duilib\Control\UIFlash.cpp" />
+    <ClCompile Include="Duilib\Control\UIGifAnim.cpp" />
+    <ClCompile Include="Duilib\Control\UIGifAnimEx.cpp" />
+    <ClCompile Include="Duilib\Control\UIGroupBox.cpp" />
+    <ClCompile Include="Duilib\Control\UIHotKey.cpp" />
+    <ClCompile Include="Duilib\Control\UIIPAddress.cpp" />
+    <ClCompile Include="Duilib\Control\UIIPAddressEx.cpp" />
+    <ClCompile Include="Duilib\Control\UILabel.cpp" />
+    <ClCompile Include="Duilib\Control\UIList.cpp" />
+    <ClCompile Include="Duilib\Control\UIListEx.cpp" />
+    <ClCompile Include="Duilib\Control\UIMenu.cpp" />
+    <ClCompile Include="Duilib\Control\UIOption.cpp" />
+    <ClCompile Include="Duilib\Control\UIProgress.cpp" />
+    <ClCompile Include="Duilib\Control\UIRichEdit.cpp" />
+    <ClCompile Include="Duilib\Control\UIRing.cpp" />
+    <ClCompile Include="Duilib\Control\UIRollText.cpp" />
+    <ClCompile Include="Duilib\Control\UIScrollBar.cpp" />
+    <ClCompile Include="Duilib\Control\UISlider.cpp" />
+    <ClCompile Include="Duilib\Control\UIText.cpp" />
+    <ClCompile Include="Duilib\Control\UITreeView.cpp" />
+    <ClCompile Include="Duilib\Control\UIWebBrowser.cpp" />
+    <ClCompile Include="Duilib\Core\ControlFactory.cpp" />
+    <ClCompile Include="Duilib\Core\UIBase.cpp" />
+    <ClCompile Include="Duilib\Core\UIContainer.cpp" />
+    <ClCompile Include="Duilib\Core\UIControl.cpp" />
+    <ClCompile Include="Duilib\Core\UIDlgBuilder.cpp" />
+    <ClCompile Include="Duilib\Core\UIManager.cpp" />
+    <ClCompile Include="Duilib\Core\UIMarkup.cpp" />
+    <ClCompile Include="Duilib\Core\UIRender.cpp" />
+    <ClCompile Include="Duilib\Core\UIResourceManager.cpp" />
+    <ClCompile Include="Duilib\Layout\UIAnimationTabLayout.cpp" />
+    <ClCompile Include="Duilib\Layout\UIChildLayout.cpp" />
+    <ClCompile Include="Duilib\Layout\UIHorizontalLayout.cpp" />
+    <ClCompile Include="Duilib\Layout\UITabLayout.cpp" />
+    <ClCompile Include="Duilib\Layout\UITileLayout.cpp" />
+    <ClCompile Include="Duilib\Layout\UIVerticalLayout.cpp" />
+    <ClCompile Include="Duilib\StdAfx.cpp" />
+    <ClCompile Include="Duilib\UIlib.cpp" />
+    <ClCompile Include="Duilib\Utils\DPI.cpp" />
+    <ClCompile Include="Duilib\Utils\DragDropImpl.cpp" />
+    <ClCompile Include="Duilib\Utils\TrayIcon.cpp" />
+    <ClCompile Include="Duilib\Utils\UIDelegate.cpp" />
+    <ClCompile Include="Duilib\Utils\UIShadow.cpp" />
+    <ClCompile Include="Duilib\Utils\unzip.cpp" />
+    <ClCompile Include="Duilib\Utils\Utils.cpp" />
+    <ClCompile Include="Duilib\Utils\WinImplBase.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="ModuleSDK\ChineseCode.cpp" />
+    <ClCompile Include="ModuleSDK\lib_Hook.cpp" />
+    <ClCompile Include="ModuleSDK\lib_http.cpp" />
+    <ClCompile Include="ModuleSDK\lib_Process.cpp" />
+    <ClCompile Include="ModuleSDK\lib_Socket.cpp" />
+    <ClCompile Include="ModuleSDK\lib_String.cpp" />
+    <ClCompile Include="unzip.cpp" />
+    <ClCompile Include="Update.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Duilib\Control\UIActiveX.h" />
+    <ClInclude Include="Duilib\Control\UIAnimation.h" />
+    <ClInclude Include="Duilib\Control\UIButton.h" />
+    <ClInclude Include="Duilib\Control\UIColorPalette.h" />
+    <ClInclude Include="Duilib\Control\UICombo.h" />
+    <ClInclude Include="Duilib\Control\UIComboBox.h" />
+    <ClInclude Include="Duilib\Control\UIDateTime.h" />
+    <ClInclude Include="Duilib\Control\UIEdit.h" />
+    <ClInclude Include="Duilib\Control\UIFadeButton.h" />
+    <ClInclude Include="Duilib\Control\UIFlash.h" />
+    <ClInclude Include="Duilib\Control\UIGifAnim.h" />
+    <ClInclude Include="Duilib\Control\UIGifAnimEx.h" />
+    <ClInclude Include="Duilib\Control\UIGroupBox.h" />
+    <ClInclude Include="Duilib\Control\UIHotKey.h" />
+    <ClInclude Include="Duilib\Control\UIIPAddress.h" />
+    <ClInclude Include="Duilib\Control\UIIPAddressEx.h" />
+    <ClInclude Include="Duilib\Control\UILabel.h" />
+    <ClInclude Include="Duilib\Control\UIList.h" />
+    <ClInclude Include="Duilib\Control\UIListEx.h" />
+    <ClInclude Include="Duilib\Control\UIMenu.h" />
+    <ClInclude Include="Duilib\Control\UIOption.h" />
+    <ClInclude Include="Duilib\Control\UIProgress.h" />
+    <ClInclude Include="Duilib\Control\UIRichEdit.h" />
+    <ClInclude Include="Duilib\Control\UIRing.h" />
+    <ClInclude Include="Duilib\Control\UIRollText.h" />
+    <ClInclude Include="Duilib\Control\UIScrollBar.h" />
+    <ClInclude Include="Duilib\Control\UISlider.h" />
+    <ClInclude Include="Duilib\Control\UIText.h" />
+    <ClInclude Include="Duilib\Control\UITreeView.h" />
+    <ClInclude Include="Duilib\Control\UIWebBrowser.h" />
+    <ClInclude Include="Duilib\Core\ControlFactory.h" />
+    <ClInclude Include="Duilib\Core\UIBase.h" />
+    <ClInclude Include="Duilib\Core\UIContainer.h" />
+    <ClInclude Include="Duilib\Core\UIControl.h" />
+    <ClInclude Include="Duilib\Core\UIDefine.h" />
+    <ClInclude Include="Duilib\Core\UIDlgBuilder.h" />
+    <ClInclude Include="Duilib\Core\UIManager.h" />
+    <ClInclude Include="Duilib\Core\UIMarkup.h" />
+    <ClInclude Include="Duilib\Core\UIRender.h" />
+    <ClInclude Include="Duilib\Core\UIResourceManager.h" />
+    <ClInclude Include="Duilib\Layout\UIAnimationTabLayout.h" />
+    <ClInclude Include="Duilib\Layout\UIChildLayout.h" />
+    <ClInclude Include="Duilib\Layout\UIHorizontalLayout.h" />
+    <ClInclude Include="Duilib\Layout\UITabLayout.h" />
+    <ClInclude Include="Duilib\Layout\UITileLayout.h" />
+    <ClInclude Include="Duilib\Layout\UIVerticalLayout.h" />
+    <ClInclude Include="Duilib\StdAfx.h" />
+    <ClInclude Include="Duilib\UIlib.h" />
+    <ClInclude Include="Duilib\Utils\downloadmgr.h" />
+    <ClInclude Include="Duilib\Utils\DPI.h" />
+    <ClInclude Include="Duilib\Utils\DragDropImpl.h" />
+    <ClInclude Include="Duilib\Utils\FlashEventHandler.h" />
+    <ClInclude Include="Duilib\Utils\observer_impl_base.h" />
+    <ClInclude Include="Duilib\Utils\stb_image.h" />
+    <ClInclude Include="Duilib\Utils\TrayIcon.h" />
+    <ClInclude Include="Duilib\Utils\UIDelegate.h" />
+    <ClInclude Include="Duilib\Utils\UIShadow.h" />
+    <ClInclude Include="Duilib\Utils\unzip.h" />
+    <ClInclude Include="Duilib\Utils\Utils.h" />
+    <ClInclude Include="Duilib\Utils\VersionHelpers.h" />
+    <ClInclude Include="Duilib\Utils\WebBrowserEventHandler.h" />
+    <ClInclude Include="Duilib\Utils\WinImplBase.h" />
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="ModuleSDK\ChineseCode.h" />
+    <ClInclude Include="ModuleSDK\lib_Hook.h" />
+    <ClInclude Include="ModuleSDK\lib_http.h" />
+    <ClInclude Include="ModuleSDK\lib_Process.h" />
+    <ClInclude Include="ModuleSDK\lib_Socket.h" />
+    <ClInclude Include="ModuleSDK\lib_String.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="unzip.h" />
+    <ClInclude Include="Update.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="UpdateDownload.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Debug\Skin\Skin.zip" />
+    <None Include="Duilib\Utils\Flash11.tlb" />
+    <None Include="Duilib\Utils\flash11.tlh" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\SteamUser\ICON.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
