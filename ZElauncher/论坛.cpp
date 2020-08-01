@@ -162,7 +162,7 @@ void C论坛UI::GetBBSList(_bstr_t url, UINT type /* = NULL */)
 		return;
 	}
 	HtmlParser parser;
-	shared_ptr<HtmlDocument> doc = std::move(parser.Parse(pStrMulti, nLen2));
+	shared_ptr<HtmlDocument> doc = parser.Parse(pStrMulti, nLen2);
 	//释放缓冲区;
 	delete[]pStrMulti;
 	delete[]pStrHtml;
@@ -191,14 +191,14 @@ void C论坛UI::GetBBSList(_bstr_t url, UINT type /* = NULL */)
 			if (strstr(tbody->html().c_str(), "置顶主题"))tmpText = Element_type[j];
 			else {
 				//获取主题类型名称;
-				std::vector<shared_ptr<HtmlElement>> eletype = std::move(Element[0]->GetElementByTagName("em"));
+				std::vector<shared_ptr<HtmlElement>> eletype = Element[0]->GetElementByTagName("em");
 				if (eletype.size() > 0) {
 					tmpText = eletype[0]->text().c_str();
 				}
 				else tmpText = Element_type[2];
 			}
 			//std::string htmltitle = tbody->html();
-			Tmp_.typename_ = std::move(tmpText);
+			Tmp_.typename_ = tmpText;
 			//获取主题名称和链接;
 			std::vector<shared_ptr<HtmlElement>> sxst = std::move(Element[0]->GetElementByClassName("s xst"));
 			if (sxst.size() < 1)continue;
@@ -273,7 +273,7 @@ void C论坛UI::GetSaylaba(shared_ptr<HtmlDocument>& doc)
 	if (tbodyroot.size() < 1)return;
 	std::vector<shared_ptr<HtmlElement>> tbodyroot_;
 	tbodyroot[0]->SelectElement("//div[@style]", tbodyroot_);
-	tmptext = tbodyroot[0]->html();
+	tmptext = std::move(tbodyroot[0]->html());
 	_bstr_t Tmpstr = tbodyroot[0]->text().c_str();
 	CDuiString strin = Tmpstr.GetBSTR();
 	strin.Replace(L"\t\n\t", L"  ");

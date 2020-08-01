@@ -206,7 +206,7 @@ void C服务器UI::GetServerList2(const char* pName, UINT type)
 	if (StrResult.length() < 10) { MessageBox(NULL, _T("获取服务器信息失败!"), NULL, NULL); IsThread2 = false; return; }
 	UINT nLen = StrResult.size() * sizeof(TCHAR);
 	TCHAR* pStrHtml = new TCHAR[nLen]();
-	_MultiByteToWideChar(CP_UTF8, NULL, StrResult.c_str(), StrResult.length(), pStrHtml, nLen);
+	MultiByteToWideChar(CP_UTF8, NULL, StrResult.c_str(), StrResult.length(), pStrHtml, nLen);
 	UINT nLen2 = StrResult.size() * sizeof(TCHAR);
 	char* pStrMulti = new char[nLen2]();
 	WideCharToMultiByte(CP_ACP, NULL, pStrHtml, nLen, pStrMulti, nLen2, NULL, NULL);
@@ -448,7 +448,7 @@ void C服务器UI::Get93xServerList2(const char* pName, UINT type)
 	//编码转换
 	UINT nLen = StrResult.size() * sizeof(TCHAR);
 	TCHAR* pStrHtml = new TCHAR[nLen]();
-	_MultiByteToWideChar(CP_UTF8, NULL, StrResult.c_str(), StrResult.length(), pStrHtml, nLen);
+	MultiByteToWideChar(CP_UTF8, NULL, StrResult.c_str(), StrResult.length(), pStrHtml, nLen);
 	UINT nLen2 = StrResult.size() * sizeof(TCHAR);
 	char* pStrMulti = new char[nLen2]();
 	WideCharToMultiByte(CP_ACP, NULL, pStrHtml, nLen, pStrMulti, nLen2, NULL, NULL);

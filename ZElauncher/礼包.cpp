@@ -99,7 +99,7 @@ _bstr_t C礼包UI::GetFormhash(LPCTSTR pUrl)
 	UINT nNextpos = strHtml.find("\">", nPos);
 	if (nNextpos == std::string::npos)return _T("");
 	_bstr_t result = strHtml.substr(nPos, nNextpos - nPos).c_str();
-	return std::move(result);
+	return result;
 }
 
 bool C礼包UI::IsStart_yaoyiyao(LPCTSTR pUrl)

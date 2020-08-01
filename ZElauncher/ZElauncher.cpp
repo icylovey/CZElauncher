@@ -286,7 +286,7 @@ void CZElauncherMain::Get93xServerListInfo()
 	//编码转换
 	UINT nLen = StrResult.size() * sizeof(TCHAR);
 	TCHAR* pStrHtml = new TCHAR[nLen]();
-	_MultiByteToWideChar(CP_UTF8, NULL, StrResult.c_str(), StrResult.length(), pStrHtml, nLen);
+	MultiByteToWideChar(CP_UTF8, NULL, StrResult.c_str(), StrResult.length(), pStrHtml, nLen);
 	UINT nLen2 = StrResult.size() * sizeof(TCHAR);
 	char* pStrMulti = new char[nLen2]();
 	WideCharToMultiByte(CP_ACP, NULL, pStrHtml, nLen, pStrMulti, nLen2, NULL, NULL);

@@ -96,7 +96,7 @@ void C–¬ ÷∆§∑ÙUI::∂“ªª∆§∑Ù(LPCTSTR pUrl)
 		http.GET(static_cast<TCHAR*>(sSkinConvertUrl), htmldata, _T(""), Cookies.GetData());
 		//±‡¬Î◊™ªª
 		nLen = htmldata.size() * sizeof(TCHAR);
-		TCHAR* pTmpHtml = new TCHAR[nLen];
+		TCHAR* pTmpHtml = new TCHAR[nLen]();
 		_MultiByteToWideChar(CP_UTF8, NULL, htmldata.c_str(), htmldata.length(), pTmpHtml, nLen);
 		pRegexp->PutPattern(pTpatternSkinConvert);
 		VBScript_RegExp_55::IMatchCollectionPtr ItemResult = pRegexp->Execute(pTmpHtml);

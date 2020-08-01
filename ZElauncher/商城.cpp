@@ -56,7 +56,7 @@ std::string C商城UI::获取皮肤html数据(const TCHAR* Page)
 		http.GET(url.GetData(), Result, _T(""), Cookies.GetData());
 		//http.GET(url.GetData(), Result);
 	}
-	return std::move(Result);
+	return Result;
 }
 
 void C商城UI::设置图片可视状态()
