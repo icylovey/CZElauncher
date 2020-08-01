@@ -35,5 +35,5 @@
 [编译二进制版本](https://bbs.93x.net/forum.php?mod=viewthread&tid=227978&extra=page%3D1)
 
 
-![UI1](https://github.com/icylovey/CZElauncher/tree/master/doc/UI1.jpg)
-![UI2](https://github.com/icylovey/CZElauncher/tree/master/doc/UI2.bmp)
+![UI1](https://dzfiles.93x.net/data/attachment/forum/202006/28/005021mzbz5gdxobhgmzwf.png)
+![UI2](https://dzfiles.93x.net/data/attachment/forum/202007/12/200303guyd8d7g7z3sfqed.png)
