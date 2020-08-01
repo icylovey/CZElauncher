@@ -34,5 +34,6 @@
 
 [编译二进制版本](https://bbs.93x.net/forum.php?mod=viewthread&tid=227978&extra=page%3D1)
 
-![](https://github.com/guodongxiaren/ImageCache/raw/master/Logo/foryou.gif)
-![](https://github.com/icylovey/CZElauncher/tree/master/doc/UI2.png)
+
+![UI1](https://github.com/icylovey/CZElauncher/tree/master/doc/UI1.jpg)
+![UI2](https://github.com/icylovey/CZElauncher/tree/master/doc/UI2.bmp)
