@@ -173,6 +173,7 @@ void CUpdateUI::DownloadThread(CDuiString& Url)
 	RunFile += "\\ZElauncher.exe";
 	if (MessageBox(NULL, _T("更新完成,是否启动主程序?"), NULL, MB_YESNO | MB_TOPMOST | MB_ICONQUESTION) == IDYES)
 		ShellExecute(NULL, _T("open"), RunFile.GetData(), NULL, NULL, NULL);
+
 	_bstr_t Cmdline = "cmd /c ping 127.0.0.1 -n 5 &del \"";
 	Cmdline += ZipPath;
 	Cmdline += "\\UpdateDownload.exe\"";
