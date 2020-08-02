@@ -166,6 +166,7 @@ void CUpdateUI::DownloadThread(CDuiString& Url)
 	}
 	SetProgressValue(100);
 	SetProgressText(L"CSGO僵尸逃跑社区登录器  更新完成!");
+	DeleteFile(TempPath);
 	delete[]TempPath;
 
 	CDuiString RunFile = ZipPath;
@@ -184,7 +185,7 @@ void CUpdateUI::DownloadThread(CDuiString& Url)
 		fwrite((char*)Cmdline, Cmdline.length(), 1, pFile);
 		fclose(pFile);
 	}
-
+	
 	ShellExecute(NULL, _T("open"), cmdfile, NULL, NULL, SW_HIDE);
 	ExitProcess(NULL);
 }

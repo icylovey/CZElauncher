@@ -37,7 +37,7 @@ void __stdcall GetUpdateVersion(LPCTSTR sVersion)
 				ExitProcess(NULL);
 			}
 			else {
-				ShellExecute(NULL, _T("open"), Updateurl, NULL, NULL, SW_NORMAL);
+				ShellExecute(NULL, _T("open"), _T("UpdateDownload.exe"),_T("UpdateCSGOZElauncher"), NULL, SW_NORMAL);
 				ExitProcess(NULL);
 			}
 		}
@@ -57,7 +57,7 @@ int __stdcall WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 {
 	NotRepeat();
 
-	GetUpdateVersion(_T("v1.2.3"));
+	GetUpdateVersion(_T("v1.2.4"));
 	Zip7ZInitiale();
 
 	CPaintManagerUI::SetInstance(hInstance);
