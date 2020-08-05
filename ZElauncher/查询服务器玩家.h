@@ -14,7 +14,7 @@ public:
 	~C查询服务器玩家UI() {} //::PostQuitMessage(0L); }
 	CDuiString GetSkinFile();
 	CDuiString GetSkinFolder();
-	//UILIB_RESOURCETYPE GetResourceType()const;
+	//UILIB_RESTYPE GetResourceType()const;
 	UILIB_RESTYPE GetResourceType()const;
 	LPCTSTR GetResourceID()const;
 	void OnFinalMessage(HWND hWnd);

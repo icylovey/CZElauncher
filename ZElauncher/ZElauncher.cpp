@@ -568,8 +568,8 @@ bool CZElauncherMain::UserIslogin()
 void CZElauncherMain::OnClick(const TNotifyUI& msg)
 {
 	if (_tcscmp(msg.pSender->GetName(), m_pCloseBtn) == 0)OnExit(msg);
-	else if (_tcscmp(msg.pSender->GetName(), m_pMinBtn) == 0)SendMessage(WM_SYSCOMMAND, SC_MINIMIZE, NULL);
-	else if (_tcscmp(msg.pSender->GetName(), m_pMenuBtn) == 0)OnMenu(msg);
+	else if (_tcscmp(msg.pSender->GetName(), m_PaintManagerinBtn) == 0)SendMessage(WM_SYSCOMMAND, SC_MINIMIZE, NULL);
+	else if (_tcscmp(msg.pSender->GetName(), m_PaintManagerenuBtn) == 0)OnMenu(msg);
 	else if (_tcscmp(msg.pSender->GetName(), m_pBBSBtn) == 0)ShellExecute(NULL, _T("open"), _T("https://bbs.93x.net/"), NULL, NULL, NULL);
 	else if (_tcscmp(msg.pSender->GetName(), m_pBugBtn) == 0)ShellExecute(NULL, _T("open"), _T("https://bbs.93x.net/forum.php?mod=viewthread&tid=234653"), NULL, NULL, NULL);
 	else if (_tcscmp(msg.pSender->GetName(), _T("Button_Login")) == 0) {

@@ -30,7 +30,7 @@ private:
 	_bstr_t GetFormhash(LPCTSTR pUrl);
 	bool IsStart_yaoyiyao(LPCTSTR pUrl);
 private:
-	CPaintManagerUI* m_paintmanager;
-	CPaintManagerUI m_pm;
+	CPaintManagerUI* m_paintmanage_;
+	CPaintManagerUI m_pm2;
 	CDuiString m_Signbtn;
 };

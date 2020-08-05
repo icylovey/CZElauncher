@@ -60,7 +60,7 @@ IDI_ICON1               ICON                    "ICON.ico"
 // ZIPRES
 //
 
-IDR_ZIPRES1             ZIPRES                  "F:\\ProjectCode\\C++\\Other\\ZElauncher\\Debug\\Skin\\ListRes\\ListRes.zip"
+IDR_ZIPRES1             ZIPRES                  "F:\\ProjectCode\\C++\\Other\\ZElauncher\\Debug\\Skin\\Skin.zip"
 
 #endif    // 中文(简体，中国) resources
 /////////////////////////////////////////////////////////////////////////////

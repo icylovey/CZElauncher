@@ -20,7 +20,7 @@ class C服务器UI :
 	,public INotifyUI
 {
 public:
-	C服务器UI(CPaintManagerUI& m_paintmanager, HWND hWnd);
+	C服务器UI(CPaintManagerUI& m_pm, HWND hWnd);
 	~C服务器UI();
 	void RefreshServer();
 	void ShowServerList(const char* pName, UINT type = NULL, bool Is93x = false);

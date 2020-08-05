@@ -106,7 +106,7 @@ void CSteamUserMain::GetUserInfo()
 		{
 			//CPaintManagerUI m_Paint;
 			CDialogBuilder builder;
-			CControlUI* pControl = builder.Create(_T("xml\\Steam_Button.xml"), NULL, NULL, &m_pListManager);
+			CControlUI* pControl = builder.Create(_T("xml\\BBS_Nick.xml"), NULL, NULL, &m_pListManager);
 			CListUI* plist = static_cast<CListUI*>(m_PaintManager.FindControl(_T("List1")));
 			srand(GetTickCount64());
 			if (plist) {
@@ -131,7 +131,7 @@ void CSteamUserMain::GetUserInfo()
 
 CDuiString CSteamUserMain::GetImageStr(LPCTSTR pSteamID)
 {
-	lib_http::http http;
+	lib_http::CLibhttp http;
 	std::string HtmlData;
 	CDuiString Url = _T("http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=2B4F7DEC13030AC9E59898514A14AFEB&steamids=");
 	Url += pSteamID;

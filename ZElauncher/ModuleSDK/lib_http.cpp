@@ -743,6 +743,7 @@ namespace lib_http
 		return true;
 	}
 	
+/*
 #pragma region http2
 	bool IsInitalize = false;
 	WSADATA httpwsadata = { 0 };
@@ -841,7 +842,7 @@ namespace lib_http
 		} while (_tcslen(pCookies) > 1);;
 		return ReusltCookies;
 	}
-	bool __fastcall CLibhttp2::Get(const TCHAR* Url, std::string& ResultData, const TCHAR* Header /* = nullptr */, const TCHAR* Cookies /* = nullptr */)
+	bool __fastcall CLibhttp2::Get(const TCHAR* Url, std::string& ResultData, const TCHAR* Header / * = nullptr * /, const TCHAR* Cookies / * = nullptr * /)
 	{
 		bool Ishttps;
 		_tcsstr(Url, _T("https")) ? Ishttps = true : Ishttps = false;
@@ -862,7 +863,7 @@ namespace lib_http
 			closesocket(Socket);
 			return false;
 		}
-		/*
+		/ *
 		GET / HTTP/1.1
 		Host: bilibili.com
 		Connection: keep-alive
@@ -872,7 +873,7 @@ namespace lib_http
 		Accept - Encoding: gzip, deflate
 		Accept - Language : zh - CN, zh; q = 0.9
 		Cookie: CURRENT_FNVAL = 16;llJR)m;
-		*/
+		* /
 #pragma region Http请求协议头
 		CLibString RequestData = _T("GET ");
 		RequestData += GetURLPage(Url).c_str();
@@ -885,7 +886,7 @@ namespace lib_http
 		else {
 			RequestData += _T("User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64)\r\n");
 			RequestData += _T("Connection: keep-alive\r\n");
-			RequestData += _T("Accept: text/html,*/*\r\n");
+			RequestData += _T("Accept: text/html,* / *\r\n");
 			RequestData += _T("Accept-Language: zh-CN,zh;\r\n");
 			RequestData += _T("Content-Type: application/x-www-form-urlencoded\r\n");
 
@@ -981,6 +982,6 @@ namespace lib_http
 		}
 #pragma endregion
 	}
-#pragma endregion
+#pragma endregion*/
 }
 

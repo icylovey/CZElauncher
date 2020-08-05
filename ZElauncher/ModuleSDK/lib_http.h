@@ -124,7 +124,7 @@ namespace lib_http
 
 	};
 	//Http Socket∑Ω Ω«Î«Û;
-	class CLibhttp2
+	/*class CLibhttp2
 	{
 	public:
 		CLibhttp2() {};
@@ -143,7 +143,7 @@ namespace lib_http
 		lib_String::CLibString m_htmlHeader;
 		lib_String::CLibString m_htmldata;
 
-	};
+	};*/
 }
 
 #endif

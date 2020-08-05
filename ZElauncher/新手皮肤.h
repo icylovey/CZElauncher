@@ -26,8 +26,8 @@ private:
 	CDuiString ªÒ»°Õº∆¨µÿ÷∑(LPCTSTR pUrl, UINT iFlag);
 	void ∂“ªª∆§∑Ù(LPCTSTR pUrl);
 private:
-	CPaintManagerUI* m_paintmanager;
-	CPaintManagerUI m_pm;
+	CPaintManagerUI* m_paintmanage_;
+	CPaintManagerUI m_pm2;
 	CPaintManagerUI m_pTilelayout;
 	CContainerUI* pSKin = nullptr;
 	UINT m_PageNum;

@@ -2,13 +2,13 @@
 
 C新手皮肤UI::C新手皮肤UI(CPaintManagerUI& m_paintmanage)
 {
-	m_paintmanager = &m_paintmanage;
+	m_paintmanage_ = &m_paintmanage;
 	m_PageNum = 1;
 	CDialogBuilder Builder;
-	pSKin = static_cast<CContainerUI*>(Builder.Create(_T("SkinConvert.xml"), NULL, NULL, &m_pm));
+	pSKin = static_cast<CContainerUI*>(Builder.Create(_T("SkinConvert.xml"), NULL, NULL, &m_pm2));
 	if (pSKin) {
 		this->Add(pSKin);
-		m_paintmanager->AddNotifier(this);
+		m_paintmanage_->AddNotifier(this);
 	}
 	else {
 		this->RemoveAll();
@@ -167,8 +167,8 @@ CDuiString C新手皮肤UI::获取图片地址(LPCTSTR pUrl, UINT iFlag)
 	img.Load(pStream);
 	TCHAR szbuf[MAX_PATH] = { 0 };
 	_stprintf(szbuf, _T("Skin_%d.png"), iFlag);
-	m_paintmanager->RemoveImage(szbuf);
-	m_paintmanager->AddImage(szbuf, (HBITMAP)img, img.GetWidth(), img.GetHeight(), false);
+	m_paintmanage_->RemoveImage(szbuf);
+	m_paintmanage_->AddImage(szbuf, (HBITMAP)img, img.GetWidth(), img.GetHeight(), false);
 	img.Detach();
 	pStream->Release();
 	GlobalFree(hGlobal);
@@ -183,7 +183,7 @@ void C新手皮肤UI::获取新手皮肤数据()
 		MessageBox(NULL, _T("获取新手皮肤礼包失败,请先登录!"), NULL, NULL);
 		return;
 	}*/
-	CTileLayoutUI* pTilelayout = static_cast<CTileLayoutUI*>(m_paintmanager->FindControl(_T("Table_SkinConvert")));
+	CTileLayoutUI* pTilelayout = static_cast<CTileLayoutUI*>(m_paintmanage_->FindControl(_T("Table_SkinConvert")));
 	if (!pTilelayout)return;
 	//获取正则表达式数据
 	TCHAR dbPath[MAX_PATH] = { 0 };

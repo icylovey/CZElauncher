@@ -9,7 +9,7 @@ C论坛UI::~C论坛UI()
 C论坛UI::C论坛UI(CPaintManagerUI& m_paintmanager)
 {
 	m_paintmanager_ = &m_paintmanager;
-	CContainerUI* pBBS = static_cast<CContainerUI*>(builder.Create(_T("BBS.xml"), NULL, NULL, &m_pm2));
+	CContainerUI* pBBS = static_cast<CContainerUI*>(builder.Create(_T("BBS.xml"), NULL, NULL, &m_PaintManager2));
 	if (pBBS) {
 		this->Add(pBBS);
 		m_paintmanager_->AddNotifier(this);
@@ -115,8 +115,8 @@ std::vector<shared_ptr<HtmlElement>> C论坛UI::GetTagValue(const char* name, cons
 
 void C论坛UI::OnLookBBS()
 {
-	MessageBox(NULL, L"很抱歉此项功能还没有完成,请耐心等待.", L"Tip", MB_ICONQUESTION);
-	return;
+	/*MessageBox(NULL, L"很抱歉此项功能还没有完成,请耐心等待.", L"Tip", MB_ICONQUESTION);
+	return;*/
 	CListUI* pList = static_cast<CListUI*>(m_paintmanager_->FindControl(_T("List_bbs")));
 	if (!pList)return;
 	CListTextElementUI* pItem = static_cast<CListTextElementUI*>(pList->GetItemAt(pList->GetCurSel()));
@@ -126,11 +126,12 @@ void C论坛UI::OnLookBBS()
 	}
 	CDuiString ItemText = pItem->GetUserData();
 	g_BBSUrl = ItemText;
-	C查看帖子UI* pSetting = new C查看帖子UI();
+	C查看帖子UI* pSetting = new C查看帖子UI(m_paintmanager_);
 	if (pSetting == NULL) return;
 	pSetting->Create(NULL, _T("查看帖子"), UI_WNDSTYLE_DIALOG, WS_EX_STATICEDGE | WS_EX_APPWINDOW, 0, 0, 900, 500);
 	pSetting->CenterWindow();
-	::ShowWindow(*pSetting, SW_SHOW);
+	pSetting->ShowModal();
+	//::ShowWindow(*pSetting, SW_SHOW);
 	//::SetWindowPos(*pSetting, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
 }
 

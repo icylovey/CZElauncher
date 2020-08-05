@@ -17,6 +17,6 @@ private:
 	void OnCreate();
 
 private:
-	CPaintManagerUI* m_paintmanager;
-	CPaintManagerUI m_pm;
+	CPaintManagerUI* m_paintmanage_;
+	CPaintManagerUI m_pm2;
 };

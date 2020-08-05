@@ -50,8 +50,8 @@ private:
 	void 获取ZE地图中文名表(LPCTSTR maptype);
 	void 启动获取ZE地图中文名表();
 private:
-	const TCHAR* m_pMenuBtn = _T("menubtn");
-	const TCHAR* m_pMinBtn = _T("minbtn");
+	const TCHAR* m_PaintManagerenuBtn = _T("menubtn");
+	const TCHAR* m_PaintManagerinBtn = _T("minbtn");
 	const TCHAR* m_pCloseBtn = _T("closebtn");
 	const TCHAR* m_pBugBtn = _T("BUGbtn");
 	const TCHAR* m_pBBSBtn = _T("BBSbtn");

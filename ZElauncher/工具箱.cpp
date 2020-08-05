@@ -2,12 +2,12 @@
 
 C工具箱UI::C工具箱UI(CPaintManagerUI& m_paintmanage)
 {
-	m_paintmanager = &m_paintmanage;
+	m_paintmanage_ = &m_paintmanage;
 	CDialogBuilder Builder;
-	CContainerUI* pTools = static_cast<CContainerUI*>(Builder.Create(_T("Tools.xml"), NULL, NULL, &m_pm));
+	CContainerUI* pTools = static_cast<CContainerUI*>(Builder.Create(_T("Tools.xml"), NULL, NULL, &m_pm2));
 	if (pTools) {
 		this->Add(pTools);
-		m_paintmanager->AddNotifier(this);
+		m_paintmanage_->AddNotifier(this);
 	}
 	else {
 		this->RemoveAll();

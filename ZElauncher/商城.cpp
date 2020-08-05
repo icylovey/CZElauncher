@@ -2,13 +2,13 @@
 
 C商城UI::C商城UI(CPaintManagerUI& m_paintmanage)
 {
-	m_paintmanager = &m_paintmanage;
+	m_paintmanage_ = &m_paintmanage;
 	m_PageNum = 1;
 	CDialogBuilder Builder;
-	CContainerUI* pShop = static_cast<CContainerUI*>(Builder.Create(_T("Shop.xml"), NULL, NULL, &m_pm));
+	CContainerUI* pShop = static_cast<CContainerUI*>(Builder.Create(_T("Shop.xml"), NULL, NULL, &m_pm2));
 	if (pShop) {
 		this->Add(pShop);
-		m_paintmanager->AddNotifier(this);
+		m_paintmanage_->AddNotifier(this);
 	}
 	else {
 		this->RemoveAll();
@@ -64,7 +64,7 @@ void C商城UI::设置图片可视状态()
 	for (int i = 0; i < 12; i++) {
 		TCHAR szbuf[1024] = { 0 };
 		_stprintf(szbuf, _T("panel_Skin%d"), i + 1);
-		CContainerUI* pPanel = static_cast<CContainerUI*>(m_paintmanager->FindControl(szbuf));
+		CContainerUI* pPanel = static_cast<CContainerUI*>(m_paintmanage_->FindControl(szbuf));
 		if (pPanel)pPanel->SetVisible(false);
 	}
 }
@@ -82,7 +82,7 @@ bool C商城UI::判断正则表达式数据库是否存在(TCHAR* 正则表达式)
 void C商城UI::获取商城数据()
 {
 	设置图片可视状态();
-	CButtonUI* pLogin = static_cast<CButtonUI*>(m_paintmanager->FindControl(_T("Button_Login")));
+	CButtonUI* pLogin = static_cast<CButtonUI*>(m_paintmanage_->FindControl(_T("Button_Login")));
 	if (!pLogin)return;
 	if (_tcscmp(pLogin->GetText(), _T("{u}{a}未登录{/a}{/u}")) == 0 || _tcscmp(pLogin->GetText(), _T("{u}{a}登录失败{/a}{/u}")) == 0 || _tcscmp(pLogin->GetText(), _T("{u}{a}Cookies获取为空{/a}{/u}")) == 0) {
 		MessageBox(NULL, _T("获取商城信息失败,请先登录!"), NULL, MB_OK | MB_TOPMOST);
@@ -109,7 +109,7 @@ void C商城UI::获取商城数据()
 	_MultiByteToWideChar(CP_UTF8, NULL, Result.c_str(), Result.length(), pStrHtml, nLen);
 	if (wcsstr(pStrHtml,L"提示信息"))return;
 #pragma region 正则表达式算法
-	CContainerUI* pPage = static_cast<CContainerUI*>(m_paintmanager->FindControl(_T("page_panel")));
+	CContainerUI* pPage = static_cast<CContainerUI*>(m_paintmanage_->FindControl(_T("page_panel")));
 	if (pPage)pPage->SetVisible(true);
 	VBScript_RegExp_55::IRegExp2Ptr pRegexp(__uuidof(VBScript_RegExp_55::RegExp));
 	pRegexp->PutGlobal(VARIANT_TRUE);
@@ -128,12 +128,12 @@ void C商城UI::获取商城数据()
 		_bstr_t sText = "";
 		TCHAR szbuf[1024] = { 0 };
 		_stprintf(szbuf, _T("panel_Skin%d"), i + 1);
-		CContainerUI* pPanel = static_cast<CContainerUI*>(m_paintmanager->FindControl(szbuf));
+		CContainerUI* pPanel = static_cast<CContainerUI*>(m_paintmanage_->FindControl(szbuf));
 		if (pPanel)pPanel->SetVisible(true);
 		//获取皮肤名称
 		sText = static_cast<_bstr_t>(Submatch->GetItem(1L));
 		_stprintf(szbuf, _T("Text_SkinName%d"), i + 1);
-		CTextUI* pText = static_cast<CTextUI*>(m_paintmanager->FindControl(szbuf));;
+		CTextUI* pText = static_cast<CTextUI*>(m_paintmanage_->FindControl(szbuf));;
 		if (pText) {
 			pText->SetTextColor(RGB(rand() % 255, rand() % 255, rand() % 255));
 			pText->SetText(sText);
@@ -141,7 +141,7 @@ void C商城UI::获取商城数据()
 		//获取皮肤图片
 		sText = static_cast<_bstr_t>(Submatch->GetItem(2L));
 		_stprintf(szbuf, _T("Label_Skin%d"), i + 1);
-		COptionUI* pLabel = static_cast<COptionUI*>(m_paintmanager->FindControl(szbuf));;
+		COptionUI* pLabel = static_cast<COptionUI*>(m_paintmanage_->FindControl(szbuf));;
 		if (pLabel) {
 			//保存皮肤购买链接
 			_bstr_t tmp23 = static_cast<_bstr_t>(Submatch->GetItem(0L));
@@ -165,8 +165,8 @@ void C商城UI::获取商城数据()
 					CreateStreamOnHGlobal(hGlobal, TRUE, &pStream);
 					CImage img;
 					img.Load(pStream);
-					m_paintmanager->RemoveImage(szbuf);
-					m_paintmanager->AddImage(szbuf, (HBITMAP)img, img.GetWidth(), img.GetHeight(), false);
+					m_paintmanage_->RemoveImage(szbuf);
+					m_paintmanage_->AddImage(szbuf, (HBITMAP)img, img.GetWidth(), img.GetHeight(), false);
 					pLabel->SetBkImage(szbuf);
 					img.Detach();
 					pStream->Release();
@@ -188,7 +188,7 @@ void C商城UI::获取商城数据()
 		sText += static_cast<_bstr_t>(Submatch->GetItem(4L));
 		sText += _T("{/c}");
 		_stprintf(szbuf, _T("Text_SkinMoney%d"), i + 1);
-		pText = static_cast<CTextUI*>(m_paintmanager->FindControl(szbuf));
+		pText = static_cast<CTextUI*>(m_paintmanage_->FindControl(szbuf));
 		if (pText)pText->SetText(sText);
 		//获取VIP金钱数量
 		sText = _T("{c #386382}VP价:{/c}{c #FF0000}");
@@ -197,12 +197,12 @@ void C商城UI::获取商城数据()
 		sText += static_cast<_bstr_t>(Submatch->GetItem(6L));
 		sText += _T("{/c}");
 		_stprintf(szbuf, _T("Text_SkinVip%d"), i + 1);
-		pText = static_cast<CTextUI*>(m_paintmanager->FindControl(szbuf));
+		pText = static_cast<CTextUI*>(m_paintmanage_->FindControl(szbuf));
 		if (pText)pText->SetText(sText);
 	}
 	pRegexp.Release();
 	_stprintf(page, _T("%d/%d"), m_PageNum, m_pageNumMax);
-	CTextUI* pPaget = static_cast<CTextUI*>(m_paintmanager->FindControl(_T("page_text")));
+	CTextUI* pPaget = static_cast<CTextUI*>(m_paintmanage_->FindControl(_T("page_text")));
 	if (pPaget)pPaget->SetText(page);
 #pragma endregion
 	{

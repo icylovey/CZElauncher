@@ -796,7 +796,7 @@ private:
 						shared_ptr<HtmlElement> parent = self->GetParent();
 						while (parent) {
 							if (parent->name == value) {
-								std::cerr << "WARN : element not closed <" << self->name << "> " << std::endl;
+								//std::cerr << "WARN : element not closed <" << self->name << "> " << std::endl;
 								self->Parse(attr);
 								element->children.push_back(self);
 								return pre - 2;
@@ -805,8 +805,8 @@ private:
 							parent = parent->GetParent();
 						}
 
-						std::cerr << "WARN : unexpected closed element </" << value << "> for <" << self->name
-							<< ">" << std::endl;
+						//std::cerr << "WARN : unexpected closed element </" << value << "> for <" << self->name
+							//<< ">" << std::endl;
 						state = PARSE_ELEMENT_VALUE;
 					}
 					else {

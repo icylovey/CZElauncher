@@ -37,6 +37,7 @@ public:
 	C论坛UI(CPaintManagerUI& m_paintmanager);;
 	~C论坛UI();
 	void ShowBBSList();
+	void BrowserBBS();
 private:
 	void Notify(TNotifyUI& msg);
 	void MenuClick(CControlUI* Click);
@@ -46,11 +47,10 @@ private:
 	void GetSaylaba(shared_ptr<HtmlDocument>& doc);
 	void Threadlaba();
 	std::vector<std::shared_ptr<HtmlElement>> GetTagValue(const char* name, const char* tagname, shared_ptr<HtmlElement>& tbody);
-	void BrowserBBS();
 	void OnLookBBS();
 private:
 	CDialogBuilder builder;
-	CPaintManagerUI m_pm2;
+	CPaintManagerUI m_PaintManager2;
 	CPaintManagerUI* m_paintmanager_;
 	std::vector<CBBSUI::主题> 主题信息;
 	std::vector<std::string> 喇叭信息;

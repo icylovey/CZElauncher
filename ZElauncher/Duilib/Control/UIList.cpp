@@ -126,9 +126,10 @@ namespace DuiLib {
         if( pListItem != NULL ) {
             pListItem->SetOwner(this);
             pListItem->SetIndex(GetCount());
-            return m_pList->Add(pControl);
+            //return m_pList->Add(pControl);
         }
-        return CVerticalLayoutUI::Add(pControl);
+        return m_pList->Add(pControl); //修复Item不显示滚动条的BUG
+        //return CVerticalLayoutUI::Add(pControl);
     }
 
     bool CListUI::AddAt(CControlUI* pControl, int iIndex)

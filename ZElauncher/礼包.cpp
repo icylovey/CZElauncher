@@ -2,12 +2,12 @@
 TCHAR G_TodayUIName[50] = { 0 };
 C礼包UI::C礼包UI(CPaintManagerUI& m_paintmanage)
 {
-	m_paintmanager = &m_paintmanage;
+	m_paintmanage_ = &m_paintmanage;
 	CDialogBuilder Builder;
-	CContainerUI* pAward = static_cast<CContainerUI*>(Builder.Create(_T("Award.xml"), NULL, NULL, &m_pm));
+	CContainerUI* pAward = static_cast<CContainerUI*>(Builder.Create(_T("Award.xml"), NULL, NULL, &m_pm2));
 	if (pAward) {
 		this->Add(pAward);
-		m_paintmanager->AddNotifier(this);
+		m_paintmanage_->AddNotifier(this);
 		DrawCalendar(pAward);
 	}
 	else {
@@ -61,7 +61,7 @@ void C礼包UI::Sign93x()
 				TCHAR* pStrHtml = new TCHAR[nLen]();
 				_MultiByteToWideChar(CP_UTF8, NULL, Result.c_str(), Result.length(), pStrHtml, nLen);
 				if (wcsstr(pStrHtml, L"您已获得")) {
-					CAwardTipUI* pAwardTip = new CAwardTipUI(*m_paintmanager, pStrHtml);
+					CAwardTipUI* pAwardTip = new CAwardTipUI(*m_paintmanage_, pStrHtml);
 					if (pAwardTip == NULL) { delete[]pStrHtml; return; }
 					pAwardTip->Create(NULL, _T("AwardUI"), UI_WNDSTYLE_DIALOG, WS_EX_STATICEDGE | WS_EX_APPWINDOW, 0, 0, 900, 500);
 					pAwardTip->CenterWindow();
@@ -319,7 +319,7 @@ void C礼包UI::DrawCalendar(CContainerUI* pAwarad)
 	TCHAR szBuf[256] = { 0 };
 	UINT iDay = 0;
 	_stprintf(G_TodayUIName, _T("OptionUI%d"), pTime->tm_wday + m_systime.wDay);
-	CTextUI* pText = static_cast<CTextUI*>(m_pm.FindSubControlByName(pAwarad, _T("Text_yyd")));
+	CTextUI* pText = static_cast<CTextUI*>(m_pm2.FindSubControlByName(pAwarad, _T("Text_yyd")));
 	if (pText) { _stprintf(szBuf, _T("%d 月"), m_systime.wMonth); pText->SetText(szBuf); }
 	CDuiString szFile = CPaintManagerUI::GetInstancePath() + _T("\\bin\\Data.dat");
 	GetPrivateProfileString(_T("CSGO"), _T("Date_Year"), NULL, szBuf, sizeof(szBuf), szFile);
@@ -332,7 +332,7 @@ void C礼包UI::DrawCalendar(CContainerUI* pAwarad)
 	for (int i = pTime->tm_wday; i < (iMonthDays + pTime->tm_wday); i++)
 	{
 		_stprintf(szBuf, _T("OptionUI%d"), i + 1);
-		pButtonUI = static_cast<CButtonUI*>(m_pm.FindSubControlByName(pAwarad, szBuf));
+		pButtonUI = static_cast<CButtonUI*>(m_pm2.FindSubControlByName(pAwarad, szBuf));
 		if (!pButtonUI)continue;
 		iDay++;
 		if (iDay < m_systime.wDay)pButtonUI->SetEnabled(false);

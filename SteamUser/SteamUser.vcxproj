@@ -46,7 +46,6 @@
     <ClInclude Include="SteamUser.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Debug\Skin\ListRes\ListRes.zip" />
     <None Include="..\ZElauncher\json\json_internalarray.inl" />
     <None Include="..\ZElauncher\json\json_internalmap.inl" />
     <None Include="..\ZElauncher\json\json_valueiterator.inl" />
@@ -119,8 +118,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>F:\SDK\Duilib\include;$(IncludePath)</IncludePath>
-    <LibraryPath>F:\SDK\Duilib\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>F:\SDK\Duilib\include;C:\OpenSSL-Win32\include;$(IncludePath);</IncludePath>
+    <LibraryPath>F:\SDK\Duilib\lib;C:\OpenSSL-Win32\lib;$(LibraryPath);</LibraryPath>
     <IntDir>$(Configuration)</IntDir>
     <OutDir>$(SolutionDir)$(Configuration)\bin\</OutDir>
   </PropertyGroup>

@@ -106,7 +106,6 @@
     <None Include="..\ZElauncher\json\sconscript">
       <Filter>SDK\json</Filter>
     </None>
-    <None Include="..\Debug\Skin\ListRes\ListRes.zip" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SteamUser.rc">

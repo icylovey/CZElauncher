@@ -9,7 +9,7 @@ LPCTSTR C查看帖子UI::GetWindowClassName()const
 
 CDuiString C查看帖子UI::GetSkinFile()
 {
-	return _T("LookBBS.xml");
+	return _T("BBS_look.xml");
 }
 
 CDuiString C查看帖子UI::GetSkinFolder()
@@ -35,7 +35,7 @@ void C查看帖子UI::OnFinalMessage(HWND hWnd)
 
 CControlUI* C查看帖子UI::CreateControl(LPCTSTR pstrClass)
 {
-	return NULL;
+	return nullptr;
 }
 
 void C查看帖子UI::InitWindow()
@@ -62,11 +62,11 @@ void C查看帖子UI::Notify(TNotifyUI& msg)
 
 void C查看帖子UI::获取帖子内容()
 {
-	CTileLayoutUI* pTilelayout = static_cast<CTileLayoutUI*>(m_pm.FindControl(_T("Table_LookBBS")));
+	CListUI* pTilelayout = static_cast<CListUI*>(m_pm.FindControl(_T("Table_LookBBS")));
 	if (!pTilelayout)return;
-	for (UINT i = 0; i < 10; i++) {
+	for (UINT i = 0; i < 20; i++) {
 		CDialogBuilder BuilderXml;
-		CControlUI* pNewXml = BuilderXml.Create(_T("xml\\BBS_Nick.xml"), NULL, NULL, &m_pTilelayout);
+		CControlUI* pNewXml = BuilderXml.Create(_T("xml\\BBS_Nick.xml"), NULL, NULL, m_paintmanager);
 		if (!pNewXml)return;
 		pTilelayout->Add(pNewXml);
 	}

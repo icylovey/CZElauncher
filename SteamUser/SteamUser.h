@@ -12,7 +12,12 @@
 #import <progid:VBScript.RegExp>named_guids
 #ifdef _DEBUG
 #include "Debug/3.tlh"
+#pragma comment(lib,"Duilib_d.lib")
+#else
+#pragma comment(lib,"Duilib.lib")
 #endif // _DEBUG
+
+#pragma comment(lib,"ComCtl32.lib") 
 
 
 using namespace DuiLib;

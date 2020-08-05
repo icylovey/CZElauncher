@@ -20,8 +20,8 @@ private:
 	bool 判断正则表达式数据库是否存在(TCHAR* 正则表达式);
 	std::string 获取皮肤html数据(const TCHAR* Page);
 private:
-	CPaintManagerUI* m_paintmanager;
-	CPaintManagerUI m_pm;
+	CPaintManagerUI* m_paintmanage_;
+	CPaintManagerUI m_pm2;
 	UINT m_PageNum;
 	UINT m_pageNumMax;
 };
