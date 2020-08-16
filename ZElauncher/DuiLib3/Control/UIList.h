@@ -2,8 +2,8 @@
 #define __UILIST_H__
 
 #pragma once
-#include "Layout/UIVerticalLayout.h"
-#include "Layout/UIHorizontalLayout.h"
+#include "../Layout/UIVerticalLayout.h"
+#include "../Layout/UIHorizontalLayout.h"
 
 namespace DuiLib {
 /////////////////////////////////////////////////////////////////////////////////////
@@ -396,6 +396,7 @@ public:
 
     LPCTSTR GetText(int iIndex) const;
     void SetText(int iIndex, LPCTSTR pstrText);
+    void SetTextColor_(COLORREF color);
 
     void SetOwner(CControlUI* pOwner);
     CDuiString* GetLinkContent(int iIndex);
@@ -415,6 +416,7 @@ protected:
     CDuiPtrArray m_aTexts;
 
     CDuiString m_sTextLast;
+    DWORD m_aTextsColors;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////

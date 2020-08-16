@@ -440,6 +440,7 @@ namespace DuiLib {
         bool MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lRes);
         bool PreMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lRes);
         void UsedVirtualWnd(bool bUsed);
+		
 
     private:
         CStdPtrArray* GetFoundControls();

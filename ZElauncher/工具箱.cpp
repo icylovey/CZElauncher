@@ -18,21 +18,18 @@ C工具箱UI::C工具箱UI(CPaintManagerUI& m_paintmanage)
 void C工具箱UI::OnClick(CControlUI* Click)
 {
 	if (_tcscmp(Click->GetName(), _T("Button_mapclear")) == 0) { 
-		TCHAR szBuf[1024] = { 0 };
-		GetRunPath(szBuf, sizeof(szBuf));
-		_tcscat(szBuf, _T("\\bin\\CSGO_MapsClear.exe"));
+		_bstr_t szBuf = GetRunPath();;
+		szBuf += _T("\\bin\\CSGO_MapsClear.exe");
 		ShellExecute(NULL, _T("open"), szBuf, NULL, szBuf, SW_NORMAL);
 	}
 	else if (_tcscmp(Click->GetName(), _T("Button_cmd")) == 0) { 
-		TCHAR szBuf[1024] = { 0 };
-		GetRunPath(szBuf, sizeof(szBuf));
-		_tcscat(szBuf, _T("\\bin\\command.exe"));
+		_bstr_t szBuf = GetRunPath();
+		szBuf += _T("\\bin\\command.exe");
 		ShellExecute(NULL, _T("open"), szBuf, NULL, szBuf, SW_NORMAL);
 	}
 	else if (_tcscmp(Click->GetName(), _T("Button_SteamUser")) == 0) {
-		TCHAR szBuf[1024] = { 0 };
-		GetRunPath(szBuf, sizeof(szBuf));
-		_tcscat(szBuf, _T("\\bin\\SteamUser.exe"));
+		_bstr_t szBuf = GetRunPath();
+		szBuf += _T("\\bin\\SteamUser.exe");
 		ShellExecute(NULL, _T("open"), szBuf, NULL, szBuf, SW_NORMAL);
 	}
 

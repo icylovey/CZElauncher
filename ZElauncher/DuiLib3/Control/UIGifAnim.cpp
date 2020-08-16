@@ -60,7 +60,7 @@ namespace DuiLib
 	CGifAnimUI::~CGifAnimUI(void)
 	{
 		DeleteGif();
-		m_PaintManageranager->KillTimer( this, EVENT_TIEM_ID );
+		m_pManager->KillTimer( this, EVENT_TIEM_ID );
 
 	}
 
@@ -165,7 +165,7 @@ namespace DuiLib
 
 		long lPause = ((long*) m_pPropertyItem->value)[m_nFramePosition] * 10;
 		if ( lPause == 0 ) lPause = 100;
-		m_PaintManageranager->SetTimer( this, EVENT_TIEM_ID, lPause );
+		m_pManager->SetTimer( this, EVENT_TIEM_ID, lPause );
 
 		m_bIsPlaying = true;
 	}
@@ -177,7 +177,7 @@ namespace DuiLib
 			return;
 		}
 
-		m_PaintManageranager->KillTimer(this, EVENT_TIEM_ID);
+		m_pManager->KillTimer(this, EVENT_TIEM_ID);
 		this->Invalidate();
 		m_bIsPlaying = false;
 	}
@@ -189,7 +189,7 @@ namespace DuiLib
 			return;
 		}
 
-		m_PaintManageranager->KillTimer(this, EVENT_TIEM_ID);
+		m_pManager->KillTimer(this, EVENT_TIEM_ID);
 		m_nFramePosition = 0;
 		this->Invalidate();
 		m_bIsPlaying = false;
@@ -247,14 +247,14 @@ namespace DuiLib
 	{
 		if ( idEvent != EVENT_TIEM_ID )
 			return;
-		m_PaintManageranager->KillTimer( this, EVENT_TIEM_ID );
+		m_pManager->KillTimer( this, EVENT_TIEM_ID );
 		this->Invalidate();
 
 		m_nFramePosition = (++m_nFramePosition) % m_nFrameCount;
 
 		long lPause = ((long*) m_pPropertyItem->value)[m_nFramePosition] * 10;
 		if ( lPause == 0 ) lPause = 100;
-		m_PaintManageranager->SetTimer( this, EVENT_TIEM_ID, lPause );
+		m_pManager->SetTimer( this, EVENT_TIEM_ID, lPause );
 	}
 
 	void CGifAnimUI::DrawFrame( HDC hDC )

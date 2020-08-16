@@ -85,7 +85,7 @@ namespace DuiLib
 		if( event.Type == UIEVENT_CONTEXTMENU )
 		{
 			if( IsContextMenuUsed() && IsEnabled()) {
-				m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_MENU, event.wParam, event.lParam);
+				m_pManager->SendNotify(this, DUI_MSGTYPE_MENU, event.wParam, event.lParam);
 			}
 			return;
 		}
@@ -100,7 +100,7 @@ namespace DuiLib
                 }
             }
 			if ( GetFadeAlphaDelta() > 0 ) {
-				m_PaintManageranager->SetTimer(this, FADE_TIMERID, FADE_ELLAPSE);
+				m_pManager->SetTimer(this, FADE_TIMERID, FADE_ELLAPSE);
 			}
 		}
 		if( event.Type == UIEVENT_MOUSELEAVE )
@@ -112,13 +112,13 @@ namespace DuiLib
                         Invalidate();
                     }
                 }
-                if (m_PaintManageranager) m_PaintManageranager->RemoveMouseLeaveNeeded(this);
+                if (m_pManager) m_pManager->RemoveMouseLeaveNeeded(this);
                 if ( GetFadeAlphaDelta() > 0 ) {
-                    m_PaintManageranager->SetTimer(this, FADE_TIMERID, FADE_ELLAPSE);
+                    m_pManager->SetTimer(this, FADE_TIMERID, FADE_ELLAPSE);
                 }
             }
             else {
-                if (m_PaintManageranager) m_PaintManageranager->AddMouseLeaveNeeded(this);
+                if (m_pManager) m_pManager->AddMouseLeaveNeeded(this);
                 return;
             }
 		}
@@ -133,14 +133,14 @@ namespace DuiLib
 				if( m_uFadeAlpha > m_uFadeAlphaDelta ) m_uFadeAlpha -= m_uFadeAlphaDelta;
 				else {
 					m_uFadeAlpha = 0;
-					m_PaintManageranager->KillTimer(this, FADE_TIMERID);
+					m_pManager->KillTimer(this, FADE_TIMERID);
 				}
 			}
 			else {
 				if( m_uFadeAlpha < 255-m_uFadeAlphaDelta ) m_uFadeAlpha += m_uFadeAlphaDelta;
 				else {
 					m_uFadeAlpha = 255;
-					m_PaintManageranager->KillTimer(this, FADE_TIMERID);
+					m_pManager->KillTimer(this, FADE_TIMERID);
 				}
 			}
 			Invalidate();
@@ -152,7 +152,7 @@ namespace DuiLib
 	bool CButtonUI::Activate()
 	{
 		if( !CControlUI::Activate() ) return false;
-		if( m_PaintManageranager != NULL ) m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_CLICK);
+		if( m_pManager != NULL ) m_pManager->SendNotify(this, DUI_MSGTYPE_CLICK);
 		return true;
 	}
 
@@ -361,7 +361,7 @@ namespace DuiLib
 
 	SIZE CButtonUI::EstimateSize(SIZE szAvailable)
 	{
-		if( m_cxyFixed.cy == 0 ) return CDuiSize(m_cxyFixed.cx, m_PaintManageranager->GetFontInfo(GetFont())->tm.tmHeight + 8);
+		if( m_cxyFixed.cy == 0 ) return CDuiSize(m_cxyFixed.cx, m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 8);
 		return CControlUI::EstimateSize(szAvailable);
 	}
 
@@ -414,8 +414,8 @@ namespace DuiLib
 		if( !IsEnabled() ) m_uButtonState |= UISTATE_DISABLED;
 		else m_uButtonState &= ~ UISTATE_DISABLED;
 
-		if( m_dwTextColor == 0 ) m_dwTextColor = m_PaintManageranager->GetDefaultFontColor();
-		if( m_dwDisabledTextColor == 0 ) m_dwDisabledTextColor = m_PaintManageranager->GetDefaultDisabledColor();
+		if( m_dwTextColor == 0 ) m_dwTextColor = m_pManager->GetDefaultFontColor();
+		if( m_dwDisabledTextColor == 0 ) m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor();
 
 		if( m_sText.IsEmpty() ) return;
 		int nLinks = 0;
@@ -435,10 +435,10 @@ namespace DuiLib
 			clrColor = GetFocusedTextColor();
 
 		if( m_bShowHtml )
-			CRenderEngine::DrawHtmlText(hDC, m_PaintManageranager, rc, m_sText, clrColor, \
+			CRenderEngine::DrawHtmlText(hDC, m_pManager, rc, m_sText, clrColor, \
 			NULL, NULL, nLinks, m_iFont, m_uTextStyle);
 		else
-			CRenderEngine::DrawText(hDC, m_PaintManageranager, rc, m_sText, clrColor, \
+			CRenderEngine::DrawText(hDC, m_pManager, rc, m_sText, clrColor, \
 			m_iFont, m_uTextStyle);
 	}
 

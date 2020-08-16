@@ -7,54 +7,75 @@
 
 namespace DuiLib {
 
-struct ContextMenuParam
-{
-    // 1: remove all
-    // 2: remove the sub menu
-    WPARAM wParam;
-    HWND hWnd;
-};
+    struct ContextMenuParam
+    {
+        // 1: remove all
+        // 2: remove the sub menu
+        WPARAM wParam;
+        HWND hWnd;
+    };
 
-struct MenuItemInfo
-{
-    TCHAR szName[256];
-    bool bChecked;
-};
-struct MenuCmd
-{
-    TCHAR szName[256];
-    TCHAR szUserData[1024];
-    TCHAR szText[1024];
-    BOOL bChecked;
-};
+    struct MenuItemInfo
+    {
+        TCHAR szName[256];
+        bool bChecked;
+    };
+    struct MenuCmd
+    {
+        TCHAR szName[256];
+        TCHAR szUserData[1024];
+        TCHAR szText[1024];
+        BOOL bChecked;
+    };
 
-enum MenuAlignment
-{
-    eMenuAlignment_Left = 1 << 1,
-    eMenuAlignment_Top = 1 << 2,
-    eMenuAlignment_Right = 1 << 3,
-    eMenuAlignment_Bottom = 1 << 4,
-};
+    enum MenuAlignment
+    {
+        eMenuAlignment_Left = 1 << 1,
+        eMenuAlignment_Top = 1 << 2,
+        eMenuAlignment_Right = 1 << 3,
+        eMenuAlignment_Bottom = 1 << 4,
+    };
 
 
-enum MenuItemDefaultInfo
-{
-    ITEM_DEFAULT_HEIGHT = 30,        //每一个item的默认高度（只在竖状排列时自定义）
-    ITEM_DEFAULT_WIDTH = 150,        //窗口的默认宽度
+    enum MenuItemDefaultInfo
+    {
+        ITEM_DEFAULT_HEIGHT = 30,        //每一个item的默认高度（只在竖状排列时自定义）
+        ITEM_DEFAULT_WIDTH = 150,        //窗口的默认宽度
 
-    ITEM_DEFAULT_ICON_WIDTH = 26,    //默认图标所占宽度
-    ITEM_DEFAULT_ICON_SIZE = 16,    //默认图标的大小
+        ITEM_DEFAULT_ICON_WIDTH = 26,    //默认图标所占宽度
+        ITEM_DEFAULT_ICON_SIZE = 16,    //默认图标的大小
 
-    ITEM_DEFAULT_EXPLAND_ICON_WIDTH = 20,    //默认下级菜单扩展图标所占宽度
-    ITEM_DEFAULT_EXPLAND_ICON_SIZE = 9,        //默认下级菜单扩展图标的大小
+        ITEM_DEFAULT_EXPLAND_ICON_WIDTH = 20,    //默认下级菜单扩展图标所占宽度
+        ITEM_DEFAULT_EXPLAND_ICON_SIZE = 9,        //默认下级菜单扩展图标的大小
 
-    DEFAULT_LINE_LEFT_INSET = ITEM_DEFAULT_ICON_WIDTH + 3,    //默认分隔线的左边距
-    DEFAULT_LINE_RIGHT_INSET = 7,    //默认分隔线的右边距
-    DEFAULT_LINE_HEIGHT = 6,        //默认分隔线所占高度
-    DEFAULT_LINE_COLOR = 0xFFBCBFC4    //默认分隔线颜色
+        DEFAULT_LINE_LEFT_INSET = ITEM_DEFAULT_ICON_WIDTH + 3,    //默认分隔线的左边距
+        DEFAULT_LINE_RIGHT_INSET = 7,    //默认分隔线的右边距
+        DEFAULT_LINE_HEIGHT = 6,        //默认分隔线所占高度
+        DEFAULT_LINE_COLOR = 0xFFBCBFC4    //默认分隔线颜色
 
-};
+    };
 
+	enum ListType
+	{
+		LT_LIST = 0,
+		LT_COMBO,
+		LT_TREE,
+		LT_MENU,
+	};
+
+#define DECLARE_DUICONTROL(class_name)\
+public:\
+    static CControlUI* CreateControl();
+
+#define IMPLEMENT_DUICONTROL(class_name)\
+    CControlUI* class_name::CreateControl()\
+    { return new class_name; }
+
+#define REGIST_DUICONTROL(class_name)\
+    CControlFactory::GetInstance()->RegistControl(_T(#class_name), (CreateClass)class_name::CreateControl);
+
+#define INNER_REGISTER_DUICONTROL(class_name)\
+    RegistControl(_T(#class_name), (CreateClass)class_name::CreateControl);
 
 ///////////////////////////////////////////////
 class MenuMenuReceiverImplBase;
@@ -174,7 +195,7 @@ public:
         return m_pMainWndPaintManager;
     }
 
-    virtual void SetMenuCheckInfo(CStdStringPtrMap* pInfo)
+    virtual void SetMenuCheckInfo(CDuiStringPtrMap* pInfo)
     {
         if (pInfo != NULL)
             m_pMenuCheckInfo = pInfo;
@@ -182,7 +203,7 @@ public:
             m_pMenuCheckInfo = NULL;
     }
 
-    virtual CStdStringPtrMap* GetMenuCheckInfo() const
+    virtual CDuiStringPtrMap* GetMenuCheckInfo() const
     {
         return m_pMenuCheckInfo;
     }
@@ -191,7 +212,7 @@ protected:
     typedef std::vector<MenuMenuReceiverImplBase*> ReceiversVector;
     ReceiversVector *pReceivers_;
     CPaintManagerUI* m_pMainWndPaintManager;
-    CStdStringPtrMap* m_pMenuCheckInfo;
+    CDuiStringPtrMap* m_pMenuCheckInfo;
 };
 
 ////////////////////////////////////////////////////
@@ -279,7 +300,7 @@ public:
         return s_context_menu_observer;
     }
     static CMenuWnd* CreateMenu(CMenuElementUI* pOwner, STRINGorID xml, POINT point,
-        CPaintManagerUI* pMainPaintManager, CStdStringPtrMap* pMenuCheckInfo = NULL,
+        CPaintManagerUI* pMainPaintManager, CDuiStringPtrMap* pMenuCheckInfo = NULL,
         DWORD dwAlignment = eMenuAlignment_Left | eMenuAlignment_Top);
     static void DestroyMenu();
     static MenuItemInfo* SetMenuItemInfo(LPCTSTR pstrName, bool bChecked);
@@ -299,7 +320,7 @@ public:
      */
 
     void Init(CMenuElementUI* pOwner, STRINGorID xml, POINT point,
-        CPaintManagerUI* pMainPaintManager, CStdStringPtrMap* pMenuCheckInfo = NULL,
+        CPaintManagerUI* pMainPaintManager, CDuiStringPtrMap* pMenuCheckInfo = NULL,
         DWORD dwAlignment = eMenuAlignment_Left | eMenuAlignment_Top);
     LPCTSTR GetWindowClassName() const;
     void OnFinalMessage(HWND hWnd);

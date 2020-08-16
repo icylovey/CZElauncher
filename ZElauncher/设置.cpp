@@ -46,10 +46,8 @@ void C设置UI::InitEditInfo()
 	if (!pEdit)return;
 	TCHAR csgobuff[1024] = { 0 };
 	TCHAR steambuff[1024] = { 0 };
-	TCHAR cfgbuff[1024] = { 0 };
-	GetRunPath(cfgbuff, sizeof(cfgbuff));
-	_tcscat(cfgbuff, _T("\\bin\\Config.cfg"));
-	GetPrivateProfileString(_T("ZElauncher"), _T("CSGOPath"), NULL, csgobuff, sizeof(csgobuff), cfgbuff);
+	_bstr_t CfgPath = GetCFGPath();
+	GetPrivateProfileString(_T("ZElauncher"), _T("CSGOPath"), NULL, csgobuff, sizeof(csgobuff), CfgPath);
 	if (_tcslen(csgobuff) > 3) {
 		pEdit->SetText(csgobuff);
 	}
@@ -61,7 +59,7 @@ void C设置UI::InitEditInfo()
 	//获取Steam目录
 	pEdit = static_cast<CEditUI*>(m_pm.FindControl(_T("edit_steam")));
 	if (!pEdit)return;
-	GetPrivateProfileString(_T("ZElauncher"), _T("SteamPath"), NULL, steambuff, sizeof(steambuff), cfgbuff);
+	GetPrivateProfileString(_T("ZElauncher"), _T("SteamPath"), NULL, steambuff, sizeof(steambuff), CfgPath);
 	if (_tcslen(steambuff) > 3) {
 		pEdit->SetText(steambuff);
 	}
@@ -73,14 +71,14 @@ void C设置UI::InitEditInfo()
 	//获取背景图片目录
 	pEdit = static_cast<CEditUI*>(m_pm.FindControl(_T("edit_bkimge")));
 	if (!pEdit)return;
-	GetPrivateProfileString(_T("ZElauncher"), _T("edit_bkimge"), NULL, steambuff, sizeof(steambuff), cfgbuff);
+	GetPrivateProfileString(_T("ZElauncher"), _T("edit_bkimge"), NULL, steambuff, sizeof(steambuff), CfgPath);
 	if (_tcslen(steambuff) > 3) {
 		pEdit->SetText(steambuff);
 	}
 	//获取服务器列表背景图片目录
 	pEdit = static_cast<CEditUI*>(m_pm.FindControl(_T("edit_listbkimge")));
 	if (!pEdit)return;
-	GetPrivateProfileString(_T("ZElauncher"), _T("edit_listbkimge"), NULL, steambuff, sizeof(steambuff), cfgbuff);
+	GetPrivateProfileString(_T("ZElauncher"), _T("edit_listbkimge"), NULL, steambuff, sizeof(steambuff), CfgPath);
 	if (_tcslen(steambuff) > 3) {
 		pEdit->SetText(steambuff);
 	}
@@ -98,31 +96,29 @@ void C设置UI::InitWindow()
 
 void C设置UI::SaveEditInfo()
 {
-	TCHAR cfgbuff[1024] = { 0 };
-	GetRunPath(cfgbuff, sizeof(cfgbuff));
-	_tcscat(cfgbuff, _T("\\bin\\Config.cfg"));
+	_bstr_t CfgPath = GetCFGPath();
 	CEditUI* pEdit = static_cast<CEditUI*>(m_pm.FindControl(_T("edit_csgo")));
 	if (!pEdit)return;
 	CDuiString tmpstr = pEdit->GetText();
-	WritePrivateProfileString(_T("ZElauncher"), _T("CSGOPath"), tmpstr.GetData(), cfgbuff);
+	WritePrivateProfileString(_T("ZElauncher"), _T("CSGOPath"), tmpstr.GetData(), CfgPath);
 	pEdit = static_cast<CEditUI*>(m_pm.FindControl(_T("edit_steam")));
 	if (!pEdit)return;
 	tmpstr = pEdit->GetText();
-	WritePrivateProfileString(_T("ZElauncher"), _T("SteamPath"), tmpstr.GetData(), cfgbuff);
+	WritePrivateProfileString(_T("ZElauncher"), _T("SteamPath"), tmpstr.GetData(), CfgPath);
 
 	pEdit = static_cast<CEditUI*>(m_pm.FindControl(_T("edit_listbkimge")));
 	if (!pEdit)return;
 	tmpstr = pEdit->GetText();
-	WritePrivateProfileString(_T("ZElauncher"), _T("edit_listbkimge"), tmpstr.GetData(), cfgbuff);
+	WritePrivateProfileString(_T("ZElauncher"), _T("edit_listbkimge"), tmpstr.GetData(), CfgPath);
 
 	pEdit = static_cast<CEditUI*>(m_pm.FindControl(_T("edit_bkimge")));
 	if (!pEdit)return;
 	tmpstr = pEdit->GetText();
-	WritePrivateProfileString(_T("ZElauncher"), _T("edit_bkimge"), tmpstr.GetData(), cfgbuff);
+	WritePrivateProfileString(_T("ZElauncher"), _T("edit_bkimge"), tmpstr.GetData(), CfgPath);
 
 	if (g_IsDownloadHotmap)tmpstr = _T("true");
 	else tmpstr = _T("false");
-	WritePrivateProfileString(_T("ZElauncher"), _T("DownloadHotmap"), tmpstr.GetData(), cfgbuff);
+	WritePrivateProfileString(_T("ZElauncher"), _T("DownloadHotmap"), tmpstr.GetData(), CfgPath);
 }
 
 void C设置UI::OnExit()

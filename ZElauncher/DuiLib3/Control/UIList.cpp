@@ -488,8 +488,8 @@ bool CListUI::SelectItem(int iIndex, bool bTakeFocus, bool bTriggerEvent)
     }
     EnsureVisible(m_iCurSel);
     if( bTakeFocus ) pControl->SetFocus();
-    if( m_PaintManageranager != NULL && bTriggerEvent ) {
-        m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_ITEMSELECT, m_iCurSel, iOldSel);
+    if( m_pManager != NULL && bTriggerEvent ) {
+        m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMSELECT, m_iCurSel, iOldSel);
     }
 
     return true;
@@ -1432,11 +1432,11 @@ LPVOID CListHeaderUI::GetInterface(LPCTSTR pstrName)
 SIZE CListHeaderUI::EstimateSize(SIZE szAvailable)
 {
     SIZE cXY = {0, m_cxyFixed.cy};
-	if( cXY.cy == 0 && m_PaintManageranager != NULL ) {
+	if( cXY.cy == 0 && m_pManager != NULL ) {
 		for( int it = 0; it < m_items.GetSize(); it++ ) {
 			cXY.cy = MAX(cXY.cy,static_cast<CControlUI*>(m_items[it])->EstimateSize(szAvailable).cy);
 		}
-		int nMin = m_PaintManageranager->GetDefaultFontInfo()->tm.tmHeight + 8;
+		int nMin = m_pManager->GetDefaultFontInfo()->tm.tmHeight + 8;
 		cXY.cy = MAX(cXY.cy,nMin);
 	}
 
@@ -1737,7 +1737,7 @@ void CListHeaderItemUI::DoEvent(TEventUI& event)
         }
         else {
             m_uButtonState |= UISTATE_PUSHED;
-            m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_HEADERCLICK);
+            m_pManager->SendNotify(this, DUI_MSGTYPE_HEADERCLICK);
             Invalidate();
         }
         return;
@@ -1803,10 +1803,10 @@ void CListHeaderItemUI::DoEvent(TEventUI& event)
                     Invalidate();
                 }
             }
-            if (m_PaintManageranager) m_PaintManageranager->RemoveMouseLeaveNeeded(this);
+            if (m_pManager) m_pManager->RemoveMouseLeaveNeeded(this);
         }
         else {
-            if (m_PaintManageranager) m_PaintManageranager->AddMouseLeaveNeeded(this);
+            if (m_pManager) m_pManager->AddMouseLeaveNeeded(this);
             return;
         }
     }
@@ -1815,7 +1815,7 @@ void CListHeaderItemUI::DoEvent(TEventUI& event)
 
 SIZE CListHeaderItemUI::EstimateSize(SIZE szAvailable)
 {
-    if( m_cxyFixed.cy == 0 ) return CDuiSize(m_cxyFixed.cx, m_PaintManageranager->GetDefaultFontInfo()->tm.tmHeight + 8);
+    if( m_cxyFixed.cy == 0 ) return CDuiSize(m_cxyFixed.cx, m_pManager->GetDefaultFontInfo()->tm.tmHeight + 8);
     return CControlUI::EstimateSize(szAvailable);
 }
 
@@ -1860,7 +1860,7 @@ void CListHeaderItemUI::PaintStatusImage(HDC hDC)
 
 void CListHeaderItemUI::PaintText(HDC hDC)
 {
-    if( m_dwTextColor == 0 ) m_dwTextColor = m_PaintManageranager->GetDefaultFontColor();
+    if( m_dwTextColor == 0 ) m_dwTextColor = m_pManager->GetDefaultFontColor();
 
 	RECT rcText = m_rcItem;
 	rcText.left += m_rcTextPadding.left;
@@ -1871,10 +1871,10 @@ void CListHeaderItemUI::PaintText(HDC hDC)
     if( m_sText.IsEmpty() ) return;
     int nLinks = 0;
     if( m_bShowHtml )
-        CRenderEngine::DrawHtmlText(hDC, m_PaintManageranager, rcText, m_sText, m_dwTextColor, \
+        CRenderEngine::DrawHtmlText(hDC, m_pManager, rcText, m_sText, m_dwTextColor, \
         NULL, NULL, nLinks, m_iFont, m_uTextStyle);
     else
-        CRenderEngine::DrawText(hDC, m_PaintManageranager, rcText, m_sText, m_dwTextColor, \
+        CRenderEngine::DrawText(hDC, m_pManager, rcText, m_sText, m_dwTextColor, \
         m_iFont, m_uTextStyle);
 }
 
@@ -1993,7 +1993,7 @@ void CListElementUI::Invalidate()
                 }
             }
 
-            if( m_PaintManageranager != NULL ) m_PaintManageranager->Invalidate(invalidateRc);
+            if( m_pManager != NULL ) m_pManager->Invalidate(invalidateRc);
         }
         else {
             CControlUI::Invalidate();
@@ -2007,7 +2007,7 @@ void CListElementUI::Invalidate()
 bool CListElementUI::Activate()
 {
     if( !CControlUI::Activate() ) return false;
-    if( m_PaintManageranager != NULL ) m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_ITEMACTIVATE);
+    if( m_pManager != NULL ) m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMACTIVATE);
     return true;
 }
 
@@ -2172,7 +2172,7 @@ void CListLabelElementUI::DoEvent(TEventUI& event)
     if( event.Type == UIEVENT_BUTTONDOWN || event.Type == UIEVENT_RBUTTONDOWN )
     {
         if( IsEnabled() ) {
-            m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_ITEMCLICK);
+            m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMCLICK);
             Select();
             Invalidate();
         }
@@ -2206,10 +2206,10 @@ void CListLabelElementUI::DoEvent(TEventUI& event)
                     Invalidate();
                 }
             }
-            if (m_PaintManageranager) m_PaintManageranager->RemoveMouseLeaveNeeded(this);
+            if (m_pManager) m_pManager->RemoveMouseLeaveNeeded(this);
         }
         else {
-            if (m_PaintManageranager) m_PaintManageranager->AddMouseLeaveNeeded(this);
+            if (m_pManager) m_pManager->AddMouseLeaveNeeded(this);
             return;
         }
     }
@@ -2252,17 +2252,17 @@ SIZE CListLabelElementUI::EstimateSize(SIZE szAvailable)
 
         if ((pInfo->uTextStyle & DT_SINGLELINE) != 0) {
             if( m_cxyFixedLast.cy == 0 ) {
-                m_cxyFixedLast.cy = m_PaintManageranager->GetFontInfo(pInfo->nFont)->tm.tmHeight + 8;
+                m_cxyFixedLast.cy = m_pManager->GetFontInfo(pInfo->nFont)->tm.tmHeight + 8;
                 m_cxyFixedLast.cy += pInfo->rcTextPadding.top + pInfo->rcTextPadding.bottom;
             }
             if (m_cxyFixedLast.cx == 0) {
                 RECT rcText = { 0, 0, 9999, m_cxyFixedLast.cy };
                 if( pInfo->bShowHtml ) {
                     int nLinks = 0;
-                    CRenderEngine::DrawHtmlText(m_PaintManageranager->GetPaintDC(), m_PaintManageranager, rcText, m_sText, 0, NULL, NULL, nLinks, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
+                    CRenderEngine::DrawHtmlText(m_pManager->GetPaintDC(), m_pManager, rcText, m_sText, 0, NULL, NULL, nLinks, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
                 }
                 else {
-                    CRenderEngine::DrawText(m_PaintManageranager->GetPaintDC(), m_PaintManageranager, rcText, m_sText, 0, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
+                    CRenderEngine::DrawText(m_pManager->GetPaintDC(), m_pManager, rcText, m_sText, 0, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
                 }
                 m_cxyFixedLast.cx = rcText.right - rcText.left + pInfo->rcTextPadding.left + pInfo->rcTextPadding.right;
             }
@@ -2276,10 +2276,10 @@ SIZE CListLabelElementUI::EstimateSize(SIZE szAvailable)
             rcText.right -= pInfo->rcTextPadding.right;
             if( pInfo->bShowHtml ) {
                 int nLinks = 0;
-                CRenderEngine::DrawHtmlText(m_PaintManageranager->GetPaintDC(), m_PaintManageranager, rcText, m_sText, 0, NULL, NULL, nLinks, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
+                CRenderEngine::DrawHtmlText(m_pManager->GetPaintDC(), m_pManager, rcText, m_sText, 0, NULL, NULL, nLinks, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
             }
             else {
-                CRenderEngine::DrawText(m_PaintManageranager->GetPaintDC(), m_PaintManageranager, rcText, m_sText, 0, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
+                CRenderEngine::DrawText(m_pManager->GetPaintDC(), m_pManager, rcText, m_sText, 0, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
             }
             m_cxyFixedLast.cy = rcText.bottom - rcText.top + pInfo->rcTextPadding.top + pInfo->rcTextPadding.bottom;
         }
@@ -2319,10 +2319,10 @@ void CListLabelElementUI::DrawItemText(HDC hDC, const RECT& rcItem)
     rcText.bottom -= pInfo->rcTextPadding.bottom;
 
     if( pInfo->bShowHtml )
-        CRenderEngine::DrawHtmlText(hDC, m_PaintManageranager, rcText, m_sText, iTextColor, \
+        CRenderEngine::DrawHtmlText(hDC, m_pManager, rcText, m_sText, iTextColor, \
         NULL, NULL, nLinks, pInfo->nFont, pInfo->uTextStyle);
     else
-        CRenderEngine::DrawText(hDC, m_PaintManageranager, rcText, m_sText, iTextColor, \
+        CRenderEngine::DrawText(hDC, m_pManager, rcText, m_sText, iTextColor, \
         pInfo->nFont, pInfo->uTextStyle);
 }
 
@@ -2388,6 +2388,11 @@ void CListTextElementUI::SetText(int iIndex, LPCTSTR pstrText)
     Invalidate();
 }
 
+void CListTextElementUI::SetTextColor_(COLORREF color)
+{
+	m_aTextsColors = color;
+}
+
 void CListTextElementUI::SetOwner(CControlUI* pOwner)
 {
     if (pOwner != NULL) {
@@ -2423,7 +2428,7 @@ void CListTextElementUI::DoEvent(TEventUI& event)
     if( event.Type == UIEVENT_BUTTONUP && IsEnabled() ) {
         for( int i = 0; i < m_nLinks; i++ ) {
             if( ::PtInRect(&m_rcLinks[i], event.ptMouse) ) {
-                m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_LINK, i);
+                m_pManager->SendNotify(this, DUI_MSGTYPE_LINK, i);
                 return;
             }
         }
@@ -2447,10 +2452,10 @@ void CListTextElementUI::DoEvent(TEventUI& event)
             if( !::PtInRect(&m_rcLinks[m_nHoverLink], event.ptMouse) ) {
                 m_nHoverLink = -1;
                 Invalidate();
-                if (m_PaintManageranager) m_PaintManageranager->RemoveMouseLeaveNeeded(this);
+                if (m_pManager) m_pManager->RemoveMouseLeaveNeeded(this);
             }
             else {
-                if (m_PaintManageranager) m_PaintManageranager->AddMouseLeaveNeeded(this);
+                if (m_pManager) m_pManager->AddMouseLeaveNeeded(this);
                 return;
             }
         }
@@ -2510,17 +2515,17 @@ SIZE CListTextElementUI::EstimateSize(SIZE szAvailable)
 
         if ((pInfo->uTextStyle & DT_SINGLELINE) != 0) {
             if( m_cxyFixedLast.cy == 0 ) {
-                m_cxyFixedLast.cy = m_PaintManageranager->GetFontInfo(pInfo->nFont)->tm.tmHeight + 8;
+                m_cxyFixedLast.cy = m_pManager->GetFontInfo(pInfo->nFont)->tm.tmHeight + 8;
                 m_cxyFixedLast.cy += pInfo->rcTextPadding.top + pInfo->rcTextPadding.bottom;
             }
             if (m_cxyFixedLast.cx == 0) {
                 RECT rcText = { 0, 0, 9999, m_cxyFixedLast.cy };
                 if( pInfo->bShowHtml ) {
                     int nLinks = 0;
-                    CRenderEngine::DrawHtmlText(m_PaintManageranager->GetPaintDC(), m_PaintManageranager, rcText, strText, 0, NULL, NULL, nLinks, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
+                    CRenderEngine::DrawHtmlText(m_pManager->GetPaintDC(), m_pManager, rcText, strText, 0, NULL, NULL, nLinks, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
                 }
                 else {
-                    CRenderEngine::DrawText(m_PaintManageranager->GetPaintDC(), m_PaintManageranager, rcText, strText, 0, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
+                    CRenderEngine::DrawText(m_pManager->GetPaintDC(), m_pManager, rcText, strText, 0, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
                 }
                 m_cxyFixedLast.cx = rcText.right - rcText.left + pInfo->rcTextPadding.left + pInfo->rcTextPadding.right;
             }
@@ -2534,10 +2539,10 @@ SIZE CListTextElementUI::EstimateSize(SIZE szAvailable)
             rcText.right -= pInfo->rcTextPadding.right;
             if( pInfo->bShowHtml ) {
                 int nLinks = 0;
-                CRenderEngine::DrawHtmlText(m_PaintManageranager->GetPaintDC(), m_PaintManageranager, rcText, strText, 0, NULL, NULL, nLinks, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
+                CRenderEngine::DrawHtmlText(m_pManager->GetPaintDC(), m_pManager, rcText, strText, 0, NULL, NULL, nLinks, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
             }
             else {
-                CRenderEngine::DrawText(m_PaintManageranager->GetPaintDC(), m_PaintManageranager, rcText, strText, 0, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
+                CRenderEngine::DrawText(m_pManager->GetPaintDC(), m_pManager, rcText, strText, 0, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
             }
             m_cxyFixedLast.cy = rcText.bottom - rcText.top + pInfo->rcTextPadding.top + pInfo->rcTextPadding.bottom;
         }
@@ -2550,7 +2555,10 @@ void CListTextElementUI::DrawItemText(HDC hDC, const RECT& rcItem)
     if( m_pOwner == NULL ) return;
     TListInfoUI* pInfo = m_pOwner->GetListInfo();
     if (pInfo == NULL) return;
-    DWORD iTextColor = pInfo->dwTextColor;
+    DWORD iTextColor;
+	if (m_aTextsColors)iTextColor = m_aTextsColors;
+	else iTextColor = pInfo->dwTextColor;
+	//DWORD iTextColor = m_aTextsColors;
 
     if( (m_uButtonState & UISTATE_HOT) != 0 ) {
         iTextColor = pInfo->dwHotTextColor;
@@ -2584,10 +2592,10 @@ void CListTextElementUI::DrawItemText(HDC hDC, const RECT& rcItem)
             if( pCallback ) strText = pCallback->GetItemText(this, m_iIndex, i);
             else strText.Assign(GetText(i));
             if( pInfo->bShowHtml )
-                CRenderEngine::DrawHtmlText(hDC, m_PaintManageranager, rcItem, strText.GetData(), iTextColor, \
+                CRenderEngine::DrawHtmlText(hDC, m_pManager, rcItem, strText.GetData(), iTextColor, \
                 &m_rcLinks[m_nLinks], &m_sLinks[m_nLinks], nLinks, pInfo->nFont, pInfo->uTextStyle);
             else
-                CRenderEngine::DrawText(hDC, m_PaintManageranager, rcItem, strText.GetData(), iTextColor, \
+                CRenderEngine::DrawText(hDC, m_pManager, rcItem, strText.GetData(), iTextColor, \
                 pInfo->nFont, pInfo->uTextStyle);
 
             m_nLinks += nLinks;
@@ -2606,10 +2614,10 @@ void CListTextElementUI::DrawItemText(HDC hDC, const RECT& rcItem)
         else if (m_aTexts.GetSize() > 0) strText.Assign(GetText(0));
         else strText = m_sText;
         if( pInfo->bShowHtml )
-            CRenderEngine::DrawHtmlText(hDC, m_PaintManageranager, rcItem, strText.GetData(), iTextColor, \
+            CRenderEngine::DrawHtmlText(hDC, m_pManager, rcItem, strText.GetData(), iTextColor, \
             &m_rcLinks[m_nLinks], &m_sLinks[m_nLinks], nLinks, pInfo->nFont, pInfo->uTextStyle);
         else
-            CRenderEngine::DrawText(hDC, m_PaintManageranager, rcItem, strText.GetData(), iTextColor, \
+            CRenderEngine::DrawText(hDC, m_pManager, rcItem, strText.GetData(), iTextColor, \
             pInfo->nFont, pInfo->uTextStyle);
 
         m_nLinks += nLinks;
@@ -2739,7 +2747,7 @@ void CListContainerElementUI::Invalidate()
                 }
             }
 
-            if( m_PaintManageranager != NULL ) m_PaintManageranager->Invalidate(invalidateRc);
+            if( m_pManager != NULL ) m_pManager->Invalidate(invalidateRc);
         }
         else {
             CContainerUI::Invalidate();
@@ -2753,7 +2761,7 @@ void CListContainerElementUI::Invalidate()
 bool CListContainerElementUI::Activate()
 {
     if( !CContainerUI::Activate() ) return false;
-    if( m_PaintManageranager != NULL ) m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_ITEMACTIVATE);
+    if( m_pManager != NULL ) m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMACTIVATE);
     return true;
 }
 
@@ -2796,9 +2804,9 @@ bool CListContainerElementUI::Expand(bool bExpand)
     m_bExpand = bExpand;
     if( m_bExpandable ) {
         if( !m_pOwner->ExpandItem(m_iIndex, bExpand) ) return false;
-        if( m_PaintManageranager != NULL ) {
-            if( bExpand ) m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_ITEMEXPAND, false);
-            else m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_ITEMCOLLAPSE, false);
+        if( m_pManager != NULL ) {
+            if( bExpand ) m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMEXPAND, false);
+            else m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMCOLLAPSE, false);
         }
     }
 
@@ -2834,7 +2842,7 @@ void CListContainerElementUI::DoEvent(TEventUI& event)
     if( event.Type == UIEVENT_BUTTONDOWN || event.Type == UIEVENT_RBUTTONDOWN )
     {
         if( IsEnabled() ) {
-            m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_ITEMCLICK);
+            m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMCLICK);
             Select();
             Invalidate();
         }
@@ -2868,10 +2876,10 @@ void CListContainerElementUI::DoEvent(TEventUI& event)
                     Invalidate();
                 }
             }
-            if (m_PaintManageranager) m_PaintManageranager->RemoveMouseLeaveNeeded(this);
+            if (m_pManager) m_pManager->RemoveMouseLeaveNeeded(this);
         }
         else {
-            if (m_PaintManageranager) m_PaintManageranager->AddMouseLeaveNeeded(this);
+            if (m_pManager) m_pManager->AddMouseLeaveNeeded(this);
             return;
         }
     }

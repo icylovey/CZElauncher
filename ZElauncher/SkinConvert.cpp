@@ -15,7 +15,6 @@ LRESULT CSkinConvertUI::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	m_pm.Init(m_hWnd);
 	CDialogBuilder builder;
 	CControlUI* pRoot = builder.Create(_T("Award_tip.xml"), (UINT)0, NULL, &m_pm);
-	ASSERT(pRoot && "Failed to parse XML");
 	m_pm.AttachDialog(pRoot);
 	m_pm.AddNotifier(this);
 	return 0;

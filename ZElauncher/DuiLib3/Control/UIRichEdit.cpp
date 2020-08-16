@@ -1086,7 +1086,7 @@ CRichEditUI::~CRichEditUI()
 {
     if( m_pTwh ) {
         m_pTwh->Release();
-        m_PaintManageranager->RemoveMessageFilter(this);
+        m_pManager->RemoveMessageFilter(this);
     }
 }
 
@@ -1720,8 +1720,8 @@ void CRichEditUI::DoInit()
         LRESULT lResult;
         m_pTwh->GetTextServices()->TxSendMessage(EM_SETLANGOPTIONS, 0, 0, &lResult);
         m_pTwh->OnTxInPlaceActivate(NULL);
-        m_PaintManageranager->AddMessageFilter(this);
-		if( m_PaintManageranager->IsLayered() ) m_PaintManageranager->SetTimer(this, DEFAULT_TIMERID, ::GetCaretBlinkTime());
+        m_pManager->AddMessageFilter(this);
+		if( m_pManager->IsLayered() ) m_pManager->SetTimer(this, DEFAULT_TIMERID, ::GetCaretBlinkTime());
     }
 
 	m_bInited= true;
@@ -1732,7 +1732,7 @@ HRESULT CRichEditUI::TxSendMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESU
     if( m_pTwh ) {
         if( msg == WM_KEYDOWN && TCHAR(wparam) == VK_RETURN ) {
             if( !m_bWantReturn || (::GetKeyState(VK_CONTROL) < 0 && !m_bWantCtrlReturn) ) {
-                if( m_PaintManageranager != NULL ) m_PaintManageranager->SendNotify((CControlUI*)this, DUI_MSGTYPE_RETURN);
+                if( m_pManager != NULL ) m_pManager->SendNotify((CControlUI*)this, DUI_MSGTYPE_RETURN);
                 return S_OK;
             }
         }
@@ -1936,8 +1936,8 @@ void CRichEditUI::DoEvent(TEventUI& event)
     }
 	else if( event.Type == UIEVENT_TIMER ) {
 		if( event.wParam == DEFAULT_TIMERID ) {
-			if( m_pTwh && m_PaintManageranager->IsLayered() && IsFocused() ) {
-				if (::GetFocus() != m_PaintManageranager->GetPaintWindow()) return;
+			if( m_pTwh && m_pManager->IsLayered() && IsFocused() ) {
+				if (::GetFocus() != m_pManager->GetPaintWindow()) return;
 				m_bDrawCaret = !m_bDrawCaret;
 				POINT ptCaret;
 				::GetCaretPos(&ptCaret);
@@ -1954,7 +1954,7 @@ void CRichEditUI::DoEvent(TEventUI& event)
 						return;
 					}
 				}                    
-				m_PaintManageranager->Invalidate(rcCaret);
+				m_pManager->Invalidate(rcCaret);
 			}
 			return;
 		}
@@ -2195,7 +2195,7 @@ bool CRichEditUI::DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl
         }
     }
 
-	if( m_pTwh && m_pTwh->IsShowCaret() && m_PaintManageranager->IsLayered() && IsFocused() && m_bDrawCaret ) {
+	if( m_pTwh && m_pTwh->IsShowCaret() && m_pManager->IsLayered() && IsFocused() && m_bDrawCaret ) {
 		POINT ptCaret;
 		::GetCaretPos(&ptCaret);
 		if( ::PtInRect(&m_rcItem, ptCaret) ) {

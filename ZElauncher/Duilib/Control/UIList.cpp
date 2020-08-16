@@ -34,6 +34,11 @@ namespace DuiLib {
         m_ListInfo.bShowHtml = false;
         m_ListInfo.bMultiExpandable = false;
         m_ListInfo.bRSelected = false;
+		m_ListInfo.iHLineSize = 0;
+		m_ListInfo.dwHLineColor = 0xFF3C3C3C;
+		m_ListInfo.iVLineSize = 0;
+		m_ListInfo.dwVLineColor = 0xFF3C3C3C;
+
         ::ZeroMemory(&m_ListInfo.rcTextPadding, sizeof(m_ListInfo.rcTextPadding));
         ::ZeroMemory(&m_ListInfo.rcColumn, sizeof(m_ListInfo.rcColumn));
     }
@@ -126,9 +131,9 @@ namespace DuiLib {
         if( pListItem != NULL ) {
             pListItem->SetOwner(this);
             pListItem->SetIndex(GetCount());
-            //return m_pList->Add(pControl);
+            //return m_pList->Add(pControl);//修复Item不显示滚动条的BUG
         }
-        return m_pList->Add(pControl); //修复Item不显示滚动条的BUG
+        return m_pList->Add(pControl);//修复Item不显示滚动条的BUG
         //return CVerticalLayoutUI::Add(pControl);
     }
 
@@ -242,7 +247,6 @@ namespace DuiLib {
             }
             m_pHeader->SetPos(CDuiRect(rc.left, 0, rc.right, 0), bNeedInvalidate);
         }
-
         for( int i = 0; i < m_ListInfo.nColumns; i++ ) {
             CControlUI* pControl = static_cast<CControlUI*>(m_pHeader->GetItemAt(i));
             if( !pControl->IsVisible() ) continue;
@@ -1110,6 +1114,100 @@ namespace DuiLib {
     //
     //
 
+	bool CListBodyUI::DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl)
+	{
+		RECT rcTemp = { 0 };
+		if (!::IntersectRect(&rcTemp, &rcPaint, &m_rcItem)) return true;
+
+		TListInfoUI* pListInfo = NULL;
+		if (m_pOwner) pListInfo = m_pOwner->GetListInfo();
+
+		CRenderClip clip;
+		CRenderClip::GenerateClip(hDC, rcTemp, clip);
+		CControlUI::DoPaint(hDC, rcPaint, pStopControl);
+
+		if (m_items.GetSize() > 0) {
+			RECT rc = m_rcItem;
+			rc.left += m_rcInset.left;
+			rc.top += m_rcInset.top;
+			rc.right -= m_rcInset.right;
+			rc.bottom -= m_rcInset.bottom;
+			if (m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible()) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
+			if (m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible()) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
+
+			if (!::IntersectRect(&rcTemp, &rcPaint, &rc)) {
+				for (int it = 0; it < m_items.GetSize(); it++) {
+					CControlUI* pControl = static_cast<CControlUI*>(m_items[it]);
+					if (pControl == pStopControl) return false;
+					if (!pControl->IsVisible()) continue;
+					if (!::IntersectRect(&rcTemp, &rcPaint, &pControl->GetPos())) continue;
+					if (pControl->IsFloat()) {
+						if (!::IntersectRect(&rcTemp, &m_rcItem, &pControl->GetPos())) continue;
+						if (!pControl->Paint(hDC, rcPaint, pStopControl)) return false;
+					}
+				}
+			}
+			else {
+				int iDrawIndex = 0;
+				CRenderClip childClip;
+				CRenderClip::GenerateClip(hDC, rcTemp, childClip);
+				for (int it = 0; it < m_items.GetSize(); it++) {
+					CControlUI* pControl = static_cast<CControlUI*>(m_items[it]);
+					if (pControl == pStopControl) return false;
+					if (!pControl->IsVisible()) continue;
+					if (!pControl->IsFloat()) {
+						IListItemUI* pListItem = static_cast<IListItemUI*>(pControl->GetInterface(_T("IListItem")));
+						if (pListItem != NULL) {
+							pListItem->SetDrawIndex(iDrawIndex);
+							iDrawIndex += 1;
+						}
+						if (pListInfo && pListInfo->iHLineSize > 0) {
+							// 因为没有为最后一个预留分割条长度，如果list铺满，最后一条不会显示
+							RECT rcPadding = pControl->GetPadding();
+							const RECT& rcPos = pControl->GetPos();
+							RECT rcBottomLine = { rcPos.left, rcPos.bottom + rcPadding.bottom, rcPos.right, rcPos.bottom + rcPadding.bottom + pListInfo->iHLineSize };
+							if (::IntersectRect(&rcTemp, &rcPaint, &rcBottomLine)) {
+								rcBottomLine.top += pListInfo->iHLineSize / 2;
+								rcBottomLine.bottom = rcBottomLine.top;
+								CRenderEngine::DrawLine(hDC, rcBottomLine, pListInfo->iHLineSize, GetAdjustColor(pListInfo->dwHLineColor));
+							}
+						}
+					}
+					if (!::IntersectRect(&rcTemp, &rcPaint, &pControl->GetPos())) continue;
+					if (pControl->IsFloat()) {
+						if (!::IntersectRect(&rcTemp, &m_rcItem, &pControl->GetPos())) continue;
+						CRenderClip::UseOldClipBegin(hDC, childClip);
+						if (!pControl->Paint(hDC, rcPaint, pStopControl)) return false;
+						CRenderClip::UseOldClipEnd(hDC, childClip);
+					}
+					else {
+						if (!::IntersectRect(&rcTemp, &rc, &pControl->GetPos())) continue;
+						if (!pControl->Paint(hDC, rcPaint, pStopControl)) return false;
+					}
+				}
+			}
+		}
+
+		if (m_pVerticalScrollBar != NULL) {
+			if (m_pVerticalScrollBar == pStopControl) return false;
+			if (m_pVerticalScrollBar->IsVisible()) {
+				if (::IntersectRect(&rcTemp, &rcPaint, &m_pVerticalScrollBar->GetPos())) {
+					if (!m_pVerticalScrollBar->Paint(hDC, rcPaint, pStopControl)) return false;
+				}
+			}
+		}
+
+		if (m_pHorizontalScrollBar != NULL) {
+			if (m_pHorizontalScrollBar == pStopControl) return false;
+			if (m_pHorizontalScrollBar->IsVisible()) {
+				if (::IntersectRect(&rcTemp, &rcPaint, &m_pHorizontalScrollBar->GetPos())) {
+					if (!m_pHorizontalScrollBar->Paint(hDC, rcPaint, pStopControl)) return false;
+				}
+			}
+		}
+		return true;
+	}
+
     CListBodyUI::CListBodyUI(CListUI* pOwner) : m_pOwner(pOwner)
     {
         ASSERT(m_pOwner);
@@ -1165,66 +1263,56 @@ namespace DuiLib {
         return CVerticalLayoutUI::GetScrollStepSize();
     }
 
-    void CListBodyUI::SetScrollPos(SIZE szPos, bool bMsg)
-    {
-        int cx = 0;
-        int cy = 0;
-        if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) {
-            int iLastScrollPos = m_pVerticalScrollBar->GetScrollPos();
-            m_pVerticalScrollBar->SetScrollPos(szPos.cy);
-            cy = m_pVerticalScrollBar->GetScrollPos() - iLastScrollPos;
-        }
 
-        if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) {
-            int iLastScrollPos = m_pHorizontalScrollBar->GetScrollPos();
-            m_pHorizontalScrollBar->SetScrollPos(szPos.cx);
-            cx = m_pHorizontalScrollBar->GetScrollPos() - iLastScrollPos;
-        }
+	void CListBodyUI::SetScrollPos(SIZE szPos, bool bMsg)
+	{
+		int cx = 0;
+		int cy = 0;
+		if (m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible()) {
+			int iLastScrollPos = m_pVerticalScrollBar->GetScrollPos();
+			m_pVerticalScrollBar->SetScrollPos(szPos.cy);
+			cy = m_pVerticalScrollBar->GetScrollPos() - iLastScrollPos;
+		}
 
-        RECT rcPos;
-        for( int it2 = 0; it2 < m_items.GetSize(); it2++ ) {
-            CControlUI* pControl = static_cast<CControlUI*>(m_items[it2]);
-            if( !pControl->IsVisible() ) continue;
-            if( pControl->IsFloat() ) continue;
+		if (m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible()) {
+			int iLastScrollPos = m_pHorizontalScrollBar->GetScrollPos();
+			m_pHorizontalScrollBar->SetScrollPos(szPos.cx);
+			cx = m_pHorizontalScrollBar->GetScrollPos() - iLastScrollPos;
+		}
 
-            rcPos = pControl->GetPos();
-            rcPos.left -= cx;
-            rcPos.right -= cx;
-            rcPos.top -= cy;
-            rcPos.bottom -= cy;
-            pControl->SetPos(rcPos, true);
-        }
+        if (cx == 0 && cy == 0) return;
+		RECT rcPos;
+		for (int it2 = 0; it2 < m_items.GetSize(); it2++) {
+			CControlUI* pControl = static_cast<CControlUI*>(m_items[it2]);
+			if (!pControl->IsVisible()) continue;
+			if (pControl->IsFloat()) continue;
 
-        Invalidate();
-        if( m_pOwner ) {
-            CListHeaderUI* pHeader = m_pOwner->GetHeader();
-            if( pHeader == NULL ) return;
-            TListInfoUI* pInfo = m_pOwner->GetListInfo();
-            pInfo->nColumns = MIN(pHeader->GetCount(), UILIST_MAX_COLUMNS);
+			rcPos = pControl->GetPos();
+			rcPos.left -= cx;
+			rcPos.right -= cx;
+			rcPos.top -= cy;
+			rcPos.bottom -= cy;
+			pControl->SetPos(rcPos, true);
+		}
 
-            if( !pHeader->IsVisible() ) {
-                for( int it = 0; it < pHeader->GetCount(); it++ ) {
-                    static_cast<CControlUI*>(pHeader->GetItemAt(it))->SetInternVisible(true);
-                }
-            }
-            for( int i = 0; i < pInfo->nColumns; i++ ) {
-                CControlUI* pControl = static_cast<CControlUI*>(pHeader->GetItemAt(i));
-                if( !pControl->IsVisible() ) continue;
-                if( pControl->IsFloat() ) continue;
+		Invalidate();
 
-                RECT rcPos = pControl->GetPos();
-                rcPos.left -= cx;
-                rcPos.right -= cx;
-                pControl->SetPos(rcPos);
-                pInfo->rcColumn[i] = pControl->GetPos();
-            }
-            if( !pHeader->IsVisible() ) {
-                for( int it = 0; it < pHeader->GetCount(); it++ ) {
-                    static_cast<CControlUI*>(pHeader->GetItemAt(it))->SetInternVisible(false);
-                }
-            }
-        }
-    }
+		if (cx != 0 && m_pOwner) {
+			CListHeaderUI* pHeader = m_pOwner->GetHeader();
+			if (pHeader == NULL) return;
+			TListInfoUI* pInfo = m_pOwner->GetListInfo();
+			pInfo->nColumns = MIN(pHeader->GetCount(), UILIST_MAX_COLUMNS);
+			for (int i = 0; i < pInfo->nColumns; i++) {
+				CControlUI* pControl = static_cast<CControlUI*>(pHeader->GetItemAt(i));
+				if (!pControl->IsVisible()) continue;
+				if (pControl->IsFloat()) continue;
+				pControl->Move(CDuiSize(-cx, -cy), false);
+				pInfo->rcColumn[i] = pControl->GetPos();
+			}
+			pHeader->Invalidate();
+		}
+	}
+
 
     void CListBodyUI::SetPos(RECT rc, bool bNeedInvalidate)
     {
@@ -1374,11 +1462,15 @@ namespace DuiLib {
                 int nFixedWidth = pControl->GetFixedWidth();
                 if (nFixedWidth > 0)
                 {
+                    cyNeeded = pControl->GetFixedHeight() * nItemCount;//修复ITEM显示不完整的BUG;
+                    /*
+                    旧版Item显示会出现显示不完整的BUG
+
                     int nRank = (rc.right - rc.left) / nFixedWidth;
                     if (nRank > 0)
                     {
-                        cyNeeded = ((nItemCount - 1) / nRank + 1) * pControl->GetFixedHeight();
-                    }
+                        //cyNeeded = ((nItemCount - 1) / nRank + 1) * pControl->GetFixedHeight();
+                    }*/
                 }
             }
         }
@@ -2152,13 +2244,23 @@ namespace DuiLib {
         else CControlUI::SetAttribute(pstrName, pstrValue);
     }
 
+	int CListElementUI::GetDrawIndex() const
+	{
+		return m_iDrawIndex;
+	}
+
+	void CListElementUI::SetDrawIndex(int iIndex)
+	{
+		m_iDrawIndex = iIndex;
+	}
+
     void CListElementUI::DrawItemBk(HDC hDC, const RECT& rcItem)
     {
         ASSERT(m_pOwner);
         if( m_pOwner == NULL ) return;
         TListInfoUI* pInfo = m_pOwner->GetListInfo();
         DWORD iBackColor = 0;
-        if( !pInfo->bAlternateBk || m_iIndex % 2 == 0 ) iBackColor = pInfo->dwBkColor;
+        if( !pInfo->bAlternateBk || m_iDrawIndex % 2 == 0 ) iBackColor = pInfo->dwBkColor;
         if( (m_uButtonState & UISTATE_HOT) != 0 && pInfo->dwHotBkColor > 0) {
             iBackColor = pInfo->dwHotBkColor;
         }
@@ -2645,6 +2747,16 @@ namespace DuiLib {
     {
         m_iIndex = iIndex;
     }
+
+	int CListContainerElementUI::GetDrawIndex() const
+	{
+		return m_iDrawIndex;
+	}
+
+	void CListContainerElementUI::SetDrawIndex(int iIndex)
+	{
+		m_iDrawIndex = iIndex;
+	}
 
     void CListContainerElementUI::Invalidate()
     {

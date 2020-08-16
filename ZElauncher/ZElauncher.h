@@ -40,6 +40,7 @@ public:
 	void 刷新ZE地图中文名表();
 	HWND GethWnd();
 private:
+	void InitializeControl();
 	void Notify(TNotifyUI& msg);
 	void OnExit(const TNotifyUI& msg);
 	void OnClick(const TNotifyUI& msg);
@@ -49,12 +50,26 @@ private:
 	void Get93xServerListInfo();
 	void 获取ZE地图中文名表(LPCTSTR maptype);
 	void 启动获取ZE地图中文名表();
+	void 初始化背景图片和版本号();
 private:
 	const TCHAR* m_PaintManagerenuBtn = _T("menubtn");
 	const TCHAR* m_PaintManagerinBtn = _T("minbtn");
 	const TCHAR* m_pCloseBtn = _T("closebtn");
 	const TCHAR* m_pBugBtn = _T("BUGbtn");
 	const TCHAR* m_pBBSBtn = _T("BBSbtn");
+
+	//=====控件变量
+#pragma region 控件变量
+	CListUI* m_pList = nullptr;
+	CButtonUI* m_pbtn_Login = nullptr;
+	COptionUI* m_poptn_Server_Switch = nullptr;
+	CTabLayoutUI* m_ptablay_Tabchild = nullptr;
+
+	CTextUI* m_ptext_outtip = nullptr;
+	CTextUI* m_ptext_outtip2 = nullptr;
+	//=============================================
+#pragma endregion
+	
 	C商城UI* pShop = nullptr;
 	C新手皮肤UI* pSkin = nullptr;
 public:

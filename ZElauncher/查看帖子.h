@@ -6,6 +6,7 @@
 using namespace DuiLib;
 
 extern CDuiString g_BBSUrl;
+extern CDuiString g_BBSTitle;
 
 class C查看帖子UI : public WindowImplBase
 {
@@ -21,12 +22,22 @@ public:
 	LPCTSTR GetWindowClassName()const;
 	CControlUI* CreateControl(LPCTSTR pstrClass);
 	void InitWindow();
-private:
-	void OnExit(const TNotifyUI& msg);
-	void Notify(TNotifyUI& msg);
 	void 获取帖子内容();
+private:
+	void OnExit();
+	void Notify(TNotifyUI& msg);
+	void OnClick(CControlUI* pSender);
+	void 处理帖子信息(std::string& htmldata, UINT* nFloor);
+	CDuiString GetImageStr(std::string& imgurl);
+	void 初始化控件变量();
+	void Getfish();
+private:
+	CProgressUI* m_pProgress = nullptr;
+	CListUI* m_BBSList = nullptr;
+
 private:
 	CPaintManagerUI* m_paintmanager;
 	CPaintManagerUI m_pTilelayout;
+	std::vector<CDuiString> m_fishurl;
 };
 

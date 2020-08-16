@@ -69,15 +69,13 @@ void C登录账户UI::InitWindow()
 
 void C登录账户UI::SaveEditInfo()
 {
-	TCHAR cfgbuff[1024] = { 0 };
-	GetRunPath(cfgbuff, sizeof(cfgbuff));
-	_tcscat(cfgbuff, _T("\\bin\\Config.cfg"));
+	_bstr_t CfgPath = GetCFGPath();
 	CEditUI* pEdit = static_cast<CEditUI*>(m_pm.FindControl(_T("Edit_UserName")));
 	if (!pEdit)return;
 	CDuiString tmpstr = pEdit->GetText();
-	WritePrivateProfileString(_T("ZElauncher"), _T("Login_UserName"), tmpstr.GetData(), cfgbuff);
-	if (Is_IELogin)WritePrivateProfileString(_T("ZElauncher"), _T("Login_IELogin"), _T("true"), cfgbuff);
-	else WritePrivateProfileString(_T("ZElauncher"), _T("Login_IELogin"), _T("false"), cfgbuff);
+	WritePrivateProfileString(_T("ZElauncher"), _T("Login_UserName"), tmpstr.GetData(), CfgPath);
+	if (Is_IELogin)WritePrivateProfileString(_T("ZElauncher"), _T("Login_IELogin"), _T("true"), CfgPath);
+	else WritePrivateProfileString(_T("ZElauncher"), _T("Login_IELogin"), _T("false"), CfgPath);
 }
 
 void C登录账户UI::OnExit(const TNotifyUI& msg)
@@ -167,17 +165,15 @@ void C登录账户UI::创建POST请求数据(std::string& POST请求数据)
 
 void C登录账户UI::初始化用户名编辑框()
 {
-	TCHAR cfgbuff[1024] = { 0 };
 	TCHAR tmpbuff[1024] = { 0 };
-	GetRunPath(cfgbuff, sizeof(cfgbuff));
-	_tcscat(cfgbuff, _T("\\bin\\Config.cfg"));
+	_bstr_t CfgPath = GetCFGPath();
 	CEditUI* pEdit = static_cast<CEditUI*>(m_pm.FindControl(_T("Edit_UserName")));
 	if (!pEdit)return;
-	GetPrivateProfileString(_T("ZElauncher"), _T("Login_UserName"), NULL, tmpbuff, sizeof(tmpbuff), cfgbuff);
+	GetPrivateProfileString(_T("ZElauncher"), _T("Login_UserName"), NULL, tmpbuff, sizeof(tmpbuff), CfgPath);
 	if (_tcslen(tmpbuff) > 3) {
 		pEdit->SetText(tmpbuff);
 	}
-	GetPrivateProfileString(_T("ZElauncher"), _T("Login_IELogin"), NULL, tmpbuff, sizeof(tmpbuff), cfgbuff);
+	GetPrivateProfileString(_T("ZElauncher"), _T("Login_IELogin"), NULL, tmpbuff, sizeof(tmpbuff), CfgPath);
 	if (_tcsstr(tmpbuff, _T("true")))Is_IELogin = true;
 }
 
@@ -249,14 +245,14 @@ bool C登录账户UI::LoginVerify(std::string token)
 	http.GET("https://bbs.93x.net/", 返回文本, "", ReturnCookes);
 	UINT nLen = 返回文本.size() * sizeof(TCHAR);
 	wchar_t* pStrHtml = new wchar_t[nLen];
-	_MultiByteToWideChar(CP_UTF8, NULL, 返回文本.c_str(), 返回文本.length(), pStrHtml, nLen);
+	MultiByteToWideChar(CP_UTF8, NULL, 返回文本.c_str(), 返回文本.length(), pStrHtml, nLen);
 	if (wcsstr(pStrHtml, L"找回密码") && wcsstr(pStrHtml, L"立即注册"))return false;
-	TCHAR cfgbuff[1024] = { 0 };
-	GetRunPath(cfgbuff, sizeof(cfgbuff));
-	_tcscat(cfgbuff, _T("\\bin\\Cookies.data"));
+	_bstr_t cfgbuff = GetRunPath();
+	cfgbuff += _T("\\bin\\Cookies.data");
 	_bstr_t FileName = cfgbuff;
 	FILE* pFile = fopen(FileName, "wb+");
 	if (!pFile) {
+		delete[]pStrHtml;
 		MessageBox(NULL, _T("读取Cookies失败,请确认是否拥有文件操作权限!"), NULL, MB_OK);
 		return false;
 	}
@@ -265,6 +261,7 @@ bool C登录账户UI::LoginVerify(std::string token)
 	fclose(pFile);
 	gCookies = ReturnCookes.c_str();
 	g_pZElauncher->InitLogin();
+	delete[]pStrHtml;
 	return true;
 }
 
@@ -287,9 +284,8 @@ void C登录账户UI::LoginUser()
 
 void C登录账户UI::Logout()
 {
-	TCHAR cfgbuff[1024] = { 0 };
-	GetRunPath(cfgbuff, sizeof(cfgbuff));
-	_tcscat(cfgbuff, _T("\\bin\\Cookies.data"));
+	_bstr_t cfgbuff = GetRunPath();
+	cfgbuff += _T("\\bin\\Cookies.data");
 	_bstr_t FileName = cfgbuff;
 	FILE* pFile = fopen(FileName, "wb+");
 	if (!pFile)return;

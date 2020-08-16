@@ -164,7 +164,7 @@ namespace DuiLib
 					else if( event.ptMouse.y <= m_rcItem.top + m_szThumb.cy / 2  ) m_nValue = m_nMax;
 					else m_nValue = m_nMin + (m_nMax - m_nMin) * (m_rcItem.bottom - event.ptMouse.y - m_szThumb.cy / 2 ) / (m_rcItem.bottom - m_rcItem.top - m_szThumb.cy);
 				}
-				m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_VALUECHANGED);
+				m_pManager->SendNotify(this, DUI_MSGTYPE_VALUECHANGED);
 				m_uButtonState &= ~UISTATE_CAPTURED;
 				Invalidate();
 			}
@@ -179,11 +179,11 @@ namespace DuiLib
 			switch( LOWORD(event.wParam) ) {
 			case SB_LINEUP:
 				SetValue(GetValue() + GetChangeStep());
-				m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_VALUECHANGED);
+				m_pManager->SendNotify(this, DUI_MSGTYPE_VALUECHANGED);
 				return;
 			case SB_LINEDOWN:
 				SetValue(GetValue() - GetChangeStep());
-				m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_VALUECHANGED);
+				m_pManager->SendNotify(this, DUI_MSGTYPE_VALUECHANGED);
 			    return;
 			}
 		}
@@ -200,7 +200,7 @@ namespace DuiLib
 					else if( event.ptMouse.y <= m_rcItem.top + m_szThumb.cy / 2  ) m_nValue = m_nMax;
 					else m_nValue = m_nMin + (m_nMax - m_nMin) * (m_rcItem.bottom - event.ptMouse.y - m_szThumb.cy / 2 ) / (m_rcItem.bottom - m_rcItem.top - m_szThumb.cy);
 				}
-				if( m_bImmMode ) m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_VALUECHANGED);
+				if( m_bImmMode ) m_pManager->SendNotify(this, DUI_MSGTYPE_VALUECHANGED);
 				Invalidate();
 			}
 			return;
@@ -233,10 +233,10 @@ namespace DuiLib
                         Invalidate();
                     }
                 }
-                if (m_PaintManageranager) m_PaintManageranager->RemoveMouseLeaveNeeded(this);
+                if (m_pManager) m_pManager->RemoveMouseLeaveNeeded(this);
             }
             else {
-                if (m_PaintManageranager) m_PaintManageranager->AddMouseLeaveNeeded(this);
+                if (m_pManager) m_pManager->AddMouseLeaveNeeded(this);
                 return;
             }
         }

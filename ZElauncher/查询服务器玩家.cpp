@@ -46,6 +46,7 @@ void C查询服务器玩家UI::InitWindow()
 	g_paintmanager = &m_pm;
 	lib_Socket::UDPClient udp;
 	udp.Initialize();
+	GetPlayer(g_ServerName_LookPlayer);
 }
 
 void C查询服务器玩家UI::OnExit(const TNotifyUI& msg)
@@ -75,7 +76,7 @@ void __stdcall UdpProc(SOCKET nSock, unsigned int nIndex, void* pBuf, unsigned i
 			TCHAR Buff[1024] = { 0 };
 			UINT nPlayerIndex = *pChar;
 			pChar ++;
-			_MultiByteToWideChar(CP_UTF8, NULL, pChar, strlen(pChar), Buff, 1024);
+			MultiByteToWideChar(CP_UTF8, NULL, pChar, strlen(pChar), Buff, 1024);
 			_bstr_t sPlayerName=_T(" ");
 			if(_tcslen(Buff)<1)sPlayerName += _T("玩家正在下载资源");
 			else sPlayerName += Buff;
@@ -141,11 +142,7 @@ void C查询服务器玩家UI::GetPlayer(LPCTSTR lpServer)
 
 void C查询服务器玩家UI::Notify(TNotifyUI& msg)
 {
-	if (_tcscmp(msg.sType, _T("windowinit")) == 0) {
-		::SetForegroundWindow(m_hWnd);//窗口创建完毕后,获取焦点;
-		//GetPlayer(_T("127.0.0.1:27018"));
-		GetPlayer(g_ServerName_LookPlayer);
-	}
+	if (_tcscmp(msg.sType, _T("windowinit")) == 0)::SetForegroundWindow(m_hWnd);//窗口创建完毕后,获取焦点;
 	else if (_tcscmp(msg.pSender->GetName(), _T("closebtn")) == 0)OnExit(msg);
 
 }

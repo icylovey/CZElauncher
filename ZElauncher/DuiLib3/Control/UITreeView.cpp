@@ -108,7 +108,7 @@ namespace DuiLib
 		if( event.Type == UIEVENT_DBLCLICK )
 		{
 			if( IsEnabled() ) {
-				m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_ITEMDBCLICK);
+				m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMDBCLICK);
 				Invalidate();
 			}
 			return;
@@ -180,7 +180,7 @@ namespace DuiLib
 						return;
 				}
 
-				if( m_PaintManageranager != NULL ) m_PaintManageranager->Invalidate(invalidateRc);
+				if( m_pManager != NULL ) m_pManager->Invalidate(invalidateRc);
 			}
 			else {
 				CContainerUI::Invalidate();

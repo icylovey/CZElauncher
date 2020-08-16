@@ -59,7 +59,7 @@ void C礼包UI::Sign93x()
 				http.GET(url, Result);
 				UINT nLen = Result.size() * sizeof(TCHAR);
 				TCHAR* pStrHtml = new TCHAR[nLen]();
-				_MultiByteToWideChar(CP_UTF8, NULL, Result.c_str(), Result.length(), pStrHtml, nLen);
+				MultiByteToWideChar(CP_UTF8, NULL, Result.c_str(), Result.length(), pStrHtml, nLen);
 				if (wcsstr(pStrHtml, L"您已获得")) {
 					CAwardTipUI* pAwardTip = new CAwardTipUI(*m_paintmanage_, pStrHtml);
 					if (pAwardTip == NULL) { delete[]pStrHtml; return; }
@@ -118,7 +118,7 @@ bool C礼包UI::IsStart_yaoyiyao(LPCTSTR pUrl)
 	}
 	UINT nLen = Result.size() * sizeof(TCHAR);
 	TCHAR* pStrHtml = new TCHAR[nLen]();
-	_MultiByteToWideChar(CP_UTF8, NULL, Result.c_str(), Result.length(), pStrHtml, nLen);
+	MultiByteToWideChar(CP_UTF8, NULL, Result.c_str(), Result.length(), pStrHtml, nLen);
 	std::wstring StrHtml = pStrHtml;
 	delete[]pStrHtml;
 	if (StrHtml.find(L"请求来路不明,请返回") != std::wstring::npos) {
@@ -177,7 +177,7 @@ void C礼包UI::yaoyiyao()
 	}
 	UINT nLen = Result.size() * sizeof(TCHAR);
 	TCHAR* pStrHtml = new TCHAR[nLen]();
-	_MultiByteToWideChar(CP_UTF8, NULL, Result.c_str(), Result.length(), pStrHtml, nLen);
+	MultiByteToWideChar(CP_UTF8, NULL, Result.c_str(), Result.length(), pStrHtml, nLen);
 	std::wstring StrHtml = pStrHtml;
 	delete[]pStrHtml;
 	if (StrHtml.find(L"请求来路不明,请返回") != std::wstring::npos) {
@@ -217,15 +217,14 @@ void C礼包UI::online_Award(LPCTSTR pUrl, LPCTSTR szAward)
 	}
 	UINT nLen = Result.size() * sizeof(TCHAR);
 	TCHAR* pStrHtml = new TCHAR[nLen]();
-	_MultiByteToWideChar(CP_UTF8, NULL, Result.c_str(), Result.length(), pStrHtml, nLen);
+	MultiByteToWideChar(CP_UTF8, NULL, Result.c_str(), Result.length(), pStrHtml, nLen);
 	std::wstring StrHtml = pStrHtml;
 #pragma region 获取返回结果
 	VBScript_RegExp_55::IRegExp2Ptr pRegexp(__uuidof(VBScript_RegExp_55::RegExp));
 	VBScript_RegExp_55::IMatchCollectionPtr sResult;
 	CDuiString sTip = _T("");
-	TCHAR dbPath[MAX_PATH] = { 0 };
-	GetRunPath(dbPath, sizeof(dbPath));
-	_tcscat(dbPath, _T("\\bin\\Regex.db"));
+	_bstr_t dbPath = GetRunPath();
+	dbPath += _T("\\bin\\Regex.db");
 	TCHAR* pTpattern = new TCHAR[4096]();
 	ZeroMemory(pTpattern, 4096);
 	//读取表达式数据
@@ -274,7 +273,7 @@ void C礼包UI::online_Award(LPCTSTR pUrl, LPCTSTR szAward)
 	}
 	UINT nLen = Result.size() * sizeof(TCHAR);
 	TCHAR* pStrHtml = new TCHAR[nLen];
-	_MultiByteToWideChar(CP_UTF8, NULL, Result.c_str(), Result.length(), pStrHtml, nLen);
+	MultiByteToWideChar(CP_UTF8, NULL, Result.c_str(), Result.length(), pStrHtml, nLen);
 	std::wstring StrHtml = pStrHtml;
 	if (StrHtml.find(L"登陆后才可以领取在线礼包") != std::wstring::npos) {
 		MessageBox(NULL, _T("亲,登陆后才可以领取在线礼包哦."), _T("Tip:"), MB_OK);

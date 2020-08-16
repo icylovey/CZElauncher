@@ -1141,7 +1141,7 @@ void CActiveXUI::ReleaseControl()
         m_pControl->Release();
         m_pControl = NULL;
     }
-    m_PaintManageranager->RemoveMessageFilter(this);
+    m_pManager->RemoveMessageFilter(this);
 }
 
 typedef HRESULT (__stdcall *DllGetClassObjectFunc)(REFCLSID rclsid, REFIID riid, LPVOID* ppv); 
@@ -1199,10 +1199,10 @@ bool CActiveXUI::DoCreateControl()
     if( FAILED(Hr) ) Hr = m_pUnk->QueryInterface(IID_IViewObject, (LPVOID*) &m_pControl->m_pViewObject);
     // Activate and done...
     m_pUnk->SetHostNames(OLESTR("UIActiveX"), NULL);
-    if( m_PaintManageranager != NULL ) m_PaintManageranager->SendNotify((CControlUI*)this, DUI_MSGTYPE_SHOWACTIVEX, 0, 0, false);
+    if( m_pManager != NULL ) m_pManager->SendNotify((CControlUI*)this, DUI_MSGTYPE_SHOWACTIVEX, 0, 0, false);
     if( (dwMiscStatus & OLEMISC_INVISIBLEATRUNTIME) == 0 ) {
-        Hr = m_pUnk->DoVerb(OLEIVERB_INPLACEACTIVATE, NULL, pOleClientSite, 0, m_PaintManageranager->GetPaintWindow(), &m_rcItem);
-        //::RedrawWindow(m_PaintManageranager->GetPaintWindow(), &m_rcItem, NULL, RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE | RDW_INTERNALPAINT | RDW_FRAME);
+        Hr = m_pUnk->DoVerb(OLEIVERB_INPLACEACTIVATE, NULL, pOleClientSite, 0, m_pManager->GetPaintWindow(), &m_rcItem);
+        //::RedrawWindow(m_pManager->GetPaintWindow(), &m_rcItem, NULL, RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE | RDW_INTERNALPAINT | RDW_FRAME);
     }
     IObjectWithSite* pSite = NULL;
     m_pUnk->QueryInterface(IID_IObjectWithSite, (LPVOID*) &pSite);

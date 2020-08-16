@@ -13,7 +13,7 @@ class CControlUI;
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-typedef enum EVENTTYPE_UI
+typedef enum _EVENTTYPE_UI
 {
     UIEVENT__FIRST = 1,
     UIEVENT__KEYBEGIN,
@@ -42,7 +42,7 @@ typedef enum EVENTTYPE_UI
     UIEVENT_NOTIFY,
     UIEVENT_COMMAND,
     UIEVENT__LAST,
-};
+}EVENTTYPE_UI;
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -144,6 +144,7 @@ typedef struct DUILIB_API tagTResInfo
 	CDuiStringPtrMap m_CustomFonts;
 	CDuiStringPtrMap m_ImageHash;
 	CDuiStringPtrMap m_AttrHash;
+    CDuiStringPtrMap m_StyleHash;
 	CDuiStringPtrMap m_MultiLanguageHash;
 } TResInfo;
 
@@ -396,6 +397,14 @@ public:
     bool MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lRes);
     bool PreMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lRes);
 	void UsedVirtualWnd(bool bUsed);
+
+	LPCTSTR GetStyle(LPCTSTR pName) const
+	{
+		CDuiString* pStyle = static_cast<CDuiString*>(m_ResInfo.m_StyleHash.Find(pName));
+		if (!pStyle) pStyle = static_cast<CDuiString*>(m_SharedResInfo.m_StyleHash.Find(pName));
+		if (pStyle) return pStyle->GetData();
+		else return NULL;
+	}
 
 private:
 	CDuiPtrArray* GetFoundControls();

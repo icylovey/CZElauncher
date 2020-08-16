@@ -56,7 +56,7 @@ std::string C商城UI::获取皮肤html数据(const TCHAR* Page)
 		http.GET(url.GetData(), Result, _T(""), Cookies.GetData());
 		//http.GET(url.GetData(), Result);
 	}
-	return Result;
+	return std::move(Result);
 }
 
 void C商城UI::设置图片可视状态()
@@ -71,9 +71,9 @@ void C商城UI::设置图片可视状态()
 
 bool C商城UI::判断正则表达式数据库是否存在(TCHAR* 正则表达式)
 {
-	TCHAR dbPath[MAX_PATH] = { 0 };
-	GetRunPath(dbPath, sizeof(dbPath));
-	_tcscat(dbPath, _T("\\bin\\Regex.db"));
+	if (!正则表达式)return false;
+	_bstr_t dbPath = GetRunPath();
+	dbPath += _T("\\bin\\Regex.db");
 	GetPrivateProfileString(_T("ZElauncher"), _T("Shop"), NULL, 正则表达式, 4096, dbPath);
 	if (_tcslen(正则表达式) < 5)return false; 
 	return true;
@@ -82,9 +82,7 @@ bool C商城UI::判断正则表达式数据库是否存在(TCHAR* 正则表达式)
 void C商城UI::获取商城数据()
 {
 	设置图片可视状态();
-	CButtonUI* pLogin = static_cast<CButtonUI*>(m_paintmanage_->FindControl(_T("Button_Login")));
-	if (!pLogin)return;
-	if (_tcscmp(pLogin->GetText(), _T("{u}{a}未登录{/a}{/u}")) == 0 || _tcscmp(pLogin->GetText(), _T("{u}{a}登录失败{/a}{/u}")) == 0 || _tcscmp(pLogin->GetText(), _T("{u}{a}Cookies获取为空{/a}{/u}")) == 0) {
+	if (!g_pZElauncher->UserIslogin()) {
 		MessageBox(NULL, _T("获取商城信息失败,请先登录!"), NULL, MB_OK | MB_TOPMOST);
 		g_pZElauncher->IsCreateShop = false;
 		return;
@@ -106,7 +104,7 @@ void C商城UI::获取商城数据()
 	}
 	UINT nLen = Result.size() * sizeof(TCHAR);
 	TCHAR* pStrHtml = new TCHAR[nLen]();
-	_MultiByteToWideChar(CP_UTF8, NULL, Result.c_str(), Result.length(), pStrHtml, nLen);
+	MultiByteToWideChar(CP_UTF8, NULL, Result.c_str(), Result.length(), pStrHtml, nLen);
 	if (wcsstr(pStrHtml,L"提示信息"))return;
 #pragma region 正则表达式算法
 	CContainerUI* pPage = static_cast<CContainerUI*>(m_paintmanage_->FindControl(_T("page_panel")));
@@ -117,6 +115,7 @@ void C商城UI::获取商城数据()
 	pRegexp->PutIgnoreCase(VARIANT_FALSE);
 	pRegexp->PutPattern(正则表达式);
 	VBScript_RegExp_55::IMatchCollectionPtr Item = pRegexp->Execute(pStrHtml);
+	if (!Item) { delete[]pStrHtml; return; }
 	srand(GetTickCount());
 	for (int i = 0; i < Item->GetCount(); i++) {
 		if (i > 12)break;
@@ -225,10 +224,5 @@ void C商城UI::启动获取商城数据函数()
 void C商城UI::OnCreate()
 {
 	m_pageNumMax = 2;
-	/*std::list<std::future<void>> lk;
-	auto __p = std::async(std::launch::async, &C商城UI::GetSkininfo, this);
-	lk.push_back(std::move(__p));*/
-	//GetSkininfo();
-	//HANDLE hThread = CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)ThreadCreate, this, NULL, NULL);
 }
 

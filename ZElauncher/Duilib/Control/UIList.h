@@ -37,6 +37,11 @@ namespace DuiLib {
         bool bShowHtml;
         bool bMultiExpandable;
         bool bRSelected;
+		int iHLineSize;
+		DWORD dwHLineColor;
+		int iVLineSize;
+		DWORD dwVLineColor;
+
     } TListInfoUI;
 
 
@@ -84,6 +89,8 @@ namespace DuiLib {
     public:
         virtual int GetIndex() const = 0;
         virtual void SetIndex(int iIndex) = 0;
+		virtual int GetDrawIndex() const = 0;
+		virtual void SetDrawIndex(int iIndex) = 0;
         virtual IListOwnerUI* GetOwner() = 0;
         virtual void SetOwner(CControlUI* pOwner) = 0;
         virtual bool IsSelected() const = 0;
@@ -262,6 +269,9 @@ namespace DuiLib {
         int GetScrollStepSize() const;
         void SetScrollPos(SIZE szPos, bool bMsg = true);
         void SetPos(RECT rc, bool bNeedInvalidate = true);
+		void SetScrollPos2(SIZE szPos, bool bMsg = true);
+		void SetPos2(RECT rc, bool bNeedInvalidate = true);
+        bool DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl);
         void DoEvent(TEventUI& event);
         BOOL SortItems(PULVCompareFunc pfnCompare, UINT_PTR dwData);
     protected:
@@ -383,6 +393,8 @@ namespace DuiLib {
 
         int GetIndex() const;
         void SetIndex(int iIndex);
+		int GetDrawIndex() const;
+		void SetDrawIndex(int iIndex);
 
         IListOwnerUI* GetOwner();
         void SetOwner(CControlUI* pOwner);
@@ -404,6 +416,7 @@ namespace DuiLib {
 
     protected:
         int m_iIndex;
+        int m_iDrawIndex;
         bool m_bSelected;
         UINT m_uButtonState;
         IListOwnerUI* m_pOwner;
@@ -483,6 +496,8 @@ namespace DuiLib {
 
         int GetIndex() const;
         void SetIndex(int iIndex);
+		int GetDrawIndex() const;
+		void SetDrawIndex(int iIndex);
 
         IListOwnerUI* GetOwner();
         void SetOwner(CControlUI* pOwner);
@@ -509,6 +524,7 @@ namespace DuiLib {
 
     protected:
         int m_iIndex;
+        int m_iDrawIndex;
         bool m_bSelected;
         UINT m_uButtonState;
         IListOwnerUI* m_pOwner;

@@ -215,8 +215,8 @@ namespace DuiLib
 	void CHorizontalLayoutUI::SetSepImmMode(bool bImmediately)
 	{
 		if( m_bImmMode == bImmediately ) return;
-		if( (m_uButtonState & UISTATE_CAPTURED) != 0 && !m_bImmMode && m_PaintManageranager != NULL ) {
-			m_PaintManageranager->RemovePostPaint(this);
+		if( (m_uButtonState & UISTATE_CAPTURED) != 0 && !m_bImmMode && m_pManager != NULL ) {
+			m_pManager->RemovePostPaint(this);
 		}
 
 		m_bImmMode = bImmediately;
@@ -244,7 +244,7 @@ namespace DuiLib
 					m_uButtonState |= UISTATE_CAPTURED;
 					m_ptLastMouse = event.ptMouse;
 					m_rcNewPos = m_rcItem;
-					if( !m_bImmMode && m_PaintManageranager ) m_PaintManageranager->AddPostPaint(this);
+					if( !m_bImmMode && m_pManager ) m_pManager->AddPostPaint(this);
 					return;
 				}
 			}
@@ -253,7 +253,7 @@ namespace DuiLib
 				if( (m_uButtonState & UISTATE_CAPTURED) != 0 ) {
 					m_uButtonState &= ~UISTATE_CAPTURED;
 					m_rcItem = m_rcNewPos;
-					if( !m_bImmMode && m_PaintManageranager ) m_PaintManageranager->RemovePostPaint(this);
+					if( !m_bImmMode && m_pManager ) m_pManager->RemovePostPaint(this);
 					NeedParentUpdate();
 					return;
 				}
@@ -302,7 +302,7 @@ namespace DuiLib
 					else {
 						rcInvalidate.Join(GetThumbRect(true));
 						rcInvalidate.Join(GetThumbRect(false));
-						if( m_PaintManageranager ) m_PaintManageranager->Invalidate(rcInvalidate);
+						if( m_pManager ) m_pManager->Invalidate(rcInvalidate);
 					}
 					return;
 				}

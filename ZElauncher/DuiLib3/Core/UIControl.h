@@ -7,7 +7,7 @@ namespace DuiLib {
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
-class CControlUI;
+
 typedef CControlUI* (CALLBACK* FINDCONTROLPROC)(CControlUI*, LPVOID);
 
 class DUILIB_API CControlUI
@@ -63,6 +63,7 @@ public:
 	void SetBorderSize(int iSize);
 	int GetBorderStyle() const;
 	void SetBorderStyle(int nStyle);
+	
 
     // 位置相关
     virtual const RECT& GetPos() const;
@@ -170,6 +171,49 @@ public:
 	void SetVirtualWnd(LPCTSTR pstrValue);
 	CDuiString GetVirtualWnd() const;
 
+	CControlUI* ApplyAttributeList(LPCTSTR pstrValue)
+	{
+		// 解析样式表
+		if (m_pManager != NULL) {
+			LPCTSTR pStyle = m_pManager->GetStyle(pstrValue);
+			if (pStyle != NULL) {
+				return ApplyAttributeList(pStyle);
+			}
+		}
+		CDuiString sXmlData = pstrValue;
+		sXmlData.Replace(_T("&quot;"), _T("\""));
+		LPCTSTR pstrList = sXmlData.GetData();
+		// 解析样式属性
+		CDuiString sItem;
+		CDuiString sValue;
+		while (*pstrList != _T('\0')) {
+			sItem.Empty();
+			sValue.Empty();
+			while (*pstrList != _T('\0') && *pstrList != _T('=')) {
+				LPTSTR pstrTemp = ::CharNext(pstrList);
+				while (pstrList < pstrTemp) {
+					sItem += *pstrList++;
+				}
+			}
+			ASSERT(*pstrList == _T('='));
+			if (*pstrList++ != _T('=')) return this;
+			ASSERT(*pstrList == _T('\"'));
+			if (*pstrList++ != _T('\"')) return this;
+			while (*pstrList != _T('\0') && *pstrList != _T('\"')) {
+				LPTSTR pstrTemp = ::CharNext(pstrList);
+				while (pstrList < pstrTemp) {
+					sValue += *pstrList++;
+				}
+			}
+			ASSERT(*pstrList == _T('\"'));
+			if (*pstrList++ != _T('\"')) return this;
+			SetAttribute(sItem, sValue);
+			if (*pstrList++ != _T(' ') && *pstrList++ != _T(',')) return this;
+		}
+		return this;
+	}
+
+
 public:
     CEventSource OnInit;
     CEventSource OnDestroy;
@@ -180,7 +224,7 @@ public:
 	CEventSource OnPostPaint;
 
 protected:
-    CPaintManagerUI* m_PaintManageranager;
+    CPaintManagerUI* m_pManager;
     CControlUI* m_pParent;
     CControlUI* m_pCover;
 	CDuiString m_sVirtualWnd;

@@ -9,7 +9,7 @@ namespace DuiLib
 
 	COptionUI::~COptionUI()
 	{
-		if( !m_sGroupName.IsEmpty() && m_PaintManageranager ) m_PaintManageranager->RemoveOptionGroup(m_sGroupName, this);
+		if( !m_sGroupName.IsEmpty() && m_pManager ) m_pManager->RemoveOptionGroup(m_sGroupName, this);
 	}
 
 	LPCTSTR COptionUI::GetClass() const
@@ -27,7 +27,7 @@ namespace DuiLib
 	{
 		CControlUI::SetManager(pManager, pParent, bInit);
 		if( bInit && !m_sGroupName.IsEmpty() ) {
-			if (m_PaintManageranager) m_PaintManageranager->AddOptionGroup(m_sGroupName, this);
+			if (m_pManager) m_pManager->AddOptionGroup(m_sGroupName, this);
 		}
 	}
 
@@ -44,15 +44,15 @@ namespace DuiLib
 		}
 		else {
 			if( m_sGroupName == pStrGroupName ) return;
-			if (!m_sGroupName.IsEmpty() && m_PaintManageranager) m_PaintManageranager->RemoveOptionGroup(m_sGroupName, this);
+			if (!m_sGroupName.IsEmpty() && m_pManager) m_pManager->RemoveOptionGroup(m_sGroupName, this);
 			m_sGroupName = pStrGroupName;
 		}
 
 		if( !m_sGroupName.IsEmpty() ) {
-			if (m_PaintManageranager) m_PaintManageranager->AddOptionGroup(m_sGroupName, this);
+			if (m_pManager) m_pManager->AddOptionGroup(m_sGroupName, this);
 		}
 		else {
-			if (m_PaintManageranager) m_PaintManageranager->RemoveOptionGroup(m_sGroupName, this);
+			if (m_pManager) m_pManager->RemoveOptionGroup(m_sGroupName, this);
 		}
 
 		Selected(m_bSelected);
@@ -70,21 +70,21 @@ namespace DuiLib
 		if( m_bSelected ) m_uButtonState |= UISTATE_SELECTED;
 		else m_uButtonState &= ~UISTATE_SELECTED;
 
-		if( m_PaintManageranager != NULL ) {
+		if( m_pManager != NULL ) {
 			if( !m_sGroupName.IsEmpty() ) {
 				if( m_bSelected ) {
-					CDuiPtrArray* aOptionGroup = m_PaintManageranager->GetOptionGroup(m_sGroupName);
+					CDuiPtrArray* aOptionGroup = m_pManager->GetOptionGroup(m_sGroupName);
 					for( int i = 0; i < aOptionGroup->GetSize(); i++ ) {
 						COptionUI* pControl = static_cast<COptionUI*>(aOptionGroup->GetAt(i));
 						if( pControl != this ) {
 							pControl->Selected(false, bTriggerEvent);
 						}
 					}
-					if (bTriggerEvent) m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_SELECTCHANGED);
+					if (bTriggerEvent) m_pManager->SendNotify(this, DUI_MSGTYPE_SELECTCHANGED);
 				}
 			}
 			else {
-				if (bTriggerEvent) m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_SELECTCHANGED);
+				if (bTriggerEvent) m_pManager->SendNotify(this, DUI_MSGTYPE_SELECTCHANGED);
 			}
 		}
 
@@ -142,7 +142,7 @@ namespace DuiLib
 
 	DWORD COptionUI::GetSelectedTextColor()
 	{
-		if (m_dwSelectedTextColor == 0) m_dwSelectedTextColor = m_PaintManageranager->GetDefaultFontColor();
+		if (m_dwSelectedTextColor == 0) m_dwSelectedTextColor = m_pManager->GetDefaultFontColor();
 		return m_dwSelectedTextColor;
 	}
 
@@ -176,7 +176,7 @@ namespace DuiLib
 
 	SIZE COptionUI::EstimateSize(SIZE szAvailable)
 	{
-		if( m_cxyFixed.cy == 0 ) return CDuiSize(m_cxyFixed.cx, m_PaintManageranager->GetFontInfo(GetFont())->tm.tmHeight + 8);
+		if( m_cxyFixed.cy == 0 ) return CDuiSize(m_cxyFixed.cx, m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 8);
 		return CControlUI::EstimateSize(szAvailable);
 	}
 
@@ -233,8 +233,8 @@ Label_ForeImage:
 			DWORD oldTextColor = m_dwTextColor;
 			if( m_dwSelectedTextColor != 0 ) m_dwTextColor = m_dwSelectedTextColor;
 
-			if( m_dwTextColor == 0 ) m_dwTextColor = m_PaintManageranager->GetDefaultFontColor();
-			if( m_dwDisabledTextColor == 0 ) m_dwDisabledTextColor = m_PaintManageranager->GetDefaultDisabledColor();
+			if( m_dwTextColor == 0 ) m_dwTextColor = m_pManager->GetDefaultFontColor();
+			if( m_dwDisabledTextColor == 0 ) m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor();
 
 			if( m_sText.IsEmpty() ) return;
 			int nLinks = 0;
@@ -245,10 +245,10 @@ Label_ForeImage:
 			rc.bottom -= m_rcTextPadding.bottom;
 
 			if( m_bShowHtml )
-				CRenderEngine::DrawHtmlText(hDC, m_PaintManageranager, rc, m_sText, IsEnabled()?m_dwTextColor:m_dwDisabledTextColor, \
+				CRenderEngine::DrawHtmlText(hDC, m_pManager, rc, m_sText, IsEnabled()?m_dwTextColor:m_dwDisabledTextColor, \
 				NULL, NULL, nLinks, m_iFont, m_uTextStyle);
 			else
-				CRenderEngine::DrawText(hDC, m_PaintManageranager, rc, m_sText, IsEnabled()?m_dwTextColor:m_dwDisabledTextColor, \
+				CRenderEngine::DrawText(hDC, m_pManager, rc, m_sText, IsEnabled()?m_dwTextColor:m_dwDisabledTextColor, \
 				m_iFont, m_uTextStyle);
 
 			m_dwTextColor = oldTextColor;

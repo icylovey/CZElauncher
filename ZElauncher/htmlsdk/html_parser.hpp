@@ -309,7 +309,7 @@ public:
 		return ResultValue;
 	}
 
-	void PlainStylize2(std::string& str) {
+	void PlainStylize(std::string& str) {
 		if (name == "head" || name == "meta" || name == "style" || name == "script" || name == "link") {
 			return;
 		}
@@ -338,7 +338,7 @@ public:
 		}
 	}
 
-	void PlainStylize(std::string& str) {
+	void PlainStylize2(std::string& str) {
 		if (name == "head" || name == "meta" || name == "style" || name == "script" || name == "link") {
 			return;
 		}
@@ -349,7 +349,7 @@ public:
 		}
 
 		for (size_t i = 0; i < children.size();) {
-			children[i]->PlainStylize(str);
+			children[i]->PlainStylize2(str);
 
 			if (++i < children.size()) {
 				std::string ele = children[i]->GetName();
@@ -361,7 +361,7 @@ public:
 					str.append("\n");
 				}
 				else if (ele == "em") {
-					str = "";
+					return;
 				}
 			}
 		}

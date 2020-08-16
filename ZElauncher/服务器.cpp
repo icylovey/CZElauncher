@@ -544,13 +544,11 @@ void C服务器UI::OnCreate()
 {
 	CListUI* plistbkimg = static_cast<CListUI*>(m_paManager->FindControl(_T("List_Server")));
 	if (plistbkimg) {
-		TCHAR cfgbuff[1024] = { 0 };
-		GetRunPath(cfgbuff, sizeof(cfgbuff));
-		_tcscat(cfgbuff, _T("\\bin\\Config.cfg"));
+		_bstr_t cfgbuff = GetCFGPath();
 		TCHAR* pszbuff = new TCHAR[MAX_PATH]();
 		GetPrivateProfileString(_T("ZElauncher"), _T("edit_listbkimge"), NULL, pszbuff, (MAX_PATH * sizeof(TCHAR)), cfgbuff);
 		if (_tcslen(pszbuff) > 5) {
-			plistbkimg->SetItemBkColor(RGB(0xFF, 0xE7, 0xE7, 0xE7));
+			plistbkimg->SetItemBkColor(RGB(0xFF, 0xE7, 0xE7));
 			plistbkimg->SetBkImage(pszbuff);
 		}
 	}
@@ -582,9 +580,7 @@ void C服务器UI::CopyServerInfo(UINT nIndex)
 bool C服务器UI::IsFileExist(LPCTSTR lpFileName)
 {
 	TCHAR CSGOPath[MAX_PATH] = { 0 };
-	TCHAR CfgPath[MAX_PATH] = { 0 };
-	GetRunPath(CfgPath, sizeof(CfgPath));
-	_tcscat(CfgPath, _T("\\bin\\Config.cfg"));
+	_bstr_t CfgPath = GetCFGPath();
 	GetPrivateProfileString(_T("ZElauncher"), _T("CSGOPath"), NULL, CSGOPath, sizeof(CSGOPath), CfgPath);
 	_bstr_t szTemp = "";
 	WIN32_FIND_DATA FindData = { 0 };
@@ -656,7 +652,10 @@ void C服务器UI::JoinServer()
 
 void C服务器UI::RunGame(LPCTSTR lpServer)
 {
-	TCHAR SteamPath[MAX_PATH] = { 0 };
+	_bstr_t parameter = _T("steam://connect/");
+	parameter += lpServer;
+	ShellExecute(NULL, _T("open"), parameter, NULL, NULL, SW_SHOW);
+	/*TCHAR SteamPath[MAX_PATH] = { 0 };
 	TCHAR FilePath[MAX_PATH] = { 0 };
 	TCHAR CfgPath[MAX_PATH] = { 0 };
 	TCHAR Server_Switch[25] = { 0 };
@@ -687,7 +686,7 @@ void C服务器UI::RunGame(LPCTSTR lpServer)
 			Sleep(1000);
 			ShellExecute(NULL, _T("open"), FilePath, parameter.GetData(), SteamPath, SW_SHOW);
 		}
-	}
+	}*/
 }
 
 bool __stdcall DownloadProc_(size_t FileSize, UINT nState, size_t DownloadSize, size_t SecondSize)
@@ -767,9 +766,7 @@ void C服务器UI::DownloadMap93x(LPCTSTR lpMapName, bool IsRunGame)
 	}*/
 	TCHAR CSGOPath[MAX_PATH] = { 0 };
 	TCHAR TempPath[MAX_PATH] = { 0 };
-	TCHAR CfgPath[MAX_PATH] = { 0 };
-	GetRunPath(CfgPath, sizeof(CfgPath));
-	_tcscat(CfgPath, _T("\\bin\\Config.cfg"));
+	_bstr_t CfgPath = GetCFGPath();
 	GetPrivateProfileString(_T("ZElauncher"), _T("CSGOPath"), NULL, CSGOPath, sizeof(CSGOPath), CfgPath);
 	CDuiString sMapFile = CSGOPath;
 	sMapFile += _T("\\csgo\\maps\\");
@@ -828,9 +825,7 @@ void C服务器UI::DownloadMapjsly(LPCTSTR lpMapName)
 	sUrl += _T(".bsp.bz2");
 	TCHAR CSGOPath[MAX_PATH] = { 0 };
 	TCHAR TempPath[MAX_PATH] = { 0 };
-	TCHAR CfgPath[MAX_PATH] = { 0 };
-	GetRunPath(CfgPath, sizeof(CfgPath));
-	_tcscat(CfgPath, _T("\\bin\\Config.cfg"));
+	_bstr_t CfgPath = GetCFGPath();
 	GetPrivateProfileString(_T("ZElauncher"), _T("CSGOPath"), NULL, CSGOPath, sizeof(CSGOPath), CfgPath);
 	CDuiString sMapFile = CSGOPath;
 	sMapFile += _T("\\csgo\\maps\\");
@@ -881,9 +876,7 @@ void C服务器UI::DownloadMapfys(LPCTSTR lpMapName)
 	sUrl += _T(".bsp.bz2");
 	TCHAR CSGOPath[MAX_PATH] = { 0 };
 	TCHAR TempPath[MAX_PATH] = { 0 };
-	TCHAR CfgPath[MAX_PATH] = { 0 };
-	GetRunPath(CfgPath, sizeof(CfgPath));
-	_tcscat(CfgPath, _T("\\bin\\Config.cfg"));
+	_bstr_t CfgPath = GetCFGPath();
 	GetPrivateProfileString(_T("ZElauncher"), _T("CSGOPath"), NULL, CSGOPath, sizeof(CSGOPath), CfgPath);
 	CDuiString sMapFile = CSGOPath;
 	sMapFile += _T("\\csgo\\maps\\");

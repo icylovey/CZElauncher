@@ -5,11 +5,25 @@ zip_7Z::SevenZipClearOwnerWindow pSavenZipClearOwnerWindow = nullptr;
 zip_7Z::SevenZipSetOwnerWindowEx pSavenZipSetOwnerWindowEx = nullptr;
 zip_7Z::ZipCallBackProc pZipCallBackProc = nullptr;
 
-void __stdcall GetRunPath(TCHAR* PathBuf, UINT  buflen)
+_bstr_t __stdcall GetRunPath()
 {
-	GetModuleFileName(GetModuleHandle(NULL), PathBuf, buflen);
-	TCHAR* pChar = _tcsrchr(PathBuf, '\\');
+	TCHAR szTemp[MAX_PATH] = { 0 };
+	GetModuleFileName(GetModuleHandle(NULL), szTemp, sizeof(szTemp));
+	TCHAR* pChar = _tcsrchr(szTemp, '\\');
 	if (pChar)pChar[0] = 0;
+	_bstr_t Result = szTemp;
+	return std::move(Result);
+}
+
+_bstr_t __stdcall GetCFGPath()
+{
+	TCHAR szTemp[MAX_PATH] = { 0 };
+	GetModuleFileName(GetModuleHandle(NULL), szTemp, sizeof(szTemp));
+	TCHAR* pChar = _tcsrchr(szTemp, '\\');
+	if (pChar)pChar[0] = 0;
+	_bstr_t Result = szTemp;
+	Result += _T("\\bin\\Config.cfg");
+	return std::move(Result);
 }
 
 bool __stdcall GetCSGOPath(TCHAR* BufferStr, DWORD BufferLen) {
@@ -96,13 +110,6 @@ void __stdcall XSleep(int nWaitInMSecs)
 	CloseHandle(sleep.eventHandle);
 }
 
-void _MultiByteToWideChar(UINT CodePage, DWORD dwFlags, LPCCH lpMulti, int cbMultiLen, LPWSTR lpWideByte, int CbWidelen)
-{
-	ZeroMemory(lpWideByte, CbWidelen);
-	MultiByteToWideChar(CodePage, dwFlags, lpMulti, cbMultiLen, lpWideByte, CbWidelen);
-
-}
-
 void __stdcall Zip7ZInitiale()
 {
 	HMODULE hlibr = LoadLibrary(_T("bin\\7z.dll"));
@@ -153,4 +160,25 @@ bool __stdcall Zip7ZUnCompressed(const TCHAR* lpZipFile, const TCHAR* Compressed
 	else if (szOutPut.find("operation aborted") != std::string::npos)return false;
 	else if (szOutPut.find("Everything is Ok") != std::string::npos)return true;
 	else return false;
+}
+
+std::string __stdcall DecodeToString(UINT Codepage,std::string& EncodeChar) {
+	UINT nLen = EncodeChar.size() * sizeof(TCHAR);
+	TCHAR* pTmptchar = new TCHAR[nLen]();
+	char* pTmpchar = new char[nLen]();
+	MultiByteToWideChar(Codepage, NULL, EncodeChar.c_str(), EncodeChar.size(), pTmptchar, nLen);
+	WideCharToMultiByte(CP_ACP, NULL, pTmptchar, nLen, pTmpchar, nLen, NULL, NULL);
+	std::string Result = pTmpchar;
+	return std::move(Result);
+}
+
+std::string __stdcall DecodeToString(UINT Codepage, std::wstring& EncodeChar) {
+	UINT nLen = EncodeChar.size();
+	TCHAR* pTmptchar = new TCHAR[nLen]();
+	char* pTmpchar = new char[nLen]();
+	WideCharToMultiByte(Codepage, NULL, EncodeChar.c_str(), EncodeChar.size(), pTmpchar, nLen, NULL, NULL);
+	/*MultiByteToWideChar(CP_ACP, NULL, pTmpchar, nLen, pTmptchar, nLen);
+	WideCharToMultiByte(CP_ACP, NULL, pTmptchar, nLen, pTmpchar, nLen, NULL, NULL);*/
+	std::string Result = pTmpchar;
+	return std::move(Result);
 }

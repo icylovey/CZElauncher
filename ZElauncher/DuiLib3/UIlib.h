@@ -70,7 +70,6 @@
 
 #include "Utils/Utils.h"
 #include "Utils/UIDelegate.h"
-#include "Core/ControlFactory.h"
 #include "Core/UIDefine.h"
 #include "Core/UIManager.h"
 #include "Core/UIBase.h"
@@ -92,11 +91,11 @@
 #include "Control/UICombo.h"
 #include "Control/UIScrollBar.h"
 #include "Control/UITreeView.h"
-#include "Control/UIMenu.h"
 
 #include "Control/UILabel.h"
 #include "Control/UIText.h"
 #include "Control/UIEdit.h"
+#include "Control/UIMenu.h"
 
 #include "Control/UIButton.h"
 #include "Control/UIOption.h"
@@ -111,5 +110,4 @@
 #include "Control/UIActiveX.h"
 #include "Control/UIWebBrowser.h"
 #include "Control/UIGifAnim.h"
-
 //#include "Control/UIFlash.h"

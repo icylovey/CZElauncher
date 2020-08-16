@@ -139,8 +139,8 @@ void CScrollBarUI::SetScrollPos(int nPos, bool bTriggerEvent)
 
 	SetPos(m_rcItem, true);
 
-	if(bTriggerEvent && m_PaintManageranager != NULL) 
-		m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_SCROLL, m_nScrollPos, iOldScrollPos, true, false);
+	if(bTriggerEvent && m_pManager != NULL) 
+		m_pManager->SendNotify(this, DUI_MSGTYPE_SCROLL, m_nScrollPos, iOldScrollPos, true, false);
 }
 
 int CScrollBarUI::GetLineSize() const
@@ -657,7 +657,7 @@ void CScrollBarUI::DoEvent(TEventUI& event)
 
 		m_nLastScrollOffset = 0;
 		m_nScrollRepeatDelay = 0;
-		m_PaintManageranager->SetTimer(this, DEFAULT_TIMERID, 50U);
+		m_pManager->SetTimer(this, DEFAULT_TIMERID, 50U);
 
 		if( ::PtInRect(&m_rcButton1, event.ptMouse) ) {
 			m_uButton1State |= UISTATE_PUSHED;
@@ -714,7 +714,7 @@ void CScrollBarUI::DoEvent(TEventUI& event)
 	{
 		m_nScrollRepeatDelay = 0;
 		m_nLastScrollOffset = 0;
-		m_PaintManageranager->KillTimer(this, DEFAULT_TIMERID);
+		m_pManager->KillTimer(this, DEFAULT_TIMERID);
 
 		if( (m_uThumbState & UISTATE_CAPTURED) != 0 ) {
 			m_uThumbState &= ~( UISTATE_CAPTURED | UISTATE_PUSHED );
@@ -820,7 +820,7 @@ void CScrollBarUI::DoEvent(TEventUI& event)
 			if( m_nScrollRepeatDelay <= 5 ) return;
 			POINT pt = { 0 };
 			::GetCursorPos(&pt);
-			::ScreenToClient(m_PaintManageranager->GetPaintWindow(), &pt);
+			::ScreenToClient(m_pManager->GetPaintWindow(), &pt);
 			if( !m_bHorizontal ) {
 				if( pt.y < m_rcThumb.top ) {
 					if( m_pOwner != NULL ) m_pOwner->PageUp(); 
@@ -864,10 +864,10 @@ void CScrollBarUI::DoEvent(TEventUI& event)
                 m_uThumbState &= ~UISTATE_HOT;
                 Invalidate();
             }
-            if (m_PaintManageranager) m_PaintManageranager->RemoveMouseLeaveNeeded(this);
+            if (m_pManager) m_pManager->RemoveMouseLeaveNeeded(this);
         }
         else {
-            if (m_PaintManageranager) m_PaintManageranager->AddMouseLeaveNeeded(this);
+            if (m_pManager) m_pManager->AddMouseLeaveNeeded(this);
             return;
         }
 	}

@@ -135,7 +135,7 @@ public:
 #endif
 
 public:
-    CPaintManagerUI m_PaintManager;
+    CPaintManagerUI m_pm;
     CComboUI* m_pOwner;
     CVerticalLayoutUI* m_pLayout;
     int m_iOldSel;
@@ -208,13 +208,13 @@ void CComboWnd::OnFinalMessage(HWND hWnd)
 LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     if( uMsg == WM_CREATE ) {
-		m_PaintManager.SetForceUseSharedRes(true);
-        m_PaintManager.Init(m_hWnd);
+		m_pm.SetForceUseSharedRes(true);
+        m_pm.Init(m_hWnd);
         // The trick is to add the items to the new container. Their owner gets
         // reassigned by this operation - which is why it is important to reassign
         // the items back to the righfull owner/manager when the window closes.
         m_pLayout = new CComboBodyUI(m_pOwner);
-        m_pLayout->SetManager(&m_PaintManager, NULL, true);
+        m_pLayout->SetManager(&m_pm, NULL, true);
         LPCTSTR pDefaultAttributes = m_pOwner->GetManager()->GetDefaultAttributeList(_T("VerticalLayout"));
         if( pDefaultAttributes ) {
             m_pLayout->SetAttributeList(pDefaultAttributes);
@@ -229,7 +229,7 @@ LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         for( int i = 0; i < m_pOwner->GetCount(); i++ ) {
             m_pLayout->Add(static_cast<CControlUI*>(m_pOwner->GetItemAt(i)));
         }
-        m_PaintManager.AttachDialog(m_pLayout);
+        m_pm.AttachDialog(m_pLayout);
         
         return 0;
     }
@@ -242,8 +242,8 @@ LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     else if( uMsg == WM_LBUTTONDOWN || uMsg == WM_LBUTTONDBLCLK ) {
         POINT pt = { 0 };
         ::GetCursorPos(&pt);
-        ::ScreenToClient(m_PaintManager.GetPaintWindow(), &pt);
-        CControlUI* pControl = m_PaintManager.FindControl(pt);
+        ::ScreenToClient(m_pm.GetPaintWindow(), &pt);
+        CControlUI* pControl = m_pm.FindControl(pt);
         if( pControl && _tcscmp(pControl->GetClass(), DUI_CTR_SCROLLBAR) == 0 ) {
             m_bScrollbarClicked = true;
         }
@@ -255,8 +255,8 @@ LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         else {
             POINT pt = { 0 };
             ::GetCursorPos(&pt);
-            ::ScreenToClient(m_PaintManager.GetPaintWindow(), &pt);
-            CControlUI* pControl = m_PaintManager.FindControl(pt);
+            ::ScreenToClient(m_pm.GetPaintWindow(), &pt);
+            CControlUI* pControl = m_pm.FindControl(pt);
             if( pControl && _tcscmp(pControl->GetClass(), DUI_CTR_SCROLLBAR) != 0 ) PostMessage(WM_KILLFOCUS);
         }
     }
@@ -309,7 +309,7 @@ LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
 
     LRESULT lRes = 0;
-    if( m_PaintManager.MessageHandler(uMsg, wParam, lParam, lRes) ) return lRes;
+    if( m_pm.MessageHandler(uMsg, wParam, lParam, lRes) ) return lRes;
     return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 }
 
@@ -434,7 +434,7 @@ bool CComboUI::SelectItem(int iIndex, bool bTakeFocus, bool bTriggerEvent)
     m_iCurSel = iIndex;
     if( m_pWindow != NULL || bTakeFocus ) pControl->SetFocus();
     pListItem->Select(true, bTriggerEvent);
-    if( m_PaintManageranager != NULL && bTriggerEvent) m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_ITEMSELECT, m_iCurSel, iOldSel);
+    if( m_pManager != NULL && bTriggerEvent) m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMSELECT, m_iCurSel, iOldSel);
     Invalidate();
 
     return true;
@@ -684,10 +684,10 @@ void CComboUI::DoEvent(TEventUI& event)
                     Invalidate();
                 }
             }
-            if (m_PaintManageranager) m_PaintManageranager->RemoveMouseLeaveNeeded(this);
+            if (m_pManager) m_pManager->RemoveMouseLeaveNeeded(this);
         }
         else {
-            if (m_PaintManageranager) m_PaintManageranager->AddMouseLeaveNeeded(this);
+            if (m_pManager) m_pManager->AddMouseLeaveNeeded(this);
             return;
         }
     }
@@ -696,7 +696,7 @@ void CComboUI::DoEvent(TEventUI& event)
 
 SIZE CComboUI::EstimateSize(SIZE szAvailable)
 {
-    if( m_cxyFixed.cy == 0 ) return CDuiSize(m_cxyFixed.cx, m_PaintManageranager->GetDefaultFontInfo()->tm.tmHeight + 8);
+    if( m_cxyFixed.cy == 0 ) return CDuiSize(m_cxyFixed.cx, m_pManager->GetDefaultFontInfo()->tm.tmHeight + 8);
     return CControlUI::EstimateSize(szAvailable);
 }
 
@@ -707,7 +707,7 @@ bool CComboUI::Activate()
     m_pWindow = new CComboWnd();
     ASSERT(m_pWindow);
     m_pWindow->Init(this);
-    if( m_PaintManageranager != NULL ) m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_DROPDOWN);
+    if( m_pManager != NULL ) m_pManager->SendNotify(this, DUI_MSGTYPE_DROPDOWN);
     Invalidate();
     return true;
 }

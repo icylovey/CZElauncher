@@ -19,9 +19,6 @@
     <Filter Include="ModuleSDK">
       <UniqueIdentifier>{1aaa38cb-6767-400f-837f-fa89064a255f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="DuilibSDK">
-      <UniqueIdentifier>{406b6f60-560e-47d1-8410-e5bd91f09572}</UniqueIdentifier>
-    </Filter>
     <Filter Include="源文件\Util">
       <UniqueIdentifier>{48a5b7ac-6ecf-45c8-8b8e-7de6f0654f40}</UniqueIdentifier>
     </Filter>
@@ -39,6 +36,9 @@
     </Filter>
     <Filter Include="htmlsdk">
       <UniqueIdentifier>{4faf6be4-824e-4bdb-8812-04655b7e928a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Duilib">
+      <UniqueIdentifier>{f51d569d-89d4-48a0-9051-367a6bab689d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -147,191 +147,191 @@
     <ClInclude Include="json\json_tool.h">
       <Filter>JSON</Filter>
     </ClInclude>
-    <ClInclude Include="Duilib\Control\UIActiveX.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIAnimation.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIButton.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIColorPalette.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UICombo.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIComboBox.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIDateTime.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIEdit.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIFadeButton.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIFlash.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIGifAnim.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIGifAnimEx.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIGroupBox.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIHotKey.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIIPAddress.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIIPAddressEx.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UILabel.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIList.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIListEx.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIMenu.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIOption.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIProgress.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIRichEdit.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIRing.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIRollText.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIScrollBar.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UISlider.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIText.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UITreeView.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Control\UIWebBrowser.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Core\ControlFactory.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Core\UIBase.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Core\UIContainer.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Core\UIControl.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Core\UIDefine.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Core\UIDlgBuilder.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Core\UIManager.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Core\UIMarkup.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Core\UIRender.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Core\UIResourceManager.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Layout\UIAnimationTabLayout.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Layout\UIChildLayout.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Layout\UIHorizontalLayout.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Layout\UITabLayout.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Layout\UITileLayout.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Layout\UIVerticalLayout.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Utils\downloadmgr.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Utils\DPI.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Utils\DragDropImpl.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Utils\FlashEventHandler.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Utils\observer_impl_base.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Utils\stb_image.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Utils\TrayIcon.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Utils\UIDelegate.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Utils\UIShadow.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Utils\unzip.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Utils\Utils.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Utils\VersionHelpers.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Utils\WebBrowserEventHandler.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Duilib\Utils\WinImplBase.h">
-      <Filter>DuilibSDK</Filter>
-    </ClInclude>
     <ClInclude Include="Duilib\StdAfx.h">
-      <Filter>DuilibSDK</Filter>
+      <Filter>Duilib</Filter>
     </ClInclude>
     <ClInclude Include="Duilib\UIlib.h">
-      <Filter>DuilibSDK</Filter>
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIActiveX.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIAnimation.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIButton.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIColorPalette.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UICombo.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIComboBox.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIDateTime.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIEdit.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIFadeButton.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIFlash.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIGifAnim.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIGifAnimEx.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIGroupBox.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIHotKey.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIIPAddress.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIIPAddressEx.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UILabel.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIList.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIListEx.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIMenu.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIOption.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIProgress.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIRichEdit.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIRing.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIRollText.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIScrollBar.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UISlider.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIText.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UITreeView.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Control\UIWebBrowser.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Core\ControlFactory.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Core\UIBase.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Core\UIContainer.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Core\UIControl.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Core\UIDefine.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Core\UIDlgBuilder.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Core\UIManager.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Core\UIMarkup.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Core\UIRender.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Core\UIResourceManager.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Layout\UIAnimationTabLayout.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Layout\UIChildLayout.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Layout\UIHorizontalLayout.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Layout\UITabLayout.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Layout\UITileLayout.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Layout\UIVerticalLayout.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Utils\downloadmgr.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Utils\DPI.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Utils\DragDropImpl.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Utils\FlashEventHandler.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Utils\observer_impl_base.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Utils\stb_image.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Utils\TrayIcon.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Utils\UIDelegate.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Utils\UIShadow.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Utils\unzip.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Utils\Utils.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Utils\VersionHelpers.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Utils\WebBrowserEventHandler.h">
+      <Filter>Duilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Duilib\Utils\WinImplBase.h">
+      <Filter>Duilib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -410,170 +410,170 @@
     <ClCompile Include="查看帖子.cpp">
       <Filter>源文件\Util</Filter>
     </ClCompile>
-    <ClCompile Include="Duilib\Control\UIActiveX.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIAnimation.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIButton.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIColorPalette.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UICombo.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIComboBox.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIDateTime.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIEdit.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIFadeButton.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIFlash.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIGifAnim.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIGifAnimEx.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIGroupBox.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIHotKey.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIIPAddress.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIIPAddressEx.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UILabel.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIList.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIListEx.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIMenu.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIOption.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIProgress.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIRichEdit.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIRing.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIRollText.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIScrollBar.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UISlider.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIText.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UITreeView.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Control\UIWebBrowser.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Core\ControlFactory.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Core\UIBase.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Core\UIContainer.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Core\UIControl.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Core\UIDlgBuilder.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Core\UIManager.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Core\UIMarkup.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Core\UIRender.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Core\UIResourceManager.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Layout\UIAnimationTabLayout.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Layout\UIChildLayout.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Layout\UIHorizontalLayout.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Layout\UITabLayout.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Layout\UITileLayout.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Layout\UIVerticalLayout.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Utils\DPI.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Utils\DragDropImpl.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Utils\TrayIcon.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Utils\UIDelegate.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Utils\UIShadow.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Utils\unzip.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Utils\Utils.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="Duilib\Utils\WinImplBase.cpp">
-      <Filter>DuilibSDK</Filter>
-    </ClCompile>
     <ClCompile Include="Duilib\StdAfx.cpp">
-      <Filter>DuilibSDK</Filter>
+      <Filter>Duilib</Filter>
     </ClCompile>
     <ClCompile Include="Duilib\UIlib.cpp">
-      <Filter>DuilibSDK</Filter>
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIActiveX.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIAnimation.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIButton.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIColorPalette.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UICombo.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIComboBox.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIDateTime.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIEdit.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIFadeButton.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIFlash.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIGifAnim.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIGifAnimEx.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIGroupBox.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIHotKey.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIIPAddress.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIIPAddressEx.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UILabel.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIList.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIListEx.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIMenu.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIOption.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIProgress.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIRichEdit.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIRing.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIRollText.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIScrollBar.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UISlider.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIText.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UITreeView.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Control\UIWebBrowser.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Core\ControlFactory.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Core\UIBase.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Core\UIContainer.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Core\UIControl.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Core\UIDlgBuilder.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Core\UIManager.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Core\UIMarkup.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Core\UIRender.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Core\UIResourceManager.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Layout\UIAnimationTabLayout.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Layout\UIChildLayout.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Layout\UIHorizontalLayout.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Layout\UITabLayout.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Layout\UITileLayout.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Layout\UIVerticalLayout.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Utils\DPI.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Utils\DragDropImpl.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Utils\TrayIcon.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Utils\UIDelegate.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Utils\UIShadow.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Utils\unzip.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Utils\Utils.cpp">
+      <Filter>Duilib</Filter>
+    </ClCompile>
+    <ClCompile Include="Duilib\Utils\WinImplBase.cpp">
+      <Filter>Duilib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -598,10 +598,10 @@
       <Filter>资源文件</Filter>
     </None>
     <None Include="Duilib\Utils\Flash11.tlb">
-      <Filter>DuilibSDK</Filter>
+      <Filter>Duilib</Filter>
     </None>
     <None Include="Duilib\Utils\flash11.tlh">
-      <Filter>DuilibSDK</Filter>
+      <Filter>Duilib</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

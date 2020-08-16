@@ -1,6 +1,10 @@
 #pragma once 
-//#define _AFXDLL
-//#include <afx.h>
+#ifndef FD_SETSIZE
+#define FD_SETSIZE 1024
+#endif
+/*
+#define _AFXDLL
+#include <afx.h>*/
 #include <windows.h>
 #include <stdio.h>
 #include <future>

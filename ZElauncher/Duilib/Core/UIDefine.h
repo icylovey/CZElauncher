@@ -118,6 +118,10 @@ namespace DuiLib
 #define DUI_MSGTYPE_LISTHEADITEMCHECKED        (_T("listheaditemchecked"))
 #define DUI_MSGTYPE_LISTPAGECHANGED            (_T("listpagechanged"))
 
+
+#define  DUI_CTR_LISTHBOXELEMENT                 (_T("ListHBoxElement"))
+#define  DUI_CTR_LISTTEXTELEMENT                 (_T("ListTextElement"))
+
     //////////////////////////////////////////////////////////////////////////
 
     struct DUI_MSGMAP_ENTRY;

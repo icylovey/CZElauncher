@@ -23,9 +23,8 @@ void C新手皮肤UI::兑换皮肤(LPCTSTR pUrl)
 		return;
 	}
 	//获取正则表达式数据
-	TCHAR dbPath[MAX_PATH] = { 0 };
-	GetRunPath(dbPath, sizeof(dbPath));
-	_tcscat(dbPath, _T("\\bin\\Regex.db"));
+	_bstr_t dbPath = GetRunPath();
+	dbPath += _T("\\bin\\Regex.db");
 	//申请表达式缓存空间
 	TCHAR* pTpatternSkinInfoTip = new TCHAR[4096];
 	TCHAR* pTpatternSkinInfoTip2 = new TCHAR[4096];
@@ -46,7 +45,7 @@ void C新手皮肤UI::兑换皮肤(LPCTSTR pUrl)
 	http.GET(pUrl, htmldata, _T(""), Cookies.GetData());
 	UINT nLen = htmldata.size() * sizeof(TCHAR);
 	TCHAR* pStrHtml = new TCHAR[nLen];
-	_MultiByteToWideChar(CP_UTF8, NULL, htmldata.c_str(), htmldata.length(), pStrHtml, nLen);
+	MultiByteToWideChar(CP_UTF8, NULL, htmldata.c_str(), htmldata.length(), pStrHtml, nLen);
 #pragma region 正在表达式算法
 	VBScript_RegExp_55::IRegExp2Ptr pRegexp(__uuidof(VBScript_RegExp_55::RegExp));
 	pRegexp->PutGlobal(VARIANT_TRUE);
@@ -97,7 +96,7 @@ void C新手皮肤UI::兑换皮肤(LPCTSTR pUrl)
 		//编码转换
 		nLen = htmldata.size() * sizeof(TCHAR);
 		TCHAR* pTmpHtml = new TCHAR[nLen]();
-		_MultiByteToWideChar(CP_UTF8, NULL, htmldata.c_str(), htmldata.length(), pTmpHtml, nLen);
+		MultiByteToWideChar(CP_UTF8, NULL, htmldata.c_str(), htmldata.length(), pTmpHtml, nLen);
 		pRegexp->PutPattern(pTpatternSkinConvert);
 		VBScript_RegExp_55::IMatchCollectionPtr ItemResult = pRegexp->Execute(pTmpHtml);
 		delete[]pTmpHtml;
@@ -183,12 +182,15 @@ void C新手皮肤UI::获取新手皮肤数据()
 		MessageBox(NULL, _T("获取新手皮肤礼包失败,请先登录!"), NULL, NULL);
 		return;
 	}*/
+	if (!g_pZElauncher->UserIslogin()) {
+		MessageBox(NULL, _T("获取新手皮肤礼包失败,请先登录!"), NULL, NULL);
+		return;
+	}
 	CTileLayoutUI* pTilelayout = static_cast<CTileLayoutUI*>(m_paintmanage_->FindControl(_T("Table_SkinConvert")));
 	if (!pTilelayout)return;
 	//获取正则表达式数据
-	TCHAR dbPath[MAX_PATH] = { 0 };
-	GetRunPath(dbPath, sizeof(dbPath));
-	_tcscat(dbPath, _T("\\bin\\Regex.db"));
+	_bstr_t dbPath = GetRunPath();
+	dbPath += _T("\\bin\\Regex.db");
 	//申请表达式缓存空间
 	TCHAR* pTpatternSkin = new TCHAR[4096];
 	TCHAR* pTpatternImg = new TCHAR[4096];
@@ -209,7 +211,7 @@ void C新手皮肤UI::获取新手皮肤数据()
 	//编码转换
 	UINT nLen = Result.size() * sizeof(TCHAR);
 	TCHAR* pStrHtml = new TCHAR[nLen];
-	_MultiByteToWideChar(CP_UTF8, NULL, Result.c_str(), Result.length(), pStrHtml, nLen);
+	MultiByteToWideChar(CP_UTF8, NULL, Result.c_str(), Result.length(), pStrHtml, nLen);
 	//用户数据保存
 #pragma region 正则表达式算法
 	VBScript_RegExp_55::IRegExp2Ptr pRegexp(__uuidof(VBScript_RegExp_55::RegExp));

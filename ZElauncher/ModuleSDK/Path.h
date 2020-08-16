@@ -1,5 +1,5 @@
 #pragma once
-#include "../StdAfx.h"
+#include "../stdafx.h"
 #include <comutil.h>
 
 namespace zip_7Z{
@@ -31,7 +31,9 @@ namespace zip_7Z{
 	typedef void(__stdcall *ZipCallBackProc)(HWND hWnd, UINT nState, UINT nRatePos);
 }
 
-void __stdcall GetRunPath(TCHAR* PathBuf, UINT  buflen);
+_bstr_t __stdcall GetRunPath();
+
+_bstr_t __stdcall GetCFGPath();
 
 bool __stdcall GetCSGOPath(TCHAR* BufferStr, DWORD BufferLen);
 
@@ -39,8 +41,11 @@ void __stdcall GetSteamPath(TCHAR* BufferStr, DWORD BufferLen);
 
 void __stdcall XSleep(int nWaitInMSecs);
 
-void _MultiByteToWideChar(UINT CodePage, DWORD dwFlags, LPCCH lpMulti, int cbMultiLen, LPWSTR lpWideByte, int CbWidelen);
-
 bool __stdcall Zip7ZUnCompressed(const TCHAR* lpZipFile, const TCHAR* CompressedPWD, const TCHAR* szUncompressedDir, std::string& szOutPut, zip_7Z::ZipCallBackProc lpCallbackProc);
 
 void __stdcall Zip7ZInitiale();
+
+//±àÂë½âÂë
+std::string __stdcall DecodeToString(UINT Codepage, std::string& EncodeChar);
+
+std::string __stdcall DecodeToString(UINT Codepage, std::wstring& EncodeChar);

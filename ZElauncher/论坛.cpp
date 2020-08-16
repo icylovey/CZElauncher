@@ -60,21 +60,20 @@ void C论坛UI::Notify(TNotifyUI& msg)
 		GetCursorPos(&point);
 		STRINGorID xml(_T("Menu_BBS.xml"));
 		CMenuWnd* pMenu = CMenuWnd::CreateMenu(nullptr, xml, point, m_paintmanager_);
-	}
 
+	}
+	//else if (_tcscmp(msg.sType, _T("itemactivate")) == 0)OnLookBBS();
 }
 
 void C论坛UI::OnCreate()
 {
 	CListUI* plistbkimg = static_cast<CListUI*>(m_paintmanager_->FindControl(_T("List_bbs")));
 	if (plistbkimg) {
-		TCHAR cfgbuff[1024] = { 0 };
-		GetRunPath(cfgbuff, sizeof(cfgbuff));
-		_tcscat(cfgbuff, _T("\\bin\\Config.cfg"));
+		_bstr_t cfgbuff = GetCFGPath();
 		TCHAR* pszbuff = new TCHAR[MAX_PATH]();
 		GetPrivateProfileString(_T("ZElauncher"), _T("edit_listbkimge"), NULL, pszbuff, (MAX_PATH * sizeof(TCHAR)), cfgbuff);
 		if (_tcslen(pszbuff) > 5) {
-			plistbkimg->SetItemBkColor(RGB(0xFF, 0xE7, 0xE7, 0xE7));
+			plistbkimg->SetItemBkColor(RGB(0xFF, 0xE7, 0xE7));
 			plistbkimg->SetBkImage(pszbuff);
 		}
 	}
@@ -125,7 +124,9 @@ void C论坛UI::OnLookBBS()
 		return;
 	}
 	CDuiString ItemText = pItem->GetUserData();
+	ItemText.Replace(_T("amp;"), _T(""));
 	g_BBSUrl = ItemText;
+	g_BBSTitle = pItem->GetText(1);
 	C查看帖子UI* pSetting = new C查看帖子UI(m_paintmanager_);
 	if (pSetting == NULL) return;
 	pSetting->Create(NULL, _T("查看帖子"), UI_WNDSTYLE_DIALOG, WS_EX_STATICEDGE | WS_EX_APPWINDOW, 0, 0, 900, 500);
@@ -151,22 +152,17 @@ void C论坛UI::GetBBSList(_bstr_t url, UINT type /* = NULL */)
 	http.GET(url.GetBSTR(), htmldata, L"", gCookies.GetBSTR());
 	if (htmldata.length() < 10) { IsThread3 = false; return; }
 	//编码转换
-	UINT nLen = htmldata.size() * sizeof(TCHAR);
-	TCHAR* pStrHtml = new TCHAR[nLen]();
-	_MultiByteToWideChar(CP_UTF8, NULL, htmldata.c_str(), htmldata.size(), pStrHtml, nLen);
-	UINT nLen2 = htmldata.size() * sizeof(TCHAR);
-	char* pStrMulti = new char[nLen2]();
-	WideCharToMultiByte(CP_ACP, NULL, pStrHtml, nLen, pStrMulti, nLen2, NULL, NULL);
-	if (strstr(pStrMulti, "出于用户隐私考虑,这个板块需要350分钟游戏时间方可进入")) {
+	std::string htmlDecode = DecodeToString(CP_UTF8, htmldata);
+	if (strstr(htmlDecode.c_str(), "出于用户隐私考虑,这个板块需要350分钟游戏时间方可进入")) {
 		MessageBox(NULL, L"出于用户隐私考虑,这个板块需要350分钟游戏时间方可进入!", NULL, MB_ICONWARNING);
 		IsThread3 = false;
 		return;
 	}
 	HtmlParser parser;
-	shared_ptr<HtmlDocument> doc = parser.Parse(pStrMulti, nLen2);
+	shared_ptr<HtmlDocument> doc = parser.Parse(htmlDecode.c_str(), htmlDecode.size());
 	//释放缓冲区;
-	delete[]pStrMulti;
-	delete[]pStrHtml;
+	/*delete[]pStrMulti;
+	delete[]pStrHtml*/;
 	//html解析
 	CBBSUI::主题 Tmp_ = { "" };
 	_bstr_t tmpText = "";

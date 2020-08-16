@@ -1,7 +1,7 @@
 #include "Main.h"
 using namespace DuiLib;
 //检测版本更新
-void __stdcall GetUpdateVersion(LPCTSTR sVersion)
+void __stdcall 检查版本更新(LPCTSTR sVersion)
 {
 	_tcscpy(Version, sVersion);
 	std::string htmldata;
@@ -12,7 +12,7 @@ void __stdcall GetUpdateVersion(LPCTSTR sVersion)
 	//转换编码
 	UINT nLen = htmldata.size() * sizeof(TCHAR);
 	TCHAR* pTmpHtml = new TCHAR[nLen];
-	_MultiByteToWideChar(CP_UTF8, NULL, htmldata.c_str(), htmldata.length(), pTmpHtml, nLen);
+	MultiByteToWideChar(CP_UTF8, NULL, htmldata.c_str(), htmldata.length(), pTmpHtml, nLen);
 	_bstr_t Version = sVersion;
 	std::wstring html = pTmpHtml;
 	//获取版本号
@@ -44,7 +44,7 @@ void __stdcall GetUpdateVersion(LPCTSTR sVersion)
 	}
 }
 //禁止重复运行
-void __stdcall NotRepeat()
+void __stdcall 禁止重复运行()
 {
 	TCHAR hEventchar[] = _T("ZElauncher_shjdioashdajshdwqniodashjdlas");
 	if (OpenEvent(EVENT_ALL_ACCESS, FALSE, hEventchar) != 0) {
@@ -55,17 +55,15 @@ void __stdcall NotRepeat()
 
 int __stdcall WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
 {
-	NotRepeat();
+	禁止重复运行();
 
-	GetUpdateVersion(_T("v1.2.4"));
+	检查版本更新(_T("v1.2.5"));
 	Zip7ZInitiale();
 
 	CPaintManagerUI::SetInstance(hInstance);
-	TCHAR RunPath[MAX_PATH] = { 0 };
 	TCHAR SkinName[MAX_PATH] = { 0 };
-	GetRunPath(RunPath, sizeof(RunPath));
-	_bstr_t CfgPath = RunPath;
-	CfgPath += _T("\\bin\\Config.cfg");
+	_bstr_t RunPath = GetRunPath();
+	_bstr_t CfgPath = GetCFGPath();
 	GetPrivateProfileString(_T("ZElauncher"), _T("Skin"), NULL, SkinName, sizeof(SkinName), CfgPath);
 	_bstr_t SkinFile = RunPath;
 	SkinFile += _T("\\Skin\\");

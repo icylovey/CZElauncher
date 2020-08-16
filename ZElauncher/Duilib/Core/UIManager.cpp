@@ -1928,6 +1928,18 @@ namespace DuiLib {
         return true;
     }
 
+	bool CPaintManagerUI::RenameControl(CControlUI* pControl, LPCTSTR pstrName)
+	{
+		ASSERT(pControl);
+		if (pControl == NULL || pControl->GetManager() != this || pstrName == NULL || *pstrName == _T('\0')) return false;
+		if (pControl->GetName() == pstrName) return true;
+		if (NULL != FindControl(pstrName)) return false;
+		m_mNameHash.Remove(pControl->GetName());
+		bool bResult = m_mNameHash.Insert(pstrName, pControl);
+		if (bResult) pControl->SetName(pstrName);
+		return bResult;
+	}
+
     void CPaintManagerUI::ReapObjects(CControlUI* pControl)
     {
         if( pControl == m_pEventKey ) m_pEventKey = NULL;

@@ -66,6 +66,7 @@ namespace lib_http
 		bool IsHttps;
 		//把url转小写(不使用)
 		//std::transform(url.begin(), url.end(), url.begin(), ::tolower);
+		ResultData = "";
 		url.find("https") == std::string::npos ? IsHttps = false : IsHttps = true;
 #pragma region 协议头处理
 		if (Header.find("User-Agent:") == std::string::npos)Header.append("User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 Edge/16.16299\r\n");
@@ -140,6 +141,7 @@ namespace lib_http
 	{
 		bool IsHttps;
 		url.find(L"https") == std::string::npos ? IsHttps = false : IsHttps = true;
+		ResultData = "";
 #pragma region 协议头处理
 		if (Header.find(L"User-Agent:") == std::string::npos)Header.append(L"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 Edge/16.16299\r\n");
 		if (Header.find(L"Accept:") == std::string::npos)Header.append(L"Accept: */*\r\n");
@@ -215,6 +217,7 @@ namespace lib_http
 	{
 		bool IsHttps;
 		url.find("https") == std::string::npos ? IsHttps = false : IsHttps = true;
+		ResultData = "";
 #pragma region 协议头处理
 		//if (Header.find("User-Agent:") == std::string::npos)Header.append("User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 Edge/16.16299\r\n");
 		if (Header.find("Accept:") == std::string::npos)Header.append("Accept: */*\r\n");
@@ -303,6 +306,7 @@ namespace lib_http
 	{
 		bool IsHttps;
 		strstr(url, "https") ? IsHttps = true : IsHttps = false;
+		ResultData = "";
 #pragma region 协议头处理
 		if (Header.find("User-Agent:") == std::string::npos)Header.append("User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 Edge/16.16299\r\n");
 		if (Header.find("Accept:") == std::string::npos)Header.append("Accept: */*\r\n");
@@ -376,6 +380,7 @@ namespace lib_http
 	bool _fastcall CLibhttp::GET(std::wstring url, std::string &ResultData, std::wstring Header, std::wstring Cookies, std::wstring ReturnCookies)
 	{
 		bool IsHttps;
+		ResultData = "";
 		url.find(L"https") == std::string::npos ? IsHttps = false : IsHttps = true;
 #pragma region 协议头处理
 		if (Header.find(L"User-Agent:") == std::string::npos)Header.append(L"User-Agent: Mozilla/5.0 (compatible; WOW64; MSIE 10.0; Windows NT 6.2)\r\n");

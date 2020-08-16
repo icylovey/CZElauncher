@@ -112,9 +112,9 @@ namespace DuiLib
 		}
 		NeedParentUpdate();
 
-		if( m_PaintManageranager != NULL ) {
-			m_PaintManageranager->SetNextTabControl();
-			if (bTriggerEvent) m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_TABSELECT, m_iCurSel, iOldSel);
+		if( m_pManager != NULL ) {
+			m_pManager->SetNextTabControl();
+			if (bTriggerEvent) m_pManager->SendNotify(this, DUI_MSGTYPE_TABSELECT, m_iCurSel, iOldSel);
 		}
 		return true;
 	}

@@ -290,7 +290,7 @@ namespace DuiLib
 		}
 		if( event.Type == UIEVENT_WINDOWSIZE )
 		{
-			if( m_pWindow != NULL ) m_PaintManageranager->SetFocusNeeded(this);
+			if( m_pWindow != NULL ) m_pManager->SetFocusNeeded(this);
 		}
 		if( event.Type == UIEVENT_SCROLLWHEEL )
 		{
@@ -363,10 +363,10 @@ namespace DuiLib
                         Invalidate();
                     }
                 }
-                if (m_PaintManageranager) m_PaintManageranager->RemoveMouseLeaveNeeded(this);
+                if (m_pManager) m_pManager->RemoveMouseLeaveNeeded(this);
             }
             else {
-                if (m_PaintManageranager) m_PaintManageranager->AddMouseLeaveNeeded(this);
+                if (m_pManager) m_pManager->AddMouseLeaveNeeded(this);
                 return;
             }
         }
@@ -582,17 +582,17 @@ namespace DuiLib
 	void CEditUI::SetVisible(bool bVisible)
 	{
 		CControlUI::SetVisible(bVisible);
-		if( !IsVisible() && m_pWindow != NULL ) m_PaintManageranager->SetFocus(NULL);
+		if( !IsVisible() && m_pWindow != NULL ) m_pManager->SetFocus(NULL);
 	}
 
 	void CEditUI::SetInternVisible(bool bVisible)
 	{
-		if( !IsVisible() && m_pWindow != NULL ) m_PaintManageranager->SetFocus(NULL);
+		if( !IsVisible() && m_pWindow != NULL ) m_pManager->SetFocus(NULL);
 	}
 
 	SIZE CEditUI::EstimateSize(SIZE szAvailable)
 	{
-		if( m_cxyFixed.cy == 0 ) return CDuiSize(m_cxyFixed.cx, m_PaintManageranager->GetFontInfo(GetFont())->tm.tmHeight + 8);
+		if( m_cxyFixed.cy == 0 ) return CDuiSize(m_cxyFixed.cx, m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 8);
 		return CControlUI::EstimateSize(szAvailable);
 	}
 
@@ -638,8 +638,8 @@ namespace DuiLib
 
 	void CEditUI::PaintText(HDC hDC)
 	{
-		if( m_dwTextColor == 0 ) m_dwTextColor = m_PaintManageranager->GetDefaultFontColor();
-		if( m_dwDisabledTextColor == 0 ) m_dwDisabledTextColor = m_PaintManageranager->GetDefaultDisabledColor();
+		if( m_dwTextColor == 0 ) m_dwTextColor = m_pManager->GetDefaultFontColor();
+		if( m_dwDisabledTextColor == 0 ) m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor();
 
 		if( m_sText.IsEmpty() ) return;
 
@@ -659,11 +659,11 @@ namespace DuiLib
 		rc.top += m_rcTextPadding.top;
 		rc.bottom -= m_rcTextPadding.bottom;
 		if( IsEnabled() ) {
-			CRenderEngine::DrawText(hDC, m_PaintManageranager, rc, sText, m_dwTextColor, \
+			CRenderEngine::DrawText(hDC, m_pManager, rc, sText, m_dwTextColor, \
 				m_iFont, DT_SINGLELINE | m_uTextStyle);
 		}
 		else {
-			CRenderEngine::DrawText(hDC, m_PaintManageranager, rc, sText, m_dwDisabledTextColor, \
+			CRenderEngine::DrawText(hDC, m_pManager, rc, sText, m_dwDisabledTextColor, \
 				m_iFont, DT_SINGLELINE | m_uTextStyle);
 
 		}

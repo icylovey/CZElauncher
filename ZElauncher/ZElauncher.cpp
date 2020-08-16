@@ -1,77 +1,26 @@
 ﻿#include "ZElauncher.h"
 
-bool IsCreate = false;
-
-LPCTSTR CZElauncherMain::GetWindowClassName() const
-{
-	return _T("ZElauncherForm");
-};
-
-UILIB_RESTYPE CZElauncherMain::GetResourceType() const
-{
-#ifdef _DEBUG
-	return UILIB_FILE;
-#else 
-	if (!IsSkinExist)return UILIB_ZIPRESOURCE;
-	else return UILIB_FILE;
-#endif // _DEBUG
-
-}
-
-LPCTSTR CZElauncherMain::GetResourceID() const
-{
-	return MAKEINTRESOURCE(IDR_ZIPRES1);
-}
-
-CDuiString CZElauncherMain::GetSkinFile()
-{
-	//return _T("115");
-	return _T("skin.xml");
-}
-
-CDuiString CZElauncherMain::GetSkinFolder()
-{
-	return _T("Skin\\ListRes\\");
-}
-
-void CZElauncherMain::OnFinalMessage(HWND hWnd)
-{
-	WindowImplBase::OnFinalMessage(hWnd);
-	delete this;
-}
-
-void CZElauncherMain::LogoutUser(_bstr_t Tiptext)
-{
-	CButtonUI* pLogin = static_cast<CButtonUI*>(m_pm.FindControl(_T("Button_Login")));
-	if (!pLogin)return;
-	CDuiString Tip = _T("{u}{a}");
-	Tip += Tiptext.GetBSTR();
-	Tip += _T("{/a}{/u}");;
-	pLogin->SetText(Tip);
-}
+bool IsCreate = false, IsThread = false;
 
 void InitializeCookies()
 {
-	TCHAR CfgPath[MAX_PATH] = { 0 };
 	TCHAR Is_IELogin[20] = { 0 };
-	GetRunPath(CfgPath, sizeof(CfgPath));
-	_tcscat(CfgPath, _T("\\bin\\Config.cfg"));
+	_bstr_t CfgPath = GetCFGPath();
 	GetPrivateProfileString(_T("ZElauncher"), _T("Login_IELogin"), NULL, Is_IELogin, sizeof(Is_IELogin), CfgPath);
 	if (_tcsstr(Is_IELogin, _T("true")) || _tcsstr(Is_IELogin, _T("TRUE"))) {
 		lib_http::CLibhttp http;
-		//暂时不使用cookie因为或登录失败;
+		//暂时不使用cookie因为会登录失败;
 		//gCookies = http.GetLocalCookies("https://bbs.93x.net").c_str();
 		gCookies = "";
 	}
 	else {
-		TCHAR cfgbuff[1024] = { 0 };
-		GetRunPath(cfgbuff, sizeof(cfgbuff));
-		_tcscat(cfgbuff, _T("\\bin\\Cookies.data"));
+		_bstr_t cfgbuff = GetRunPath();
+		cfgbuff += _T("\\bin\\Cookies.data");
 		_bstr_t FileName = cfgbuff;
 		FILE* pFile = fopen(FileName, "rb+");
 		if (!pFile) {
 			FILE* pFile = fopen(FileName, "wb+");
-			if(pFile)fclose(pFile);
+			if (pFile)fclose(pFile);
 			return;
 		}
 		fseek(pFile, SEEK_SET, 0);
@@ -82,7 +31,7 @@ void InitializeCookies()
 	}
 }
 
-void ServerHotDownloadJsonEvent(std::string &Resulthtml)
+void ServerHotDownloadJsonEvent(std::string& Resulthtml)
 {
 	Json::Reader reader;
 	Json::Value root;
@@ -110,7 +59,6 @@ void ServerHotDownloadJsonEvent(std::string &Resulthtml)
 		CDuiString map_tmp = map_name.GetBSTR();
 		int mPos = map_tmp.Find(_T(","));
 		if (mPos != -1) {
-			//map_name = map_name.Mid(mPos + 1, map_name.Find(_T(",")) - (mPos + 1));
 			map_name = map_tmp.Left(mPos);
 		}
 		/*
@@ -144,7 +92,7 @@ void ServerHotDownloadJsonEvent(std::string &Resulthtml)
 	}
 }
 
-void __stdcall ThreadhotProc(HWND hWnd,UINT uMsg,UINT_PTR arg3,DWORD arg4)
+void __stdcall ThreadhotProc(HWND hWnd, UINT uMsg, UINT_PTR arg3, DWORD arg4)
 {
 	for (;;) {
 		if (g_pZElauncher->UserIslogin()) {
@@ -163,23 +111,72 @@ void __stdcall ThreadhotProc(HWND hWnd,UINT uMsg,UINT_PTR arg3,DWORD arg4)
 			else g_pZElauncher->OutTip2(_T("预热下载->已关闭预热下载功能!"));
 		}
 		else g_pZElauncher->OutTip2(_T("预热下载->您未登录,请先登录!"));
-		
+
 		Sleep(2000);
 	}
 }
 
-void CZElauncherMain::InitWindow()
+void __stdcall ThreadTip()
 {
-	g_pZElauncher = this;
-	InitializeCookies();
-	TCHAR CfgPath[MAX_PATH] = { 0 };
+	if (MessageBox(NULL, _T("皮肤切换成功,重启后生效\r\n是否现在重启?"), _T("Tip"), MB_YESNO | MB_TOPMOST) == IDYES) {
+		CDuiString sBat = _T("@echo off\r\n@ping 127.0.0.1 -n 1 >nul\r\nstart \"\" \"<文件名>\"\r\ndel Restart.bat");
+		TCHAR szPath[MAX_PATH] = { 0 };
+		TCHAR szShortPath[MAX_PATH] = { 0 };
+		GetModuleFileName(GetModuleHandle(NULL), szPath, sizeof(szPath));
+		GetShortPathName(szPath, szShortPath, sizeof(szShortPath));
+		sBat.Replace(_T("<文件名>"), szPath);
+		_bstr_t RunPath2 = GetRunPath();
+		_bstr_t sRunBatFile = RunPath2;
+		sRunBatFile += _T("\\restart.bat");
+		FILE* pFile = fopen(sRunBatFile, "wb+");
+		if (!pFile)return;
+		_bstr_t sWriteBat = sBat.GetData();
+		char* sTemp = static_cast<char*>(sWriteBat);
+		fwrite(sTemp, 1, strlen(sTemp), pFile);
+		fclose(pFile);
+		ShellExecute(NULL, _T("open"), sRunBatFile, NULL, szPath, SW_HIDE);
+		ExitProcess(NULL);
+	}
+}
+
+void CZElauncherMain::InitializeControl() {
+	m_pbtn_Login = static_cast<CButtonUI*>(m_pm.FindControl(_T("Button_Login")));
+	if (!m_pbtn_Login)goto errno_;
+
+	m_poptn_Server_Switch = static_cast<COptionUI*>(m_pm.FindControl(_T("Server_Switch")));
+	if (!m_poptn_Server_Switch)goto errno_;
+
+	m_ptablay_Tabchild = static_cast<CTabLayoutUI*>(m_pm.FindControl(_T("Tabchild")));
+	if (!m_ptablay_Tabchild)goto errno_;
+
+	m_ptext_outtip = static_cast<CTextUI*>(m_pm.FindControl(_T("Outtip")));
+	if (!m_ptext_outtip)goto errno_;
+	m_ptext_outtip2 = static_cast<CTextUI*>(m_pm.FindControl(_T("Outtip2")));
+	if (!m_ptext_outtip2)goto errno_;
+
+
+	//======================================
+	//返回;
+	return;
+errno_:
+	MessageBox(NULL, _T("控件初始化失败!"), NULL, MB_TOPMOST | MB_ICONERROR);
+	ExitProcess(NULL);
+}
+
+void CZElauncherMain::LogoutUser(_bstr_t Tiptext)
+{
+	CDuiString Tip = _T("{u}{a}");
+	Tip += Tiptext.GetBSTR();
+	Tip += _T("{/a}{/u}");;
+	m_pbtn_Login->SetText(Tip);
+}
+
+void CZElauncherMain::初始化背景图片和版本号() {
 	TCHAR Server_Switch[20] = { 0 };
-	GetRunPath(CfgPath, sizeof(CfgPath));
-	_tcscat(CfgPath, _T("\\bin\\Config.cfg"));
+	_bstr_t CfgPath = GetCFGPath();
 	GetPrivateProfileString(_T("ZElauncher"), _T("Server_Switch"), NULL, Server_Switch, sizeof(Server_Switch), CfgPath);
 	if (_tcscmp(Server_Switch, _T("true")) == 0) {
-		COptionUI* pButton = static_cast<COptionUI*>(m_pm.FindControl(_T("Server_Switch")));
-		if (pButton)pButton->Selected(true);
+		m_poptn_Server_Switch->Selected(true);
 	}
 	_bstr_t sVersion = _T("{c #386382}当前版本：");
 	sVersion += Version;
@@ -192,14 +189,7 @@ void CZElauncherMain::InitWindow()
 		GetPrivateProfileString(_T("ZElauncher"), _T("edit_bkimge"), NULL, pszbuff, (MAX_PATH * sizeof(TCHAR)), CfgPath);
 		if (_tcslen(pszbuff) > 5)pbkimg->SetBkImage(pszbuff);
 	}
-	刷新ZE地图中文名表();
-	std::thread t2 = std::thread(&CZElauncherMain::Get93xServerListInfo, this);
-	t2.detach();
-	//SetTimer(m_hWnd, 12313, 2000, (TIMERPROC)Timeproc);
-	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)ThreadhotProc, NULL, NULL, NULL);
 }
-
-bool IsThread = false;
 
 void CZElauncherMain::刷新ZE地图中文名表()
 {
@@ -225,55 +215,6 @@ void CZElauncherMain::启动获取ZE地图中文名表()
 	if (IsChineseMap)pServer->RefreshServer();
 }
 
-void CZElauncherMain::MenuClick(CControlUI* Click)
-{
-	if (_tcscmp(Click->GetText().GetData(), _T("选项设置")) == 0)OnSetting();
-	else if (_tcscmp(Click->GetText().GetData(), _T("默认")) == 0)SetSkinName(_T("默认"));
-	else if (_tcscmp(Click->GetText().GetData(), _T("简约")) == 0)SetSkinName(_T("简约"));
-	else if (_tcscmp(Click->GetText().GetData(), _T("卡通")) == 0)SetSkinName(_T("卡通"));
-}
-
-void CZElauncherMain::Notify(TNotifyUI& msg)
-{
-	if (_tcscmp(msg.sType, _T("windowinit")) == 0)OnInitialize();
-	else if (_tcscmp(msg.sType, _T("click")) == 0)OnClick(msg);
-	else if (_tcscmp(msg.sType, _T("itemclick")) == 0)MenuClick(msg.pSender);
-	else if (_tcscmp(msg.sType, _T("selectchanged")) == 0)
-	{
-		CDuiString name = msg.pSender->GetName();
-		CTabLayoutUI* pControl = static_cast<CTabLayoutUI*>(m_pm.FindControl(_T("Tabchild")));
-		if (!pControl)return;
-		COptionUI* pSwitch = static_cast<COptionUI*>(m_pm.FindControl(_T("Server_Switch")));
-		if (!pSwitch)return;
-		if (name == _T("Title_Server"))pControl->SelectItem(0);
-		else if (name == _T("Title_award"))pControl->SelectItem(1);
-		else if (name == _T("Title_Tools"))pControl->SelectItem(2);
-		else if (name == _T("Title_shop")) {
-			pControl->SelectItem(3);
-			if (!IsCreateShop) {
-				IsCreateShop = true;
-				pShop->启动获取商城数据函数();
-			}
-		}
-		else if (name == _T("Title_Skin")) {
-			pControl->SelectItem(4);
-			if (!IsCreateSkin) {
-				IsCreateSkin = true;
-				pSkin->获取新手皮肤数据();
-			}
-		}
-		else if (name == _T("Title_BBS"))pControl->SelectItem(5);
-		else if (name == _T("Server_Switch")) {
-			TCHAR CfgPath[MAX_PATH] = { 0 };
-			GetRunPath(CfgPath, sizeof(CfgPath));
-			_tcscat(CfgPath, _T("\\bin\\Config.cfg"));
-			if (pSwitch->IsSelected())WritePrivateProfileString(_T("ZElauncher"), _T("Server_Switch"), _T("true"), CfgPath);
-			else WritePrivateProfileString(_T("ZElauncher"), _T("Server_Switch"), _T("false"), CfgPath);
-		}
-	}
-	//__super::Notify(msg);
-}
-
 void CZElauncherMain::Get93xServerListInfo()
 {
 	//获取网页Json内容
@@ -284,12 +225,7 @@ void CZElauncherMain::Get93xServerListInfo()
 		if (!phttp.GET(url, StrResult))MessageBox(NULL, _T("获取服务器信息失败!"), NULL, NULL);
 	}
 	//编码转换
-	UINT nLen = StrResult.size() * sizeof(TCHAR);
-	TCHAR* pStrHtml = new TCHAR[nLen]();
-	MultiByteToWideChar(CP_UTF8, NULL, StrResult.c_str(), StrResult.length(), pStrHtml, nLen);
-	UINT nLen2 = StrResult.size() * sizeof(TCHAR);
-	char* pStrMulti = new char[nLen2]();
-	WideCharToMultiByte(CP_ACP, NULL, pStrHtml, nLen, pStrMulti, nLen2, NULL, NULL);
+	std::string pStrMulti = DecodeToString(CP_UTF8, StrResult);
 #pragma region 服务器列表Json获取
 	Json::Reader reader;
 	Json::Value root;
@@ -318,8 +254,88 @@ void CZElauncherMain::Get93xServerListInfo()
 
 	}
 #pragma endregion
-	delete[] pStrHtml;
-	delete[] pStrMulti;
+}
+
+void CZElauncherMain::OnInitialize()
+{
+	TCHAR Initialize[20] = { 0 };
+	_bstr_t CfgPath = GetCFGPath();
+	GetPrivateProfileString(_T("ZElauncher"), _T("Initialize"), NULL, Initialize, sizeof(Initialize), CfgPath);
+	if (_tcscmp(Initialize, _T("true")) != 0) {
+		if (!IsCreate) {
+			OutTip(_T("请完成配置信息"));
+			OnSetting(true);
+			WritePrivateProfileString(_T("ZElauncher"), _T("Initialize"), _T("true"), CfgPath);
+			IsCreate = true;
+		}
+	}
+	else {
+		OutTip(_T("获取配置信息完成"));
+	}
+	GetPrivateProfileString(_T("ZElauncher"), _T("DownloadHotmap"), NULL, Initialize, sizeof(Initialize), CfgPath);
+	if (_tcscmp(Initialize, _T("true")) == 0) {
+		g_IsDownloadHotmap = true;
+	}
+	std::thread t1 = std::thread(&CZElauncherMain::InitLogin, this);
+	t1.detach();
+
+}
+
+void CZElauncherMain::OutTip(_bstr_t pOutTip) {
+	CDuiString Out = _T("{c #FF0000}");//#386382
+	Out += pOutTip.GetBSTR();
+	Out += _T("{/c}");
+	m_ptext_outtip->SetText(Out);
+}
+
+void CZElauncherMain::OutTip2(_bstr_t pOutTip2) {
+	CDuiString Out = _T("{c #FF0000}");
+	Out += pOutTip2.GetBSTR();
+	Out += _T("{/c}");
+	m_ptext_outtip2->SetText(Out);
+}
+
+void CZElauncherMain::InitLogin()
+{
+	//获取个人信息;
+	lib_http::CLibhttp http;
+	std::string Cookies;
+	Cookies.append(gCookies);
+	std::string Result;
+	http.GET("https://bbs.93x.net/plugin.php?id=xnet_steam_openid:SoftLogin", Result, "", Cookies.c_str());
+	//JSON处理
+	Json::Reader reader;
+	Json::Value root;
+	if (reader.parse(Result, root)) {
+		if (!root.isNull()) {
+			Json::Value userdata = root["userdata"];
+			if (userdata.isNull())return;
+			if (userdata["username"].isNull())return;
+			//TCHAR pUserName[4096] = { 0 };
+			//std::string tmpstr = userdata["username"].asCString();
+			//MultiByteToWideChar(CP_UTF8, NULL, tmpstr.c_str(), tmpstr.size(), pUserName, sizeof(pUserName));
+			_bstr_t NickName = _T("{u}{a}");
+			NickName += userdata["username"].asCString();
+			NickName += _T("{/a}{/u}");
+			m_pbtn_Login->SetText(NickName);
+			if (!userdata["steamid64"].isNull())g_SteamID64 = userdata["steamid64"].asCString();
+			OutTip(_T("帐号登录成功!"));
+		}
+	}
+	else {
+		g_SteamID64 = "";
+		OutTip(_T("登录失败,Cookies过期或从未登陆过!"));
+		m_pbtn_Login->SetText(_T("{u}{a}登录失败{/a}{/u}"));
+	}
+}
+
+bool CZElauncherMain::UserIslogin() {
+	if (_tcscmp(m_pbtn_Login->GetText(), _T("{u}{a}未登录{/a}{/u}")) == 0 \
+		|| _tcscmp(m_pbtn_Login->GetText(), _T("{u}{a}登录失败{/a}{/u}")) == 0 \
+		|| _tcscmp(m_pbtn_Login->GetText(), _T("{u}{a}Cookies获取为空{/a}{/u}")) == 0 \
+		)
+		return false;
+	else return true;
 }
 
 HWND CZElauncherMain::GethWnd()
@@ -342,59 +358,9 @@ _bstr_t CZElauncherMain::GetChineseMapName(_bstr_t Map_englishName)
 	return std::move(Result_map);
 }
 
-CControlUI* CZElauncherMain::CreateControl(LPCTSTR pstrClass)
-{
-	if (_tcscmp(pstrClass, _T("Server")) == 0)return new C服务器UI(m_pm, this->m_hWnd);
-	else if (_tcscmp(pstrClass, _T("Award")) == 0)return new C礼包UI(m_pm);
-	else if (_tcscmp(pstrClass, _T("Shop")) == 0) {
-		pShop = new C商城UI(m_pm);
-		return pShop;
-	}
-	else if (_tcscmp(pstrClass, _T("Tools")) == 0)return new C工具箱UI(m_pm);
-	else if (_tcscmp(pstrClass, _T("Skin")) == 0) {
-		pSkin = new C新手皮肤UI(m_pm);
-		return pSkin;
-	}
-	else if (_tcscmp(pstrClass, _T("BBS")) == 0)return new C论坛UI(m_pm);
-	return NULL;
-}
-
-void CZElauncherMain::OnExit(const TNotifyUI& msg)
-{
-	::PostQuitMessage(0L);
-	__super::Close();
-	ExitProcess(0L);
-}
-
-void __stdcall ThreadTip()
-{
-	if (MessageBox(NULL, _T("皮肤切换成功,重启后生效\r\n是否现在重启?"), _T("Tip"), MB_YESNO | MB_TOPMOST) == IDYES) {
-		CDuiString sBat = _T("@echo off\r\n@ping 127.0.0.1 -n 1 >nul\r\nstart \"\" \"<文件名>\"\r\ndel Restart.bat");
-		TCHAR szPath[MAX_PATH] = { 0 };
-		TCHAR szShortPath[MAX_PATH] = { 0 };
-		GetModuleFileName(GetModuleHandle(NULL), szPath, sizeof(szPath));
-		GetShortPathName(szPath, szShortPath, sizeof(szShortPath));
-		sBat.Replace(_T("<文件名>"), szPath);
-		GetRunPath(szPath, sizeof(szPath));
-		_bstr_t sRunBatFile = szPath;
-		sRunBatFile += _T("\\restart.bat");
-		FILE* pFile = fopen(sRunBatFile, "wb+");
-		if (!pFile)return;
-		_bstr_t sWriteBat = sBat.GetData();
-		char* sTemp = static_cast<char*>(sWriteBat);
-		fwrite(sTemp, 1, strlen(sTemp), pFile);
-		fclose(pFile);
-		ShellExecute(NULL, _T("open"), sRunBatFile, NULL, szPath, SW_HIDE);
-		ExitProcess(NULL);
-	}
-}
-
 void CZElauncherMain::SetSkinName(LPCTSTR SkinName)
 {
-	TCHAR RunPath[MAX_PATH] = { 0 };
-	GetRunPath(RunPath, sizeof(RunPath));
-	_bstr_t CfgPath = RunPath;
-	CfgPath += _T("\\bin\\Config.cfg");
+	_bstr_t CfgPath = GetCFGPath();
 	_bstr_t sName = _T("");
 	if (_tcscmp(SkinName, _T("默认")) == 0)sName = _T("default");
 	else {
@@ -433,7 +399,7 @@ void CZElauncherMain::获取ZE地图中文名表(LPCTSTR maptype)
 	if (reader.parse(htmlResult, root)) {
 		if (root[(UINT)0].isNull())return;
 		for (UINT i = 0; i < root.size(); i++) {
-			if(root[i].isNull())break;
+			if (root[i].isNull())break;
 			Json::Value json_Array = root[i];
 			_bstr_t map_cn = "", map_en = "", map_downloadurl = "";
 			if (!json_Array["cn_name"].isNull())
@@ -462,107 +428,97 @@ void CZElauncherMain::OnLogin(bool IsLogin, bool IsModel)
 	if (IsModel)pLogin->ShowModal();
 }
 
+//===================================================================
+void CZElauncherMain::InitWindow()
+{
+	g_pZElauncher = this;
+	//初始化控件变量;
+	InitializeControl();
+	//初始化cookies;
+	InitializeCookies();
+
+	初始化背景图片和版本号();
+
+	刷新ZE地图中文名表();
+	std::thread t2 = std::thread(&CZElauncherMain::Get93xServerListInfo, this);
+	t2.detach();
+	//SetTimer(m_hWnd, 12313, 2000, (TIMERPROC)Timeproc);
+	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)ThreadhotProc, NULL, NULL, NULL);
+}
+
+void CZElauncherMain::MenuClick(CControlUI* Click)
+{
+	if (_tcscmp(Click->GetText().GetData(), _T("选项设置")) == 0)OnSetting();
+	else if (_tcscmp(Click->GetText().GetData(), _T("默认")) == 0)SetSkinName(_T("默认"));
+	else if (_tcscmp(Click->GetText().GetData(), _T("简约")) == 0)SetSkinName(_T("简约"));
+	else if (_tcscmp(Click->GetText().GetData(), _T("卡通")) == 0)SetSkinName(_T("卡通"));
+}
+
+void CZElauncherMain::Notify(TNotifyUI& msg)
+{
+	if (_tcscmp(msg.sType, _T("windowinit")) == 0)OnInitialize();
+	else if (_tcscmp(msg.sType, _T("click")) == 0)OnClick(msg);
+	else if (_tcscmp(msg.sType, _T("itemclick")) == 0)MenuClick(msg.pSender);
+	else if (_tcscmp(msg.sType, _T("selectchanged")) == 0)
+	{
+		CDuiString name = msg.pSender->GetName();
+		if (name == _T("Title_Server"))m_ptablay_Tabchild->SelectItem(0);
+		else if (name == _T("Title_award"))m_ptablay_Tabchild->SelectItem(1);
+		else if (name == _T("Title_Tools"))m_ptablay_Tabchild->SelectItem(2);
+		else if (name == _T("Title_shop")) {
+			m_ptablay_Tabchild->SelectItem(3);
+			if (!IsCreateShop) {
+				IsCreateShop = true;
+				pShop->启动获取商城数据函数();
+			}
+		}
+		else if (name == _T("Title_Skin")) {
+			m_ptablay_Tabchild->SelectItem(4);
+			if (!IsCreateSkin) {
+				IsCreateSkin = true;
+				pSkin->获取新手皮肤数据();
+			}
+		}
+		else if (name == _T("Title_BBS"))m_ptablay_Tabchild->SelectItem(5);
+		else if (name == _T("Server_Switch")) {
+			_bstr_t CfgPath = GetCFGPath();
+			if (m_poptn_Server_Switch->IsSelected())WritePrivateProfileString(_T("ZElauncher"), _T("Server_Switch"), _T("true"), CfgPath);
+			else WritePrivateProfileString(_T("ZElauncher"), _T("Server_Switch"), _T("false"), CfgPath);
+		}
+	}
+	//__super::Notify(msg);
+}
+
+CControlUI* CZElauncherMain::CreateControl(LPCTSTR pstrClass)
+{
+	if (_tcscmp(pstrClass, _T("Server")) == 0)return new C服务器UI(m_pm, this->m_hWnd);
+	else if (_tcscmp(pstrClass, _T("Award")) == 0)return new C礼包UI(m_pm);
+	else if (_tcscmp(pstrClass, _T("Shop")) == 0) {
+		pShop = new C商城UI(m_pm);
+		return pShop;
+	}
+	else if (_tcscmp(pstrClass, _T("Tools")) == 0)return new C工具箱UI(m_pm);
+	else if (_tcscmp(pstrClass, _T("Skin")) == 0) {
+		pSkin = new C新手皮肤UI(m_pm);
+		return pSkin;
+	}
+	else if (_tcscmp(pstrClass, _T("BBS")) == 0)return new C论坛UI(m_pm);
+	return NULL;
+}
+
+void CZElauncherMain::OnExit(const TNotifyUI& msg)
+{
+	::PostQuitMessage(0L);
+	__super::Close();
+	ExitProcess(0L);
+}
+
 void CZElauncherMain::OnMenu(const TNotifyUI& msg)
 {
 	CDuiPoint point(0, 0);
 	GetCursorPos(&point);
 	STRINGorID xml(_T("Menu_Main.xml"));
 	CMenuWnd* pMenu = CMenuWnd::CreateMenu(nullptr, xml, point, &m_pm);
-}
-
-void CZElauncherMain::OnInitialize()
-{
-	TCHAR CfgPath[MAX_PATH] = { 0 };
-	TCHAR Initialize[20] = { 0 };
-	GetRunPath(CfgPath, sizeof(CfgPath));
-	_tcscat(CfgPath, _T("\\bin\\Config.cfg"));
-	GetPrivateProfileString(_T("ZElauncher"), _T("Initialize"), NULL, Initialize, sizeof(Initialize), CfgPath);
-	if (_tcscmp(Initialize, _T("true")) != 0) {
-		if (!IsCreate) {
-			OutTip(_T("请完成配置信息"));
-			OnSetting(true);
-			WritePrivateProfileString(_T("ZElauncher"), _T("Initialize"), _T("true"), CfgPath);
-			IsCreate = true;
-		}
-	}
-	else {
-		OutTip(_T("获取配置信息完成"));
-	}
-	GetPrivateProfileString(_T("ZElauncher"), _T("DownloadHotmap"), NULL, Initialize, sizeof(Initialize), CfgPath);
-	if (_tcscmp(Initialize, _T("true")) == 0) {
-		g_IsDownloadHotmap = true;
-	}
-	std::thread t1 = std::thread(&CZElauncherMain::InitLogin, this);
-	t1.detach();
-
-}
-
-void CZElauncherMain::OutTip(_bstr_t pOutTip)
-{
-	CTextUI* pText = static_cast<CTextUI*>(m_pm.FindControl(_T("Outtip")));
-	if (!pText)return;
-	CDuiString Out = _T("{c #FF0000}");//#386382
-	Out += pOutTip.GetBSTR();
-	Out += _T("{/c}");
-	pText->SetText(Out);
-}
-
-void CZElauncherMain::OutTip2(_bstr_t pOutTip2)
-{
-	CTextUI* pText = static_cast<CTextUI*>(m_pm.FindControl(_T("Outtip2")));
-	if (!pText)return;
-	CDuiString Out = _T("{c #FF0000}");
-	Out += pOutTip2.GetBSTR();
-	Out += _T("{/c}");
-	pText->SetText(Out);
-}
-
-void CZElauncherMain::InitLogin()
-{
-	CButtonUI* pLogin = static_cast<CButtonUI*>(m_pm.FindControl(_T("Button_Login")));
-	if (!pLogin)return;
-	//获取个人信息;
-	lib_http::CLibhttp http;
-	std::string Cookies;
-	Cookies.append(gCookies);
-	std::string Result;
-	http.GET("https://bbs.93x.net/plugin.php?id=xnet_steam_openid:SoftLogin", Result, "", Cookies.c_str());
-	/*FILE* pfile = fopen("C:\\Users\\Administrator\\Desktop\\新建文件夹\\僵尸逃跑启动器\\html.html", "wb+");
-	fwrite(Result.c_str(), Result.size(), 1, pfile);
-	fclose(pfile);*/
-	//JSON处理
-	Json::Reader reader;
-	Json::Value root;
-	if (reader.parse(Result, root)) {
-		if (!root.isNull()) {
-			Json::Value userdata = root["userdata"];
-			if (userdata.isNull())return;
-			if (userdata["username"].isNull())return;
-			//TCHAR pUserName[4096] = { 0 };
-			//std::string tmpstr = userdata["username"].asCString();
-			//MultiByteToWideChar(CP_UTF8, NULL, tmpstr.c_str(), tmpstr.size(), pUserName, sizeof(pUserName));
-			_bstr_t NickName = _T("{u}{a}");
-			NickName += userdata["username"].asCString();
-			NickName += _T("{/a}{/u}");
-			pLogin->SetText(NickName);
-			if (!userdata["steamid64"].isNull())g_SteamID64 = userdata["steamid64"].asCString();
-			OutTip(_T("帐号登录成功!"));
-		}
-	}
-	else {
-		g_SteamID64 = "";
-		OutTip(_T("登录失败,Cookies过期或从未登陆过!"));
-		pLogin->SetText(_T("{u}{a}登录失败{/a}{/u}"));
-	}
-}
-
-bool CZElauncherMain::UserIslogin()
-{
-	CButtonUI* pLogin = static_cast<CButtonUI*>(m_pm.FindControl(_T("Button_Login")));
-	if (!pLogin)return false;
-	if (_tcscmp(pLogin->GetText(), _T("{u}{a}未登录{/a}{/u}")) == 0 || _tcscmp(pLogin->GetText(), _T("{u}{a}登录失败{/a}{/u}")) == 0 || _tcscmp(pLogin->GetText(), _T("{u}{a}Cookies获取为空{/a}{/u}")) == 0)
-		return false;
-	else return true;
 }
 
 void CZElauncherMain::OnClick(const TNotifyUI& msg)
@@ -595,4 +551,42 @@ LRESULT CZElauncherMain::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		break;
 	}*/
 	return __super::HandleMessage(uMsg, wParam, lParam);
+}
+
+LPCTSTR CZElauncherMain::GetWindowClassName() const
+{
+	return _T("ZElauncherForm");
+};
+
+UILIB_RESTYPE CZElauncherMain::GetResourceType() const
+{
+#ifdef _DEBUG
+	return UILIB_FILE;
+#else 
+	if (!IsSkinExist)return UILIB_ZIPRESOURCE;
+	else return UILIB_FILE;
+#endif // _DEBUG
+
+}
+
+LPCTSTR CZElauncherMain::GetResourceID() const
+{
+	return MAKEINTRESOURCE(IDR_ZIPRES1);
+}
+
+CDuiString CZElauncherMain::GetSkinFile()
+{
+	//return _T("115");
+	return _T("skin.xml");
+}
+
+CDuiString CZElauncherMain::GetSkinFolder()
+{
+	return _T("Skin\\ListRes\\");
+}
+
+void CZElauncherMain::OnFinalMessage(HWND hWnd)
+{
+	WindowImplBase::OnFinalMessage(hWnd);
+	delete this;
 }

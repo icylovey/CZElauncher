@@ -299,7 +299,7 @@ namespace DuiLib
 		}
 		if( event.Type == UIEVENT_WINDOWSIZE )
 		{
-			if( m_pWindow != NULL ) m_PaintManageranager->SetFocusNeeded(this);
+			if( m_pWindow != NULL ) m_pManager->SetFocusNeeded(this);
 		}
 		if( event.Type == UIEVENT_SCROLLWHEEL )
 		{

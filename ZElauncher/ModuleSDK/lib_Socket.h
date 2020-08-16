@@ -1,7 +1,7 @@
 #pragma once
 #ifndef _LIB_SOCKET_H
 #define _LIB_SOCKET_H
-#define FD_SETSIZE 1024
+//#define FD_SETSIZE 1024
 #include <windows.h>
 #include <iostream>
 #include <vector>

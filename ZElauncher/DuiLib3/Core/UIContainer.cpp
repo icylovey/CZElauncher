@@ -101,7 +101,7 @@ namespace DuiLib
 	{
 		if( pControl == NULL) return false;
 
-		if( m_PaintManageranager != NULL ) m_PaintManageranager->InitControls(pControl, this);
+		if( m_pManager != NULL ) m_pManager->InitControls(pControl, this);
 		if( IsVisible() ) NeedUpdate();
 		else pControl->SetInternVisible(false);
 		return m_items.Add(pControl);   
@@ -111,7 +111,7 @@ namespace DuiLib
 	{
 		if( pControl == NULL) return false;
 
-        if( m_PaintManageranager != NULL ) m_PaintManageranager->InitControls(pControl, this);
+        if( m_pManager != NULL ) m_pManager->InitControls(pControl, this);
 		if( IsVisible() ) NeedUpdate();
 		else pControl->SetInternVisible(false);
 		return m_items.InsertAt(iIndex, pControl);
@@ -125,7 +125,7 @@ namespace DuiLib
 			if( static_cast<CControlUI*>(m_items[it]) == pControl ) {
 				NeedUpdate();
 				if( !bDoNotDestroy && m_bAutoDestroy ) {
-					if( m_bDelayedDestroy && m_PaintManageranager ) m_PaintManageranager->AddDelayedCleanup(pControl);             
+					if( m_bDelayedDestroy && m_pManager ) m_pManager->AddDelayedCleanup(pControl);             
 					else pControl->Delete();
 				}
 				return m_items.Remove(it);
@@ -147,7 +147,7 @@ namespace DuiLib
 	void CContainerUI::RemoveAll()
 	{
 		for( int it = 0; m_bAutoDestroy && it < m_items.GetSize(); it++ ) {
-			if( m_bDelayedDestroy && m_PaintManageranager ) m_PaintManageranager->AddDelayedCleanup(static_cast<CControlUI*>(m_items[it]));             
+			if( m_bDelayedDestroy && m_pManager ) m_pManager->AddDelayedCleanup(static_cast<CControlUI*>(m_items[it]));             
 			else static_cast<CControlUI*>(m_items[it])->Delete();
 		}
 		m_items.Empty();
@@ -417,8 +417,8 @@ namespace DuiLib
 	void CContainerUI::LineUp()
 	{
 		int cyLine = SCROLLBAR_LINESIZE;
-		if( m_PaintManageranager ) {
-            cyLine = m_PaintManageranager->GetDefaultFontInfo()->tm.tmHeight + 8;
+		if( m_pManager ) {
+            cyLine = m_pManager->GetDefaultFontInfo()->tm.tmHeight + 8;
             if (m_pVerticalScrollBar && m_pVerticalScrollBar->GetScrollUnit() > 1)
                 cyLine = m_pVerticalScrollBar->GetScrollUnit();
         }
@@ -431,8 +431,8 @@ namespace DuiLib
 	void CContainerUI::LineDown()
 	{
 		int cyLine = SCROLLBAR_LINESIZE;
-		if( m_PaintManageranager ) {
-            cyLine = m_PaintManageranager->GetDefaultFontInfo()->tm.tmHeight + 8;
+		if( m_pManager ) {
+            cyLine = m_pManager->GetDefaultFontInfo()->tm.tmHeight + 8;
             if (m_pVerticalScrollBar && m_pVerticalScrollBar->GetScrollUnit() > 1)
                 cyLine = m_pVerticalScrollBar->GetScrollUnit();
         }
@@ -534,10 +534,10 @@ namespace DuiLib
 			m_pVerticalScrollBar = new CScrollBarUI;
 			m_pVerticalScrollBar->SetScrollRange(0);
 			m_pVerticalScrollBar->SetOwner(this);
-			m_pVerticalScrollBar->SetManager(m_PaintManageranager, NULL, false);
+			m_pVerticalScrollBar->SetManager(m_pManager, NULL, false);
 			m_pVerticalScrollBar->SetVisible(false);
-			if ( m_PaintManageranager ) {
-				LPCTSTR pDefaultAttributes = m_PaintManageranager->GetDefaultAttributeList(_T("VScrollBar"));
+			if ( m_pManager ) {
+				LPCTSTR pDefaultAttributes = m_pManager->GetDefaultAttributeList(_T("VScrollBar"));
 				if( pDefaultAttributes ) {
 					m_pVerticalScrollBar->SetAttributeList(pDefaultAttributes);
 				}
@@ -553,10 +553,10 @@ namespace DuiLib
 			m_pHorizontalScrollBar->SetScrollRange(0);
 			m_pHorizontalScrollBar->SetHorizontal(true);
 			m_pHorizontalScrollBar->SetOwner(this);
-			m_pHorizontalScrollBar->SetManager(m_PaintManageranager, NULL, false);
+			m_pHorizontalScrollBar->SetManager(m_pManager, NULL, false);
 			m_pVerticalScrollBar->SetVisible(false);
-			if ( m_PaintManageranager ) {
-				LPCTSTR pDefaultAttributes = m_PaintManageranager->GetDefaultAttributeList(_T("HScrollBar"));
+			if ( m_pManager ) {
+				LPCTSTR pDefaultAttributes = m_pManager->GetDefaultAttributeList(_T("HScrollBar"));
 				if( pDefaultAttributes ) {
 					m_pHorizontalScrollBar->SetAttributeList(pDefaultAttributes);
 				}

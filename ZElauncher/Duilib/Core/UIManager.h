@@ -141,6 +141,11 @@ namespace DuiLib {
         bool bTiledX;
         bool bTiledY;
         bool bHSL;
+        const TImageInfo* pImageInfo;
+        bool bLoaded;
+		RECT rcDestOffset;
+		RECT rcBmpPart;
+		RECT rcScale9;
     } TDrawInfo;
 
     typedef struct UILIB_API tagTPercentInfo
@@ -364,6 +369,7 @@ namespace DuiLib {
 
         bool AttachDialog(CControlUI* pControl);
         bool InitControls(CControlUI* pControl, CControlUI* pParent = NULL);
+        bool RenameControl(CControlUI* pControl, LPCTSTR pstrName);
         void ReapObjects(CControlUI* pControl);
 
         bool AddOptionGroup(LPCTSTR pStrGroupName, CControlUI* pControl);

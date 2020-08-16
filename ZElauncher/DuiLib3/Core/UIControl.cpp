@@ -3,7 +3,7 @@
 namespace DuiLib {
 
 CControlUI::CControlUI() : 
-m_PaintManageranager(NULL), 
+m_pManager(NULL), 
 m_pParent(NULL), 
 m_pCover(NULL),
 m_bUpdateNeeded(true),
@@ -50,12 +50,12 @@ CControlUI::~CControlUI()
 
 	RemoveAllCustomAttribute();
     if( OnDestroy ) OnDestroy(this);
-    if( m_PaintManageranager != NULL ) m_PaintManageranager->ReapObjects(this);
+    if( m_pManager != NULL ) m_pManager->ReapObjects(this);
 }
 
 void CControlUI::Delete()
 {
-    if (m_PaintManageranager) m_PaintManageranager->RemoveMouseLeaveNeeded(this);
+    if (m_pManager) m_pManager->RemoveMouseLeaveNeeded(this);
     delete this;
 }
 
@@ -68,7 +68,7 @@ void CControlUI::SetName(LPCTSTR pstrName)
 {
 	if (m_sName != pstrName) {
 		m_sName = pstrName;
-		if (m_PaintManageranager != NULL) m_PaintManageranager->RenameControl(this, pstrName);
+		if (m_pManager != NULL) m_pManager->RenameControl(this, pstrName);
 	}
 }
 
@@ -102,13 +102,13 @@ bool CControlUI::Activate()
 
 CPaintManagerUI* CControlUI::GetManager() const
 {
-    return m_PaintManageranager;
+    return m_pManager;
 }
 
 void CControlUI::SetManager(CPaintManagerUI* pManager, CControlUI* pParent, bool bInit)
 {
     if( m_pCover != NULL ) m_pCover->SetManager(pManager, this, bInit);
-    m_PaintManageranager = pManager;
+    m_pManager = pManager;
     m_pParent = pParent;
     if( bInit && m_pParent ) Init();
 }
@@ -129,7 +129,7 @@ void CControlUI::SetCover(CControlUI *pControl)
     if( m_pCover != NULL ) m_pCover->Delete();
     m_pCover = pControl;
     if( m_pCover != NULL ) {
-        m_PaintManageranager->InitControls(m_pCover, this);
+        m_pManager->InitControls(m_pCover, this);
         if( IsVisible() ) NeedUpdate();
         else pControl->SetInternVisible(false);
     }
@@ -274,7 +274,7 @@ void CControlUI::SetBorderRound(SIZE cxyRound)
 
 bool CControlUI::DrawImage(HDC hDC, TDrawInfo& drawInfo)
 {
-	return CRenderEngine::DrawImage(hDC, m_PaintManageranager, m_rcItem, m_rcPaint, drawInfo);
+	return CRenderEngine::DrawImage(hDC, m_pManager, m_rcItem, m_rcPaint, drawInfo);
 }
 
 const RECT& CControlUI::GetPos() const
@@ -330,7 +330,7 @@ void CControlUI::SetPos(RECT rc, bool bNeedInvalidate)
 	else {
 		m_rcItem = rc;
 	}
-    if( m_PaintManageranager == NULL ) return;
+    if( m_pManager == NULL ) return;
 
     if( !m_bSetPos ) {
         m_bSetPos = true;
@@ -351,7 +351,7 @@ void CControlUI::SetPos(RECT rc, bool bNeedInvalidate)
 			rcParent = pParent->GetPos();
 			if( !::IntersectRect(&invalidateRc, &rcTemp, &rcParent) ) return;
 		}
-		m_PaintManageranager->Invalidate(invalidateRc);
+		m_pManager->Invalidate(invalidateRc);
 	}
 
     if( m_pCover != NULL && m_pCover->IsVisible() ) {
@@ -388,7 +388,7 @@ void CControlUI::Move(SIZE szOffset, bool bNeedInvalidate)
 	m_rcItem.right += szOffset.cx;
 	m_rcItem.bottom += szOffset.cy;
 
-	if( bNeedInvalidate && m_PaintManageranager == NULL && IsVisible() ) {
+	if( bNeedInvalidate && m_pManager == NULL && IsVisible() ) {
 		invalidateRc.Join(m_rcItem);
 		CControlUI* pParent = this;
 		RECT rcTemp;
@@ -399,7 +399,7 @@ void CControlUI::Move(SIZE szOffset, bool bNeedInvalidate)
 			rcParent = pParent->GetPos();
 			if( !::IntersectRect(&invalidateRc, &rcTemp, &rcParent) ) return;
 		}
-		m_PaintManageranager->Invalidate(invalidateRc);
+		m_pManager->Invalidate(invalidateRc);
 	}
 
     if( m_pCover != NULL && m_pCover->IsVisible() ) m_pCover->Move(szOffset, false);
@@ -615,8 +615,8 @@ void CControlUI::SetVisible(bool bVisible)
     bool v = IsVisible();
     m_bVisible = bVisible;
     if( m_bFocused ) m_bFocused = false;
-	if (!bVisible && m_PaintManageranager && m_PaintManageranager->GetFocus() == this) {
-		m_PaintManageranager->SetFocus(NULL) ;
+	if (!bVisible && m_pManager && m_pManager->GetFocus() == this) {
+		m_pManager->SetFocus(NULL) ;
 	}
     if( IsVisible() != v ) {
         NeedParentUpdate();
@@ -628,8 +628,8 @@ void CControlUI::SetVisible(bool bVisible)
 void CControlUI::SetInternVisible(bool bVisible)
 {
     m_bInternVisible = bVisible;
-	if (!bVisible && m_PaintManageranager && m_PaintManageranager->GetFocus() == this) {
-		m_PaintManageranager->SetFocus(NULL) ;
+	if (!bVisible && m_pManager && m_pManager->GetFocus() == this) {
+		m_pManager->SetFocus(NULL) ;
 	}
 
     if( m_pCover != NULL ) m_pCover->SetInternVisible(IsVisible());
@@ -674,7 +674,7 @@ bool CControlUI::IsFocused() const
 
 void CControlUI::SetFocus()
 {
-    if( m_PaintManageranager != NULL ) m_PaintManageranager->SetFocus(this, false);
+    if( m_pManager != NULL ) m_pManager->SetFocus(this, false);
 }
 
 bool CControlUI::IsFloat() const
@@ -771,7 +771,7 @@ void CControlUI::Invalidate()
         }
     }
 
-    if( m_PaintManageranager != NULL ) m_PaintManageranager->Invalidate(invalidateRc);
+    if( m_pManager != NULL ) m_pManager->Invalidate(invalidateRc);
 }
 
 bool CControlUI::IsUpdateNeeded() const
@@ -785,7 +785,7 @@ void CControlUI::NeedUpdate()
     m_bUpdateNeeded = true;
     Invalidate();
 
-    if( m_PaintManageranager != NULL ) m_PaintManageranager->NeedUpdate();
+    if( m_pManager != NULL ) m_pManager->NeedUpdate();
 }
 
 void CControlUI::NeedParentUpdate()
@@ -798,7 +798,7 @@ void CControlUI::NeedParentUpdate()
         NeedUpdate();
     }
 
-    if( m_PaintManageranager != NULL ) m_PaintManageranager->NeedUpdate();
+    if( m_pManager != NULL ) m_pManager->NeedUpdate();
 }
 
 DWORD CControlUI::GetAdjustColor(DWORD dwColor)
@@ -846,13 +846,13 @@ void CControlUI::DoEvent(TEventUI& event)
     }
     if( event.Type == UIEVENT_TIMER )
     {
-        m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_TIMER, event.wParam, event.lParam);
+        m_pManager->SendNotify(this, DUI_MSGTYPE_TIMER, event.wParam, event.lParam);
         return;
     }
     if( event.Type == UIEVENT_CONTEXTMENU )
     {
         if( IsContextMenuUsed() ) {
-            m_PaintManageranager->SendNotify(this, DUI_MSGTYPE_MENU, event.wParam, event.lParam);
+            m_pManager->SendNotify(this, DUI_MSGTYPE_MENU, event.wParam, event.lParam);
             return;
         }
     }
@@ -863,7 +863,7 @@ void CControlUI::DoEvent(TEventUI& event)
 void CControlUI::SetVirtualWnd(LPCTSTR pstrValue)
 {
 	m_sVirtualWnd = pstrValue;
-	m_PaintManageranager->UsedVirtualWnd(true);
+	m_pManager->UsedVirtualWnd(true);
 }
 
 CDuiString CControlUI::GetVirtualWnd() const
